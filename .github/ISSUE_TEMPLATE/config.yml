@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a Defect
+    url: https://RailgunLabs.com/contribute
+    about: When something isn't working right.
+  - name: Premium Support
+    url: https://RailgunLabs.com/services
+    about: Ask questions, get answers.

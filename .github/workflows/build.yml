@@ -1,0 +1,25 @@
+name: Build Status
+on: [push, pull_request]
+jobs:
+  linux:
+    name: "Linux - ${{ matrix.compiler.display }}"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler:
+          - { CC: gcc, display: GCC }
+          - { CC: clang, display: Clang }
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' 
+    - name: Build and Test
+      env:
+        CC: ${{ matrix.platform.CC }}
+        CFLAGS: ${{ matrix.platform.CFLAGS }}
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        ctest --output-on-failure --test-dir build

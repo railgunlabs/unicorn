@@ -1,0 +1,59 @@
+{
+    "version": "1.0",
+    "endian": "native",
+    "hasStandardAllocators": true,
+    "characterStorage": "uint32_t",
+    "optimizeFor": "speed",
+    "stackBufferSize": 32,
+    "excludeCharacterBlocks": [],
+    "algorithms": {
+        "normalization": [
+            "NFC",
+            "NFD"
+        ],
+        "normalizationQuickCheck": true,
+        "caseConversion": [
+            "lower",
+            "title",
+            "upper"
+        ],
+        "caseFolding": [
+            "default",
+            "canonical"
+        ],
+        "segmentation": [
+            "grapheme",
+            "word",
+            "sentence"
+        ],
+        "compression": true,
+        "collation": true
+    },
+    "characterProperties": [
+        "Alphabetic",
+        "Canonical_Combining_Class",
+        "Dash",
+        "Diacritic",
+        "Extender",
+        "General_Category",
+        "Hex_Digit",
+        "Ideographic",
+        "Lowercase",
+        "Math",
+        "Noncharacter_Code_Point",
+        "Numeric_Value",
+        "Quotation_Mark",
+        "Simple_Lowercase_Mapping",
+        "Simple_Titlecase_Mapping",
+        "Simple_Uppercase_Mapping",
+        "Terminal_Punctuation",
+        "Unified_Ideograph",
+        "Uppercase",
+        "White_Space"
+    ],
+    "encodingForms": [
+        "UTF-8",
+        "UTF-16",
+        "UTF-32"
+    ]
+}

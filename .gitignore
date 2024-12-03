@@ -1,0 +1,74 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.msi
+
+# Visual Studio temporary files
+*.suo
+*.user
+*.sbr
+*.pdb
+*.ncb
+*.sdf
+*.idb
+
+# Mac OS X
+.DS_Store
+
+# CMake out-of-source build files
+build
+Win32
+
+# Automake
+Makefile.in
+/ar-lib
+/mdate-sh
+/py-compile
+/test-driver
+/ylwrap
+.deps/
+.dirstamp
+
+# Autoconf
+autom4te.cache
+/autoscan.log
+/autoscan-*.log
+/aclocal.m4
+/compile
+/config.cache
+/config.guess
+/config.h.in
+/config.log
+/config.status
+/config.sub
+/configure
+/configure.scan
+/depcomp
+/install-sh
+/missing
+/stamp-h1
+
+# Python files
+*.pyc
+
+# Generated files
+*.tar.gz
