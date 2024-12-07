@@ -12,7 +12,7 @@ It's perfect for resource constrained devices like microcontrollers and IoT devi
 [![Build Status](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml/badge.svg)](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml)
 ![Unicode Version](https://img.shields.io/badge/Unicode-v16.0.0-blue)
 
-## Essential Algorithms
+## Features
 
 * Normalization ([docs](https://RailgunLabs.com/unicorn/manual/api/normalization/))
 * Case mapping ([docs](https://RailgunLabs.com/unicorn/manual/api/case-mapping/))
