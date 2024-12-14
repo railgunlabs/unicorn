@@ -1,0 +1,51 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_casefoldcmp \- case-insensitive string comparison
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_casefoldcmp(unicasefold " casing ", const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", bool *" result ");"
+.fi
+.SH DESCRIPTION
+Check if \f[I]s1\f[R] and \f[I]s2\f[R] are a caseless match in casing form \f[I]casing\f[R].
+If they match, then the implementation writes \f[C]true\f[R] to \f[I]result\f[R] else it writes \f[C]false\f[R].
+.PP
+The length and text attributes for \f[I]s1\f[R] are specified by \f[I]s1_len\f[R] and \f[I]s1_attr\f[R].
+The length and text attributes for \f[I]s2\f[R] are specified by \f[I]s2_len\f[R] and \f[I]s2_attr\f[R].
+If \f[I]s1_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s1\f[R] is null terminated.
+If \f[I]s2_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s2\f[R] is null terminated.
+.SH RETURN VALUE
+.TP
+UNI_OK
+If \f[C]text\f[R] was checked successfully.
+.TP
+UNI_BAD_OPERATION
+If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], or if \f[I]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_FEATURE_DISABLED
+If the library was built without support for case folding.
+.TP
+UNI_NO_MEMORY
+If dynamic memory allocation failed.
+.SH SEE ALSO
+.BR uniattr (3),
+.BR unicasefold (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

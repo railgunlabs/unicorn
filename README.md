@@ -31,8 +31,17 @@ Unicorn is fully customizable.
 You can choose which Unicode algorithms and character properties to include.
 You can even exclude character blocks for scripts your application does not support.
 
-To customize Unicorn, modify `features.json` and run the `amalgamate.pyz` script.
+To customize Unicorn, modify `features.json` and run the `generate.pyz` script.
 This script will generate the `unicorn.c` and `unicorn.h` source files which you can compile with your C project.
+When Unicorn is built with a provided build system (e.g. CMake), the script is executed automatically as part of the build process.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/customization-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/customization.svg">
+    <img alt="Customization" src=".github/customization.svg" width="500px">
+  </picture>
+</p>
 
 The schema for `features.json` is [documented here](https://RailgunLabs.com/unicorn/manual/feature-customization/).
 
@@ -93,7 +102,7 @@ Unit tests are executed on both little and big endian hardware as part of contin
 
 ## Installation
 
-Download a prebuilt header/source amalgamation from the [releases page](https://github.com/RailgunLabs/unicorn/releases) or generate one yourself by running `./amalgamate.pyz` (requires Python 3.6 or newer).
+Download a prebuilt header/source amalgamation from the [releases page](https://github.com/RailgunLabs/unicorn/releases) or generate one yourself by running `./generate.pyz` (requires Python 3.9 or newer).
 The prebuilt amalgamation includes _all_ features whereas the one you generate yourself only includes the features you specify in [features.json](features.json).
 
 Alternatively, build a linkable library with

@@ -1,0 +1,52 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_prev \- decode the previous scalar value
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_prev(const void *" text ", unisize " length ", uniattr " attributes ", unisize *" index ", unichar *" cp ");"
+.fi
+.SH DESCRIPTION
+Decodes the preceding Unicode scalar value from \f[I]text\f[R] at code unit \f[I]index\f[R] and writes the result to \f[I]cp\f[R].
+The \f[I]index\f[R] parameter is updated by the implementation to refer to the code unit beginning the preceding scalar.
+.PP
+The number of code units in \f[I]text\f[R] is specified by \f[I]length\f[R] and its encoding is specified by \f[I]attributes\f[R].
+If \f[I]length\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
+.PP
+This function returns \f[B]UNI_DONE\f[R] when iteration has reached the end of \f[I]text\f[R] otherwise it returns \f[B]UNI_OK\f[R] indicating there are more characters.
+If the implementation detects \f[I]text\f[R] is malformed, then it returns \f[B]UNI_BAD_ENCODING\f[R].
+.PP
+The \f[I]index\f[R] parameter must refer to a code point boundary otherwise the behavior is undefined.
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the character was successfully decoded.
+.TP
+UNI_DONE
+If the end of \f[I]text\f[R] was reached.
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is malformed; this is never returned if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R].
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R], \f[C]offset\f[R], or \f[C]c\f[R] are NULL.
+.SH SEE ALSO
+.BR unistat (3),
+.BR uniattr (3),
+.BR unisize (3),
+.BR unichar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

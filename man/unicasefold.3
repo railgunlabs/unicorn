@@ -1,0 +1,37 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unicasefold \- case folding operations
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unicasefold {
+.RS
+.B UNI_DEFAULT,
+.B UNI_CANONICAL,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+This enumeration defines the supported case folding operations.
+.SH CONSTANTS
+.TP
+.BR UNI_DEFAULT
+Case folding for binary caseless string comparison.
+.TP
+.BR UNI_CANONICAL
+Case folding for canonical caseless string comparison.
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

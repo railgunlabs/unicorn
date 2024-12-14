@@ -1,0 +1,107 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_sortkeymk \- make sort key
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_sortkeymk(const void *" text ", unisize " length ", uniattr " attributes ", uniweighting " weighting ", unistrength " strength ", uint16_t *" sortkey ", size_t *" sortkey_cap ");"
+.fi
+.SH DESCRIPTION
+Build a sort key for \f[I]text\f[R] and writes the result to \f[I]sortkey\f[R].
+The number of code units in \f[I]text\f[R] is specified by \f[I]length\f[R].
+If \f[I]length\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
+Pairs of sort keys can be compared with \f[B]uni_sortkeycmp\f[R](3).
+.PP
+The capacity of \f[I]sortkey\f[R] is specified by \f[I]sortkey_cap\f[R].
+The implementation always writes to \f[I]sortkey_cap\f[R] the total number of weights needed for \f[I]text\f[R].
+If the capacity of \f[I]sortkey\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If \f[I]sortkey\f[R] is \f[C]NULL\f[R], then \f[I]sortkey_cap\f[R] must be zero.
+.PP
+If the implementation detects \f[I]text\f[R] is malformed, then it returns \f[B]UNI_BAD_ENCODING\f[R].
+.PP
+Support for collation must be enabled in the JSON configuration file.
+.PP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "collation": true
+    }
+}
+.EE
+.in
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the scalar was successfully decoded.
+.TP
+UNI_NO_SPACE
+If \f[I]sortkey\f[R] lacks capacity for the collation elements.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]sortkey_cap\f[R] are NULL.
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_NO_MEMORY
+If dynamic memory allocation failed.
+.SH EXAMPLES
+This example constructs two sort keys and compares them.
+Sort keys must be generated with the same settings for their order to make sense.
+In this example, the sort keys are constructed with \f[B]UNI_SHIFTED\f[R] weighting and \f[B]UNI_PRIMARY\f[R] strength.
+In a real application you would cache the sort keys for future comparisons.
+For one-off comparisons, use \f[B]uni_collate\f[R](3).
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char *s1 = "hello", *s2 = "Hi";
+    uint16_t sk1[16] = {0}, sk2[16] = {0};
+    size_t sk1_len = 16, sk2_len = 16;
+
+    if (uni_sortkeymk(s1, -1, UNI_UTF8, UNI_SHIFTED, UNI_PRIMARY, sk1, &sk1_len) != UNI_OK ||
+        uni_sortkeymk(s2, -1, UNI_UTF8, UNI_SHIFTED, UNI_PRIMARY, sk2, &sk2_len) != UNI_OK)
+    {
+        puts("failed to construct sort keys");
+        return 1;
+    }
+
+    int result;
+    if (uni_sortkeycmp(sk1, sk1_len, sk2, sk2_len, &result) != UNI_OK)
+    {
+        puts("failed to compare sort keys");
+        return 1;
+    }
+
+    printf("%d", result);
+    return 0;
+}
+.EE
+.in
+.SH SEE ALSO
+.BR uni_sortkeycmp (3),
+.BR unistat (3),
+.BR uniweighting (3),
+.BR unistrength (3),
+.BR uniattr (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

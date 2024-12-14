@@ -1,0 +1,56 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_normcmp \- canonical equivalence
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_normcmp(const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", bool *" result ");"
+.fi
+.SH DESCRIPTION
+Check if \f[I]s1\f[R] and \f[I]s2\f[R] are canonically equivalent.
+That is, it checks if the graphemes of both strings are the same.
+This function is equivalent to calling \f[B]uni_norm\f[R](3) with \f[B]UNI_NFD\f[R] followed by a code point comparison.
+.PP
+The implementation is optimized to normalize the strings incrementally while simultaneously comparing them.
+This is a more optimal approach when it’s unknown whether the text is normalized or not.
+If it’s known in advance that the text is normalized, then it’s faster to simply perform the code point comparison directly with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
+.PP
+The implementation strives to be highly performant and avoid dynamic memory allocation when possible.
+Typically, memory allocation will only be performed on unnaturally long combining character sequences, like
+.UR https://en.wikipedia.org/wiki/Zalgo_text
+Zalgo text
+.UE .
+It’s rare for real world text to trigger memory allocation.
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the string was normalized successfully.
+.TP
+UNI_BAD_OPERATION
+If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], if \f[I]s1_len\f[R] or \f[I]s2_len\f[R] are negative, or if \f[I]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_NO_MEMORY
+If dynamic memory allocation failed.
+.SH SEE ALSO
+.BR uni_norm (3),
+.BR uninormform (3),
+.BR uniattr (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

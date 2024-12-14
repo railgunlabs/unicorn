@@ -1,0 +1,50 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uninormchk \- quick check constants
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum uninormchk {
+.RS
+.B UNI_YES,
+.B UNI_MAYBE,
+.B UNI_NO,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+These properties indicate whether a character can or cannot appear in a given normalization form.
+They are defined to enable various optimizations for implementations of normalization.
+They enable fast checking of whether some input string is already in the desired normalization form.
+This may make it possible to bypass the more time-consuming call to run the complete Unicode Normalization Algorithm on the input string.
+.PP
+Users can alternatively call \f[B]uni_normchk\f[R](3) which will check if text is normalized.
+The implementation uses these properties internally to perform the check.
+.SH CONSTANTS
+.TP
+.BR UNI_YES
+Indicates characters that can occur in the respective normalization form.
+.TP
+.BR UNI_MAYBE
+Characters that may occur in the respective normalization, depending on the context.
+.TP
+.BR UNI_NO
+Characters that cannot ever occur in the respective normalization form.
+.SH SEE ALSO
+.BR uni_normchk (3),
+.BR uni_normqchk (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

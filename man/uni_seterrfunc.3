@@ -1,0 +1,33 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_seterrfunc \- receive diagnostic events
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "void uni_seterrfunc(void *" user_data ", unierrfunc " callback ");"
+.fi
+.SH DESCRIPTION
+Associate the function \f[C]cb\f[R] with the library’s internal error logger.
+Anytime a function returns an error \f[C]cb\f[R] will be invoked with a description of the error.
+It is up to the implementation of \f[C]cb\f[R] to be thread safe.
+.PP
+The implementation generally invokes \f[C]cb\f[R] at the moment the error occurs.
+Callers are encouraged to set breakpoints in their implementation of \f[C]cb\f[R] and view the stack trace to discover the exact cause of the error.
+.SH SEE ALSO
+.BR unimemfunc (3),
+.BR unierrfunc (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

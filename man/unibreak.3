@@ -1,0 +1,101 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unibreak \- detectable text elements
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unibreak {
+.RS
+.B UNI_GRAPHEME,
+.B UNI_WORD,
+.B UNI_SENTENCE,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+The elements of this enumeration describe the boundaries that can be detected.
+Conceptually, a break represents the space in between two code points.
+.SH CONSTANTS
+.TP
+.BR UNI_GRAPHEME
+A grapheme or grapheme cluster is a user-perceived character.
+Grapheme clusters are useful for user interfaces and user-facing text manipulation.
+For example, graphemes should be used in the implementation of text selection, arrow key movement, backspacing through text, and so forth.
+When truncating text for presentation grapheme cluster boundaries should be used to avoid malforming user-perceived characters.
+.IP
+A key feature of Unicode grapheme clusters is that they remain unchanged across all canonically equivalent normalization forms.
+That means the graphemes boundaries remain unchanged whether the text is normalized as \f[B]UNI_NFC\f[R] or \f[B]UNI_NFD\f[R].
+.IP
+Support for grapheme cluster break detection can be enabled in the JSON configuration as shown below:
+.IP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "segmentation": [
+            "grapheme"
+        ]
+    }
+}
+.EE
+.in
+.TP
+.BR UNI_WORD
+Word boundaries are used in a number of different contexts.
+The most familiar ones are selection (double-click mouse selection or “move to next word” control-arrow keys) and “whole word search” for search and replace.
+They are also used in database queries and regular expressions, to determine whether elements are within a certain number of words of one another.
+.IP
+The default algorithm for detecting word boundaries primarily intended for languages that use white space to delimit words.
+Unfortunately, some scripts, like Thai, Lao, Khmer, and Myanmar, do not use spaces between words.
+Ideographic scripts such as Japanese and Chinese are even more complex.
+It is therefore not possible to provide an algorithm that correctly detects word boundaries across languages.
+These languages require special handling by a more sophisticated word break detection algorithm that understands the rules of the language.
+.IP
+Support for word break detection can be enabled in the JSON configuration file as shown below:
+.IP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "segmentation": [
+            "word"
+        ]
+    }
+}
+.EE
+.in
+.TP
+.BR UNI_SENTENCE
+Sentence boundaries are often used for triple-click or other methods of selecting or iterating through blocks of text that are larger than single words.
+They are also used to determine whether words occur within the same sentence in database queries.
+.IP
+Support for sentence break detection can be enabled in the JSON configuration file as shown below:
+.IP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "segmentation": [
+            "sentence"
+        ]
+    }
+}
+.EE
+.in
+.SH SEE ALSO
+.BR uninormform (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

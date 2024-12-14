@@ -1,0 +1,46 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_numval \- numeric property
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "const char *uni_numval(unichar " c ");"
+.fi
+.SH DESCRIPTION
+Return the \f[C]Numeric_Value\f[R] character property for the code point \f[I]c\f[R].
+If the input character does not have a numeric value, then \f[C]NULL\f[R] is returned.
+.PP
+The numeric value is returned as a null terminated C string in decimal notation.
+That means if the character has a numeric value of -1/2, which is the case for TIBETAN DIGIT HALF ZERO (U+0F33), it would be returned as the string “-0.5”.
+The caller can interpret the string and convert to an integer or floating-point storage format as needed.
+.PP
+Support for the numeric value character property must be enabled in the JSON configuration file otherwise the function will always return \f[C]NULL\f[R].
+.PP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Numeric_Value"
+    ]
+}
+.EE
+.in
+.SH RETURN VALUE
+The value of \f[C]Numeric_Value\f[R] character property in decimal notation or \f[C]NULL\f[R] if the character does not have a numeric value.
+.SH SEE ALSO
+.BR unichar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

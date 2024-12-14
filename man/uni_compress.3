@@ -1,0 +1,51 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_compress \- compress text
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_compress(const void *" text ", unisize " text_len ", uniattr " text_attr ", uint8_t *" buffer ", size_t *" buffer_length ");"
+.fi
+.SH DESCRIPTION
+Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and writes the results ot \f[I]buffer\f[R].
+Text is compressed based on its code points, i.e. UTF-8, 16, and 32 will compress to the same byte sequence.
+.PP
+The capacity of \f[I]buffer\f[R] is specified by \f[I]buffer_length\f[R].
+The implementation always writes to \f[I]buffer_length\f[R] the total number of bytes in the fully compressed text.
+If the capacity of \f[I]buffer\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If \f[I]buffer\f[R] is \f[C]NULL\f[R], then \f[I]buffer_length\f[R] must be zero.
+.SH RETURN VALUE
+.TP
+UNI_OK
+On success.
+.TP
+UNI_NO_SPACE
+If \f[I]buffer\f[R] is not large enough.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]buffer_length\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_FEATURE_DISABLED
+If Unicorn was configured without support for the compression algorithm.
+.SH SEE ALSO
+.BR unistat (3),
+.BR uniattr (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

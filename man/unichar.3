@@ -1,0 +1,43 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unichar \- code point
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "typedef uint32_t unichar;"
+.fi
+.SH DESCRIPTION
+This integer represents a Unicode code point or Unicode scalar value depending on how it’s used.
+Unicode code points are integers in the inclusive range \f[C][0,10FFFF]\f[R].
+Unicode scalar values are code points excluding surrogate characters.
+.PP
+The integer type used as the underlying storage for this type is configurable.
+This helps simplify integration with existing applications which may already have defined their own Unicode character type.
+The type chosen can be signed or unsigned, but it must be large enough to accommodate the entire Unicode character repertoire.
+As of Unicode 16.0, that means an integer with at least 21 bits of storage.
+.PP
+The snippet below demonstrates how to redefine \f[B]unichar\f[R](3) as a signed 64-bit integer.
+Using a 64-bit integer is wasteful, as you only need 21-bits, and was chosen for example purposes only.
+.PP
+.in +4n
+.EX
+{
+    "characterStorage": "int64_t",
+}
+.EE
+.in
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

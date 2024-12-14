@@ -7,4 +7,4 @@ if ! test -f ./unicorn.c; then
     exit 1
 fi
 
-cppcheck --std=c99 --addon=misra --suppressions-list=tests/suppressions.txt --enable=all --force -D__cppcheck__ unicorn.c unicorn.h
+cppcheck --std=c99 --addon=misra --suppressions-list=checks/suppressions.txt --enable=all --force -D__cppcheck__ unicorn.c unicorn.h

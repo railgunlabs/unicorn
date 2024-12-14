@@ -1,0 +1,72 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_sortkeycmp \- compare sort keys
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_sortkeycmp(const uint16_t *" sk1 ", size_t " sk1_len ", const uint16_t *" sk2 ", size_t " sk2_len ", int *" result ");"
+.fi
+.SH DESCRIPTION
+Compare sort keys \f[I]sk1\f[R] and \f[I]sk2\f[R] and write either -1, 0, or 1 to \f[I]result\f[R] depending on if \f[C]sk1 < sk2\f[R], \f[C]sk1 = sk2\f[R], or \f[C]sk1 > sk2\f[R].
+The sort keys must be generated with \f[B]uni_sortkeymk\f[R](3).
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the collation algorithm executed successfully.
+.TP
+UNI_BAD_OPERATION
+If \f[I]sk1\f[R], \f[I]sk2\f[R], or \f[I]result\f[R] are \f[C]NULL\f[R].
+.SH EXAMPLES
+This example constructs two sort keys and compares them.
+Sort keys must be generated with the same settings for their order to make sense.
+In this example, the sort keys are constructed with \f[B]UNI_SHIFTED\f[R] weighting and \f[B]UNI_PRIMARY\f[R] strength.
+In a real application you would cache the sort keys for future comparisons.
+For one-off comparisons, use \f[B]uni_collate\f[R](3).
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char *s1 = "hello", *s2 = "Hi";
+    uint16_t sk1[16] = {0}, sk2[16] = {0};
+    size_t sk1_len = 16, sk2_len = 16;
+
+    if (uni_sortkeymk(s1, -1, UNI_UTF8, UNI_SHIFTED, UNI_PRIMARY, sk1, &sk1_len) != UNI_OK ||
+        uni_sortkeymk(s2, -1, UNI_UTF8, UNI_SHIFTED, UNI_PRIMARY, sk2, &sk2_len) != UNI_OK)
+    {
+        puts("failed to construct sort keys");
+        return 1;
+    }
+
+    int result;
+    if (uni_sortkeycmp(sk1, sk1_len, sk2, sk2_len, &result) != UNI_OK)
+    {
+        puts("failed to compare sort keys");
+        return 1;
+    }
+
+    printf("%d", result);
+    return 0;
+}
+.EE
+.in
+.SH SEE ALSO
+.BR uni_sortkeymk (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

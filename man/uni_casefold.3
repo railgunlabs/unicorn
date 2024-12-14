@@ -1,0 +1,84 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_casefold \- perform case folding
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_casefold(unicasefold " casing ", const void *" src ", unisize " src_len ", uniattr " src_attr ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
+.fi
+.SH DESCRIPTION
+Case folds \f[I]src\f[R] to casing form \f[I]casing\f[R] and writes the result to \f[I]dst\f[R].
+The capacity of \f[I]dst\f[R] is specified by \f[I]dst_len\f[R].
+.PP
+If \f[I]dst\f[R] is not \f[C]NULL\f[R], then the implementation writes to \f[I]dst_len\f[R] the total number of code units written to \f[I]dst\f[R].
+If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+.PP
+If \f[I]dst\f[R] is \f[C]NULL\f[R], then \f[I]dst_len\f[R] must be zero and the implementation writes to \f[I]dst_len\f[R] the number of code units in the fully case converted text and returns \f[B]UNI_OK\f[R].
+Call the function this way to compute the total length of the destination buffer before calling it again with a sufficiently sized buffer.
+.SH RETURN VALUE
+.TP
+UNI_OK
+If \f[C]text\f[R] was checked successfully.
+.TP
+UNI_BAD_OPERATION
+If \f[C]text\f[R] is \f[C]NULL\f[R], \f[C]length\f[R] is negative, or \f[C]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]src\f[R] is not well-formed (checks are omitted if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_NO_SPACE
+If \f[I]dst\f[R] was not large enough.
+.TP
+UNI_FEATURE_DISABLED
+If the library was built without support for case folding.
+.TP
+UNI_NO_MEMORY
+If dynamic memory allocation failed.
+.SH EXAMPLES
+This example casefolds a string for canonical caseless comparison.
+.PP
+The example will produce an output string that is longer than the input string.
+This is because the German 'ß' (U+00DF) case folds to 'ss' (U+0073 U+0073) and the Latin small letter 'ö' with diaeresis (U+00F6) canonically normalizes to an 'o' (U+006F) followed by a combining diaeresis character (U+0308).
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char *in = u8"Stößen";
+    char out[32];
+    unisize outlen = sizeof(out);
+
+    if (uni_casefold(UNI_CANONICAL, in, -1, UNI_UTF8, out, &outlen, UNI_UTF8) != UNI_OK)
+    {
+        // something went wrong
+        return 1;
+    }
+
+    printf("%.*s", outlen, out); // prints "stössen"
+    return 0;
+}
+.EE
+.in
+.SH SEE ALSO
+.BR unistat (3),
+.BR uniattr (3),
+.BR unicasefold (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

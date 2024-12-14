@@ -1,0 +1,73 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unistat \- status code
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unistat {
+.RS
+.B UNI_OK,
+.B UNI_DONE,
+.B UNI_NO_MEMORY,
+.B UNI_NO_SPACE,
+.B UNI_BAD_ENCODING,
+.B UNI_BAD_OPERATION,
+.B UNI_FEATURE_DISABLED,
+.B UNI_MALFUNCTION,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+Most functions in the Unicorn library return an element of this enumeration.
+Of the elements, only \f[B]UNI_OK\f[R] and \f[B]UNI_DONE\f[R] represent a success status whereas the others represent failures.
+.SH CONSTANTS
+.TP
+.BR UNI_OK
+Represents the successful execution of an operation.
+.TP
+.BR UNI_DONE
+Represents the successful completion of an operation.
+An example of a function that returns this status code is \f[B]uni_next\f[R](3) which returns it when the end of the input string has been reached.
+.TP
+.BR UNI_NO_MEMORY
+Functions that can dynamically allocate memory will list this constant as one of their potential return values.
+Functions that omit this constant as a return value do not perform dynamic memory allocation.
+.TP
+.BR UNI_NO_SPACE
+This failure code indicates the destination buffer is too small to receive the content and therefore a larger buffer must be used.
+.TP
+.BR UNI_BAD_ENCODING
+This failure code indicates a malformed character sequence was encountered when decoding text.
+Examples of malformed character sequences would be overlong sequences in UTF-8 or unpaired surrogate characters in UTF-16.
+.TP
+.BR UNI_BAD_OPERATION
+This failure code is returned by functions when they are called with invalid arguments.
+For example, a function might return this code when given a null pointer when a non-null pointer was expected.
+.TP
+.BR UNI_FEATURE_DISABLED
+This failure code indicates the requested operation cannot be performed because the feature is disabled.
+Unicorn allows consumers to customize the Unicode features it’s built with.
+This is useful for reducing the footprint of the library.
+If a user attempts to call a function that uses a disabled feature of the library, then this status code will be returned.
+.TP
+.BR UNI_MALFUNCTION
+This failure code indicates a defect with the implementation.
+In a working version of Unicorn, an application will never see this status code.
+If an application does encounter this code, it means there is a bug in Unicorn.
+.SH SEE ALSO
+.BR uni_next (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

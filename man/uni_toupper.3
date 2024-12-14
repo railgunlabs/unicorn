@@ -1,0 +1,44 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_toupper \- simple upper case mapping
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unichar uni_toupper(unichar " c ");"
+.fi
+.SH DESCRIPTION
+Return the simple upper case mapping for the code point \f[I]c\f[R].
+For the full uppercase mappings use \f[B]uni_caseconv\f[R](3) with \f[B]UNI_UPPER\f[R].
+.PP
+Support for simple upper case mappings must be enabled in the JSON configuration file otherwise the function will always return \f[I]c\f[R].
+.PP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Simple_Uppercase_Mapping"
+    ]
+}
+.EE
+.in
+.SH RETURN VALUE
+The simple upper case mapping for \f[I]c\f[R].
+.SH SEE ALSO
+.BR uni_caseconv (3),
+.BR unicaseconv (3),
+.BR unichar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

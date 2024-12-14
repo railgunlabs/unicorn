@@ -1,0 +1,82 @@
+#[=======================================================================[.rst:
+FindUnicorn
+------------
+
+Finds the Unicorn library.
+
+Imported Targets
+^^^^^^^^^^^^^^^^
+
+This module provides the following imported targets, if found:
+
+``Railgun::Unicorn``
+  The Unicorn library
+
+Result Variables
+^^^^^^^^^^^^^^^^
+
+This will define the following variables:
+
+``UNICORN_FOUND``
+  True if the system has the Unicorn library.
+``UNICORN_VERSION``
+  The version of the Unicorn library which was found.
+``UNICORN_INCLUDE_DIRS``
+  Include directories needed to use Unicorn.
+``UNICORN_LIBRARIES``
+  Libraries needed to link to Unicorn.
+
+Cache Variables
+^^^^^^^^^^^^^^^
+
+The following cache variables may also be set:
+
+``UNICORN_INCLUDE_DIR``
+  The directory containing ``unicorn.h``.
+``UNICORN_LIBRARY``
+  The path to the Unicorn library.
+
+#]=======================================================================]
+
+# On Windows the header and library are installed in the same directory as this
+# script is therefore the following function is called to obtain its path.
+get_filename_component(UNICORN_CONFIG_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
+
+# Find header.
+find_path(UNICORN_INCLUDE_DIR unicorn.h
+          HINTS /usr/local/include /usr/include ${UNICORN_CONFIG_DIR})
+
+# Find library.
+find_library(UNICORN_LIBRARY
+             NAMES Unicorn unicorn
+             HINTS /usr/local/lib /usr/lib ${UNICORN_CONFIG_DIR})
+
+# Not needed anymore.
+unset(UNICORN_CONFIG_DIR)
+
+# Use version specified in top-level CMakeLists.txt
+set(UNICORN_VERSION "@PROJECT_VERSION@")
+
+# Handle the QUIETLY and REQUIRED arguments and set UNICORN_FOUND to TRUE if all listed variables are TRUE.
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Unicorn
+                                  FOUND_VAR UNICORN_FOUND
+                                  REQUIRED_VARS UNICORN_LIBRARY UNICORN_INCLUDE_DIR
+                                  VERSION_VAR UNICORN_VERSION)
+
+# Set result variables.
+if(UNICORN_FOUND)
+    set(UNICORN_LIBRARIES ${UNICORN_LIBRARY})
+    set(UNICORN_INCLUDE_DIRS ${UNICORN_INCLUDE_DIR})
+endif()
+
+# Export a module.
+if(UNICORN_FOUND AND NOT TARGET Railgun::Unicorn)
+    add_library(Railgun::Unicorn UNKNOWN IMPORTED)
+    set_target_properties(Railgun::Unicorn PROPERTIES
+                          IMPORTED_LOCATION "${UNICORN_LIBRARY}"
+                          INTERFACE_INCLUDE_DIRECTORIES "${UNICORN_INCLUDE_DIR}")
+endif()
+
+# Cached variables should be hidden in the CMake interface unless the user explicitly asks to edit them.
+mark_as_advanced(UNICORN_INCLUDE_DIR UNICORN_LIBRARY)

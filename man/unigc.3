@@ -1,0 +1,407 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unigc \- general category
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unigc {
+.RS
+.B UNI_UPPERCASE_LETTER,
+.B UNI_LOWERCASE_LETTER,
+.B UNI_TITLECASE_LETTER,
+.B UNI_MODIFIER_LETTER,
+.B UNI_OTHER_LETTER,
+.B UNI_NONSPACING_MARK,
+.B UNI_SPACING_MARK,
+.B UNI_ENCLOSING_MARK,
+.B UNI_DECIMAL_NUMBER,
+.B UNI_LETTER_NUMBER,
+.B UNI_OTHER_NUMBER,
+.B UNI_CONNECTOR_PUNCTUATION,
+.B UNI_DASH_PUNCTUATION,
+.B UNI_OPEN_PUNCTUATION,
+.B UNI_CLOSE_PUNCTUATION,
+.B UNI_INITIAL_PUNCTUATION,
+.B UNI_FINAL_PUNCTUATION,
+.B UNI_OTHER_PUNCTUATION,
+.B UNI_MATH_SYMBOL,
+.B UNI_CURRENCY_SYMBOL,
+.B UNI_MODIFIER_SYMBOL,
+.B UNI_OTHER_SYMBOL,
+.B UNI_SPACE_SEPARATOR,
+.B UNI_LINE_SEPARATOR,
+.B UNI_PARAGRAPH_SEPARATOR,
+.B UNI_CONTROL,
+.B UNI_FORMAT,
+.B UNI_SURROGATE,
+.B UNI_PRIVATE_USE,
+.B UNI_UNASSIGNED,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+A code point only has one assigned General Category.
+See \f[B]uni_gc\f[R](3) for details on retrieving any character’s general category.
+.SH CONSTANTS
+.TP
+.BR UNI_UPPERCASE_LETTER
+Examples of uppercase letters include:
+.IP
+.RS
+.IP \[bu] 2
+Latin Capital Letter A (\f[C]U+0041\f[R])
+.IP \[bu] 2
+Cyrillic Capital Letter Rha (\f[C]U+0516\f[R])
+.RE
+.TP
+.BR UNI_LOWERCASE_LETTER
+Examples of lowercase letters include:
+.IP
+.RS
+.IP \[bu] 2
+Latin Small Letter B (\f[C]U+0062\f[R]).
+.IP \[bu] 2
+Greek Small Letter Epsilon (\f[C]U+03B5\f[R]).
+.RE
+.TP
+.BR UNI_TITLECASE_LETTER
+Ligatures containing uppercase followed by lowercase letters Some examples include:
+.IP
+.RS
+.IP \[bu] 2
+Latin Capital Letter D with Small Letter Z (\f[C]U+01F2\f[R])
+.IP \[bu] 2
+Latin Capital Letter N with Small Letter J (\f[C]U+01CB\f[R])
+.RE
+.TP
+.BR UNI_MODIFIER_LETTER
+A letter or symbol typically written next to another letter that it modifies in some way.
+They generally function like diacritics, changing the sound-values of the letter it is next to (usually the letter preceding it but sometimes the following letter instead).
+Like combining marks, they are often used in technical phonetic transcriptional systems to make phonetic distinction
+.IP
+Examples of modifier letters include:
+.IP
+.RS
+.IP \[bu] 2
+Modifier Letter Small J (\f[C]U+01F2\f[R])
+.IP \[bu] 2
+Modifier Letter Acute Accent (\f[C]U+02CA\f[R])
+.RE
+.TP
+.BR UNI_OTHER_LETTER
+An ideogram or ideograph is a graphic symbol that represents an idea or concept.
+For example, Chinese characters.
+.IP
+Unicase alphabets are alphabets with just one case for its letters.
+For example, Arabic, Telugu, and Hangul.
+.IP
+Examples of specific code points include:
+.IP
+.RS
+.IP \[bu] 2
+Arabic Letter Hah (\f[C]U+062D\f[R])
+.IP \[bu] 2
+Hebrew Letter Tsadi (\f[C]U+05E6\f[R])
+.IP \[bu] 2
+CJK Unified Ideograph-3401 (\f[C]U+3401\f[R])
+.RE
+.TP
+.BR UNI_NONSPACING_MARK
+A combining mark is a code point that is intended to modify another character.
+.IP
+Examples of specific code points include:
+.IP
+.RS
+.IP \[bu] 2
+Combining Acute Accent (\f[C]U+0301\f[R])
+.IP \[bu] 2
+Arabic Sign Takhallus (\f[C]U+0614\f[R])
+.RE
+.TP
+.BR UNI_SPACING_MARK
+A combining mark is a code point that is intended to modify another character.
+.IP
+Examples of specific code points include:
+.IP
+.RS
+.IP \[bu] 2
+Bengali Vowel Sign Ai (\f[C]U+09C8\f[R])
+.IP \[bu] 2
+Hangul Double Dot Tone Mark (\f[C]U+302F\f[R])
+.IP \[bu] 2
+Musical Symbol Combining Flag-3 (\f[C]U+1D170\f[R])
+.RE
+.TP
+.BR UNI_ENCLOSING_MARK
+A combining mark is a code point that is intended to modify another character.
+.IP
+Examples of specific code points include:
+.IP
+.RS
+.IP \[bu] 2
+Combining Enclosing Diamond (\f[C]U+20DF\f[R])
+.IP \[bu] 2
+Combining Enclosing Circle Backslash (\f[C]U+20E0\f[R])
+.RE
+.TP
+.BR UNI_DECIMAL_NUMBER
+A code point representing a single digit.
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Digit One (\f[C]U+0031\f[R])
+.IP \[bu] 2
+Arabic-Indic Digit Four (\f[C]U+0664\f[R])
+.IP \[bu] 2
+Brahmi Digit Nine (\f[C]U+1106F\f[R])
+.RE
+.TP
+.BR UNI_LETTER_NUMBER
+A numeral composed of letters or letter-like symbols.
+.IP
+.RS
+.IP \[bu] 2
+Roman Numeral Seven (\f[C]U+2166\f[R])
+.IP \[bu] 2
+Bamum Letter Ten (\f[C]U+A6EA\f[R])
+.RE
+.TP
+.BR UNI_OTHER_NUMBER
+All other numeric characters that do not represent digits or letter-like numeric characters.
+For example, vulgar fractions, superscript and subscript digits.
+Specific code points include:
+.IP
+.RS
+.IP \[bu] 2
+Vulgar Fraction One Quarter (\f[C]U+00BC\f[R])
+.IP \[bu] 2
+Superscript Three (\f[C]U+00B3\f[R])
+.IP \[bu] 2
+Subscript Nine (\f[C]U+2089\f[R])
+.RE
+.TP
+.BR UNI_CONNECTOR_PUNCTUATION
+A code point representing a connecting punctuation mark, like an underscore.
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Low Line (\f[C]U+005F\f[R])
+.IP \[bu] 2
+Character Tie (\f[C]U+2040\f[R])
+.RE
+.TP
+.BR UNI_DASH_PUNCTUATION
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Hyphen-Minus (\f[C]U+002D\f[R])
+.IP \[bu] 2
+Em Dash (\f[C]U+2014\f[R])
+.RE
+.TP
+.BR UNI_OPEN_PUNCTUATION
+A code point representing an opening punctuation mark.
+Most have a corresponding closing punctuation mark.
+For example, Left Parenthesis (\f[C]U+0028\f[R]) and Right Parenthesis (\f[C]U+0028\f[R]).
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Left Parenthesis (\f[C]U+0028\f[R])
+.IP \[bu] 2
+Left Square Bracket (\f[C]U+005B\f[R])
+.IP \[bu] 2
+Left Curly Bracket (\f[C]U+007B\f[R])
+.RE
+.TP
+.BR UNI_CLOSE_PUNCTUATION
+A code point representing a closing punctuation mark.
+Most have a corresponding opening punctuation mark.
+For example, Right Parenthesis (\f[C]U+0028\f[R]) and Left Parenthesis (\f[C]U+0028\f[R]).
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Right Parenthesis (\f[C]U+0029\f[R])
+.IP \[bu] 2
+Right Square Bracket (\f[C]U+005D\f[R])
+.IP \[bu] 2
+Right Curly Bracket (\f[C]U+007D\f[R])
+.RE
+.TP
+.BR UNI_INITIAL_PUNCTUATION
+A code point representing an opening quotation mark.
+Most have a corresponding closing quotation mark.
+For example, Left Single Quotation Mark (\f[C]U+2018\f[R]) and Right Single Quotation Mark (\f[C]U+2019\f[R]).
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Left Single Quotation Mark (\f[C]U+2018\f[R])
+.IP \[bu] 2
+Left Double Quotation Mark (\f[C]U+201C\f[R])
+.RE
+.TP
+.BR UNI_FINAL_PUNCTUATION
+A code point representing a closing quotation mark.
+Most have a corresponding opening quotation mark.
+For example, Right Single Quotation Mark (\f[C]U+2019\f[R]) and Left Single Quotation Mark (\f[C]U+2018\f[R]).
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Right Single Quotation Mark (\f[C]U+2019\f[R])
+.IP \[bu] 2
+Right Double Quotation Mark (\f[C]U+201D\f[R])
+.RE
+.TP
+.BR UNI_OTHER_PUNCTUATION
+A code point representing a punctuation mark that does not fit in with any other punctuation mark categories.
+For example, a period (\f[C]U+002E\f[R]) and exclamation point (\f[C]U+0021\f[R]) which are punctuation marks to terminate sentences.
+.IP
+Examples of other punctuation marks include:
+.IP
+.RS
+.IP \[bu] 2
+Question Mark (\f[C]U+003F\f[R])
+.IP \[bu] 2
+Semicolon (\f[C]U+003B\f[R])
+.IP \[bu] 2
+Section Sign (\f[C]U+00A7\f[R])
+.RE
+.TP
+.BR UNI_MATH_SYMBOL
+A code point representing a mathematical symbol.
+This does not include parentheses and brackets, which are in categories \f[C]Ps\f[R] and \f[C]Pe\f[R].
+This also does not include \f[C]!\f[R], \f[C]*\f[R], \f[C]-\f[R], or \f[C]/\f[R], which despite frequent use as mathematical operators, are primarily considered to be punctuation.
+.IP
+Examples of mathematical code points:
+.IP
+.RS
+.IP \[bu] 2
+Plus Sign (\f[C]U+002B\f[R])
+.IP \[bu] 2
+Division Sign (\f[C]U+00F7\f[R])
+.IP \[bu] 2
+Subset of or Equal To (\f[C]U+2286\f[R])
+.RE
+.TP
+.BR UNI_CURRENCY_SYMBOL
+A code point representing a currency sign.
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Dollar Sign (\f[C]U+0024\f[R])
+.IP \[bu] 2
+Pound Sign (\f[C]U+00A3\f[R])
+.IP \[bu] 2
+Yen Sign (\f[C]U+00A5\f[R])
+.RE
+.TP
+.BR UNI_MODIFIER_SYMBOL
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Cedilla (\f[C]U+00B8\f[R])
+.IP \[bu] 2
+Greek Koronis (\f[C]U+1FBD\f[R])
+.RE
+.TP
+.BR UNI_OTHER_SYMBOL
+A code point representing a symbol that cannot be categorized as another symbol type.
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Copyright Sign (\f[C]U+00A9\f[R])
+.IP \[bu] 2
+Check Mark (\f[C]U+2713\f[R])
+.IP \[bu] 2
+Braille Pattern Dots-4578 (\f[C]U+28D8\f[R])
+.RE
+.TP
+.BR UNI_SPACE_SEPARATOR
+A code point representing a space separator.
+These code points typically do not have a graphical representation.
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+Space (SP) (\f[C]U+0020\f[R])
+.IP \[bu] 2
+Em Quad (\f[C]U+2001\f[R])
+.RE
+.TP
+.BR UNI_LINE_SEPARATOR
+At this time, only Line Separator (\f[C]U+2028\f[R]) has this category.
+.TP
+.BR UNI_PARAGRAPH_SEPARATOR
+At this time, only Paragraph Separator (\f[C]U+2029\f[R]) has this category.
+.TP
+.BR UNI_CONTROL
+A control character may be described as doing something when the user inputs them, such as a code 3 (End-of-Text character, ETX, ^C) to interrupt the running process, or a code 4 (End-of-Transmission character, EOT, ^D), used to end text input or to exit a Unix shell.
+.IP
+Some programming languages, like C, use NUL (\f[C]U+0000\f[R]) to mark the end of a string.
+.IP
+Examples include:
+.IP
+.RS
+.IP \[bu] 2
+<Null> (NUL) (\f[C]U+0000\f[R])
+.IP \[bu] 2
+<Line Tabulation> (VT) (\f[C]U+000B\f[R])
+.IP \[bu] 2
+<Carriage Return> (CR) (\f[C]U+000D\f[R])
+.RE
+.TP
+.BR UNI_FORMAT
+Includes the soft hyphen, joining control characters (zwnj and zwj), control characters to support bi-directional text, and language tag characters
+.IP
+Specific examples include:
+.IP
+.RS
+.IP \[bu] 2
+Soft Hyphen (SHY) (\f[C]U+00AD\f[R])
+.IP \[bu] 2
+Arabic Number Sign (\f[C]U+0600\f[R])
+.RE
+.TP
+.BR UNI_SURROGATE
+Surrogate characters are only used in UTF-16.
+They are used to address characters outside the initial Basic Multilingual Plane without resorting to more than 16-bit byte representations.
+.TP
+.BR UNI_PRIVATE_USE
+Private use characters are characters reserved by the Unicode Standard, but not assigned any meaning.
+Instead, individuals, organizations, software vendors, operating system vendors, font vendors and communities of end-users are free to use them as they see fit.
+Within closed systems, these characters can operate unambiguously, allowing such systems to represent characters or glyphs not defined in Unicode.
+.TP
+.BR UNI_UNASSIGNED
+Unassigned code points belong to the Other category.
+An example of an unassigned code point is \f[C]U+2F35F\f[R].
+.SH SEE ALSO
+.BR uni_gc (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

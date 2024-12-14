@@ -1,0 +1,30 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unierrfunc \- diagnostic function
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "typedef void(*unierrfunc)(void *" user_data ", const char *" message ");"
+.fi
+.SH DESCRIPTION
+Defines the function signature for a custom error callback function.
+The resulting message, given by \f[I]message\f[R], is UTF-8 encoded and null terminated.
+It is a message intended for programmers.
+It should not be displayed to an end user.
+.SH SEE ALSO
+.BR uni_seterrfunc (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

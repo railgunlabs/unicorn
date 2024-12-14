@@ -1,0 +1,46 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_gc \- general category
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unigc uni_gc(unichar " c ");"
+.fi
+.SH DESCRIPTION
+Return the \f[C]General_Category\f[R] character property for the code point \f[I]c\f[R].
+This property describes a character’s general classification.
+For example, the Latin Capital Letter A (\f[C]U+0041\f[R]) has a general category value of \f[B]UNI_UPPERCASE_LETTER\f[R] which indicates it’s an uppercase letter.
+.PP
+For a complete list of all possible general category values, see \f[B]unigc\f[R](3).
+.PP
+Support for the general category character property must be enabled in the JSON configuration file otherwise the function will always return \f[B]UNI_UNASSIGNED\f[R].
+.PP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "General_Category"
+    ]
+}
+.EE
+.in
+.SH RETURN VALUE
+The general category of \f[I]c\f[R].
+.SH SEE ALSO
+.BR unigc (3),
+.BR unichar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

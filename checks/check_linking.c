@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     uni_getucdversion(NULL, NULL, NULL);
     uni_setmemfunc(NULL, NULL);
     uni_seterrfunc(NULL, NULL);
-    uni_strerror(UNI_OK);
 
     uni_caseconv(UNI_UPPER, NULL, -1, UNI_UTF8, NULL, NULL, UNI_UTF8);
     uni_caseconvchk(UNI_UPPER, NULL, -1, UNI_UTF8, NULL);
@@ -56,8 +55,8 @@ int main(int argc, char *argv[])
 
     uni_gc(0);
     uni_ccc(0);
-    uni_binary(0, UNI_NONCHARACTER_CODE_POINT);
-    uni_numeric(0);
+    uni_is(0, UNI_NONCHARACTER_CODE_POINT);
+    uni_numval(0);
     uni_tolower(0);
     uni_toupper(0);
     return 0;

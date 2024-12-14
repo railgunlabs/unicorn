@@ -1,0 +1,284 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unibp \- binary properties
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unibp {
+.RS
+.B UNI_NONCHARACTER_CODE_POINT,
+.B UNI_ALPHABETIC,
+.B UNI_LOWERCASE,
+.B UNI_UPPERCASE,
+.B UNI_HEX_DIGIT,
+.B UNI_WHITE_SPACE,
+.B UNI_MATH,
+.B UNI_DASH,
+.B UNI_DIACRITIC,
+.B UNI_EXTENDER,
+.B UNI_IDEOGRAPHIC,
+.B UNI_QUOTATION_MARK,
+.B UNI_UNIFIED_IDEOGRAPH,
+.B UNI_TERMINAL_PUNCTUATION,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+Unicorn supports a small subset of the binary character properties defined by the Unicode Standard.
+The binary properties supported are those that are useful when parsing plain text.
+.PP
+Most binary characters properties defined by the standard are only applicable in specific applications, i.e. text shaping or rendering.
+Other properties are informational, for example a character’s name, the version it was introduced into the Unicode Standard.
+The remaining are only relevant when implementing various Unicode algorithms and are not “general” enough to expose.
+.SH CONSTANTS
+.TP
+.BR UNI_NONCHARACTER_CODE_POINT
+This property is assigned to characters permanently reserved in the Unicode Standard for internal use.
+.IP
+Noncharacters do not cause a Unicode string to be ill-formed in any UTF. Applications should handle them the same way they handle unassigned code points.
+.IP
+Support for the \f[C]Noncharacter_Code_Point\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Noncharacter_Code_Point"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_ALPHABETIC
+Included in this group are composite characters that are canonical equivalents to a combining character sequence of an alphabetic base character plus one or more combining characters; letter digraphs; contextual variants of alphabetic characters; ligatures of alphabetic characters; contextual variants of ligatures; modifier letters; letterlike symbols that are compatibility equivalents of single alphabetic letters; and miscellaneous letter elements.
+.IP
+This property is POSIX compatible with the C programming languages \f[B]isalpha\f[R](3) character classification function.
+This property should not be used as an approximation for word boundaries.
+.IP
+Support for the \f[C]Alphabetic\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Alphabetic"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_LOWERCASE
+This includes characters with general category \f[B]UNI_LOWERCASE_LETTER\f[R] plus various modifier letters that are letter-like in shape, the circled lowercase letter symbols, and the compatibility lowercase Roman numerals.
+.IP
+Support for the \f[C]Lowercase\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Lowercase"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_UPPERCASE
+This includes characters with general category \f[B]UNI_UPPERCASE_LETTER\f[R] plus the circled uppercase letter symbols, and the compatibility uppercase Roman numerals.
+.IP
+Support for the \f[C]Uppercase\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Uppercase"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_HEX_DIGIT
+This property is assigned to characters commonly used for the representation of hexadecimal numbers, plus their compatibility equivalents.
+Conventionally, the letters “A” through “F”, or their lowercase equivalents are used with the ASCII decimal digits to form a set of hexadecimal digits.
+.IP
+Support for the \f[C]Hex_Digit\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Hex_Digit"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_WHITE_SPACE
+Spaces, separator characters and other control characters which should be treated by programming, markup, and other formal languages as “white space” for the purpose of parsing elements.
+This property includes line break characters, like Line Tabulation (\f[C]U+000B\f[R]) and Carriage Return (\f[C]U+000D\f[R]).
+.IP
+This property is POSIX compatible with the C programming languages \f[B]isspace\f[R](3) character classification function.
+.IP
+Support for the \f[C]White_Space\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "White_Space"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_MATH
+Assigned to characters representing mathematical symbols.
+.IP
+Support for the \f[C]Math\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Math"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_DASH
+Punctuation characters explicitly called out as dashes in the Unicode Standard, plus their compatibility equivalents.
+Most of these have general category \f[B]UNI_DASH_PUNCTUATION\f[R], but some have are \f[B]UNI_MATH_SYMBOL\f[R] because of their use in mathematics.
+.IP
+Support for the \f[C]Dash\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Dash"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_DIACRITIC
+These are characters that linguistically modify the meaning of another character to which they apply.
+Some diacritics are not combining characters, and some combining characters are not diacritics.
+.IP
+Support for the \f[C]Diacritic\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Diacritic"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_EXTENDER
+This property is assigned to characters whose principal function is to extend the value of a preceding alphabetic character or to extend the shape of adjacent characters.
+Typical of these are length marks, iteration marks, and the Arabic tatweel.
+These are not to be confused with diacritics.
+.IP
+Support for the \f[C]Extender\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Extender"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_IDEOGRAPHIC
+Characters with this property are considered to be CJKV (Chinese, Japanese, Korean, and Vietnamese) or other siniform (Chinese writing-related) ideographs.
+This property roughly defines the class of “Chinese characters” and does not include characters of other logographic scripts such as Cuneiform or Egyptian Hieroglyphs.
+The \f[C]Ideographic\f[R] property is used in the definition of Ideographic Description Sequences.
+.IP
+Characters with the \f[C]Ideographic\f[R] property include unified CJK ideographs, CJK compatibility ideographs, Tangut ideographs, Nüshu ideographs, and characters from other blocks—for example, IDEOGRAPHIC NUMBER ZERO (\f[C]U+3007\f[R]) and IDEOGRAPHIC CLOSING MARK (\f[C]U+3006\f[R]).
+.IP
+Support for the \f[C]Ideographic\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Ideographic"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_QUOTATION_MARK
+This property is assigned to punctuation characters that function as quotation marks.
+.IP
+Support for the quotation mark character property must be enabled in the JSON configuration file otherwise \f[B]uni_is\f[R](3) will always return false.
+.IP
+Support for the \f[C]Quotation_Mark\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Quotation_Mark"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_UNIFIED_IDEOGRAPH
+This property specifies the exact set of Unified CJK Ideographs in the standard.
+This set excludes CJK Compatibility Ideographs (which have canonical decompositions to Unified CJK Ideographs), as well as characters from the CJK Symbols and Punctuation block.
+These characters are a subset of the characters with \f[C]Ideographic\f[R] property (see \f[B]UNI_IDEOGRAPHIC\f[R]).
+.IP
+Support for the \f[C]Unified_Ideograph\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Unified_Ideograph"
+    ]
+}
+.EE
+.in
+.TP
+.BR UNI_TERMINAL_PUNCTUATION
+Assigned to punctuation characters that generally mark the end of textual units.
+Examples include SEMICOLON (\f[C]U+003B\f[R]) and ARABIC COMMA (\f[C]U+060C\f[R]).
+These characters overlap with \f[C]Sentence_Terminal\f[R].
+.IP
+Support for the \f[C]Terminal_Punctuation\f[R] character property is enabled in the JSON configuration file with:
+.IP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Terminal_Punctuation"
+    ]
+}
+.EE
+.in
+.SH SEE ALSO
+.BR unigc (3),
+.BR uni_is (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

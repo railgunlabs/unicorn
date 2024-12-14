@@ -1,0 +1,46 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_setmemfunc \- custom memory allocator
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_setmemfunc(void *" user_data ", unimemfunc " allocf ");"
+.fi
+.SH DESCRIPTION
+Sets \f[I]allocf\f[R] as the implementation for dynamic memory allocations.
+If \f[I]allocf\f[R] is \f[C]NULL\f[R] then the implementation reverts to its default allocator which may be the C standard allocator or a dummy allocator that always fails to allocate memory.
+The latter is only present when the C standard library allocators are disabled.
+.PP
+Support for C standard library allocators must be enabled in the JSON configuration file.
+.PP
+.in +4n
+.EX
+{
+    "hasStandardAllocators": true
+}
+.EE
+.in
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the memory allocator was modified.
+.TP
+UNI_FEATURE_DISABLED
+If \f[I]allocf\f[R] is \f[C]NULL\f[R] and Unicorn was built without support for the C standard library memory allocator.
+.SH SEE ALSO
+.BR unimemfunc (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

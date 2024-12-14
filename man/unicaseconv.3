@@ -1,0 +1,41 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unicaseconv \- case conversion operations
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unicaseconv {
+.RS
+.B UNI_LOWER,
+.B UNI_TITLE,
+.B UNI_UPPER,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+This enumeration defines the supported case conversion operations.
+.SH CONSTANTS
+.TP
+.BR UNI_LOWER
+Lowercase case conversion.
+.TP
+.BR UNI_TITLE
+Titlecase case conversion.
+.TP
+.BR UNI_UPPER
+Uppercase case conversion.
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

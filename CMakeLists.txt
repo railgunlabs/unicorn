@@ -35,9 +35,9 @@ set(GENERATED_FILES
 )
 add_custom_command(
     OUTPUT ${GENERATED_FILES}
-    COMMAND Python3::Interpreter amalgamate.pyz --config "${UNICORN_CONFIG}" --output "${CMAKE_BINARY_DIR}"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS amalgamate.pyz unicorn.bin ${UNICORN_CONFIG})
+    COMMAND Python3::Interpreter generate.pyz --config "${UNICORN_CONFIG}" --output "${CMAKE_BINARY_DIR}"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    DEPENDS generate.pyz unicorn.bin ${UNICORN_CONFIG})
 add_custom_target(unicorn_generate DEPENDS ${GENERATED_FILES})
 
 include_directories(${CMAKE_BINARY_DIR}) # Ensure the generated header is discoverable.
@@ -52,26 +52,42 @@ set(SOURCES
 add_library(unicorn STATIC ${SOURCES})
 add_dependencies(unicorn unicorn_generate)
 
+add_subdirectory(man)
+
+# Generate version information.
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(${CMAKE_BINARY_DIR}/UnicornConfigVersion.cmake COMPATIBILITY SameMajorVersion)
+
 if (UNICORN_BUILD_ARCHIVES)
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-amalgamated-${PROJECT_VERSION}")
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-amalgamation-${PROJECT_VERSION}")
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
     set(CPACK_PACKAGE_VENDOR "Railgun Labs")
     set(CPACK_PACKAGE_CONTACT "Railgun Labs <https://RailgunLabs.com>")
     set(CPACK_PACKAGE_HOMEPAGE_URL "https://RailgunLabs.com")
     set(CPACK_GENERATOR "ZIP;TGZ")
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" DESTINATION .)
-    install(FILES "${CMAKE_BINARY_DIR}/unicorn.c" DESTINATION .)
-    install(FILES "${CMAKE_BINARY_DIR}/unicorn.h" DESTINATION .)
+    # These are the files to copy to the amalgamation archive.
+    install(FILES ${CMAKE_SOURCE_DIR}/LICENSE DESTINATION .)
+    install(FILES ${CMAKE_BINARY_DIR}/unicorn.c DESTINATION .)
+    install(FILES ${CMAKE_BINARY_DIR}/unicorn.h DESTINATION .)
     include(CPack)
 else ()
+    # Pre-process pkg-config and UnicornConfig.cmake files.
+    set(prefix "${CMAKE_INSTALL_PREFIX}")
+    set(exec_prefix "\${prefix}")
+    set(libdir "\${exec_prefix}/lib")
+    set(includedir "\${prefix}/include")
+    configure_file("${CMAKE_SOURCE_DIR}/UnicornConfig.cmake.in" "${CMAKE_BINARY_DIR}/UnicornConfig.cmake" @ONLY)
+    configure_file("${CMAKE_SOURCE_DIR}/unicorn.pc.in" "${CMAKE_BINARY_DIR}/unicorn.pc" @ONLY)
+
     # This is the "make install" action.
     set_target_properties(unicorn PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/unicorn.h)
-    install(TARGETS unicorn ARCHIVE
-            DESTINATION lib
-            PUBLIC_HEADER DESTINATION include)
+    install(TARGETS unicorn ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
+    install(FILES ${CMAKE_BINARY_DIR}/UnicornConfig.cmake DESTINATION cmake)
+    install(FILES ${CMAKE_BINARY_DIR}/UnicornConfigVersion.cmake DESTINATION cmake)
+    install(FILES ${CMAKE_BINARY_DIR}/unicorn.pc DESTINATION lib/pkgconfig)
 endif()
 
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+if (EXISTS "${CMAKE_SOURCE_DIR}/checks")
     enable_testing()
-    add_subdirectory(tests)
+    add_subdirectory(checks)
 endif ()

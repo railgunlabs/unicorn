@@ -1,0 +1,45 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_normchk \- normalization check
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_normchk(uninormform " form ", const void *" text ", unisize " length ", uniattr " attributes ", bool *" result ");"
+.fi
+.SH DESCRIPTION
+Checks if \f[I]text\f[R] is normalized.
+This functions is more “expensive” than \f[B]uni_normqchk\f[R](3), but it returns a definitive yes or no answer as to whether \f[I]text\f[R] is normalized.
+.SH RETURN VALUE
+.TP
+UNI_OK
+On success.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is malformed; this is never returned if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R].
+.TP
+UNI_FEATURE_DISABLED
+If Unicorn was built without support for \f[C]normform\f[R].
+.SH SEE ALSO
+.BR uni_normqchk (3),
+.BR uninormchk (3),
+.BR uniattr (3),
+.BR uninormform (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

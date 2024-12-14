@@ -37,6 +37,7 @@
 # CMake out-of-source build files
 build
 Win32
+_CPack_Packages
 
 # Automake
 Makefile.in
@@ -66,6 +67,9 @@ autom4te.cache
 /install-sh
 /missing
 /stamp-h1
+
+# Generated pkg-config file
+unicorn.pc
 
 # Python files
 *.pyc

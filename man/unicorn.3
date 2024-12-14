@@ -1,0 +1,594 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unicorn.h \- public interface for the Unicorn library
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.fi
+.SH DESCRIPTION
+Unicorn is a Unicode® library written in C99 with no external dependencies.
+It is highly customizable: support for Unicode algorithms and character properties can be toggled individually.
+Disabling features reduces the size of the library which helps deploy it on hardware with limited resources, like embedded systems and IoT devices.
+You can customize which features Unicorn is built with by editing the \f[C]features.json\f[R] file found in the source distribution of Unicorn.
+The detailed schema for this JSON file is
+.UR https://railgunlabs.com/unicorn/manual/feature-customization/
+documented online
+.UE .
+.PP
+Unicorn is compliant with the MISRA C:2012 standards.
+It honors all Required, Mandatory, and most Advisory rules.
+Deviations are documented here on the
+.UR https://railgunlabs.com/unicorn/manual/misra-compliance/
+projects webpage
+.UE .
+Users are encouraged to audit Unicorn and verify its level of conformance is acceptable.
+.SS Library Configuration
+Unicorn defines several foundational types that are used throughout the library.
+An example would be the \f[B]unistat\f[R](3) type which represents a status code.
+Most functions in Unicorn return a \f[B]unistat\f[R](3) value making for a consistent approach to error reporting.
+Global features of the library can be queried and configured at runtime.
+An example is the \f[B]uni_setmemfunc\f[R](3) function which allows overriding the dynamic allocator used by the library at runtime.
+All interfaces that are globally applicable to the library are defined here.
+.PP
+Most functions in Unicorn return an element from the \f[B]unistat\f[R](3) enumeration indicating the success or failure status of an operation.
+Each function documents the possible status codes it can return.
+This narrows down which codes a caller must check for.
+.PP
+Unicorn is designed with performance in mind and minimizes dynamic memory allocations where possible.
+In fact, most functions do not allocate memory at all!
+Functions that can allocate memory are identified by having \f[B]UNI_NO_MEMORY\f[R] listed as a potential return value in their documentation.
+.PP
+By default, Unicorn uses the C standard memory allocators (\f[B]realloc\f[R](3) and \f[B]free\f[R](3)) for dynamic memory allocation.
+Using \f[B]uni_setmemfunc\f[R](3) you can provide your own dynamic memory allocator.
+.PP
+If a dynamic memory allocation fails, then Unicorn will gracefully free all intermediate allocations and return \f[B]UNI_NO_MEMORY\f[R].
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_getversion\fR(3);T{
+Library version.
+T}
+\fBuni_getucdversion\fR(3);T{
+Unicode standard version.
+T}
+\fBuni_setmemfunc\fR(3);T{
+Custom memory allocator.
+T}
+\fBuni_seterrfunc\fR(3);T{
+Receive diagnostic events.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBunistat\fR(3);T{
+Status code.
+T}
+\fBuniattr\fR(3);T{
+Text attributes.
+T}
+.TE
+.SS Normalization
+Unicode normalization transforms a string for the purposes of testing equivalence against another string.
+There are three primary equivalence tests that can be performed:
+.PP
+.RS
+.IP \[bu] 2
+Binary equivalence: The code points of two strings are compared.
+.IP \[bu] 2
+Canonical equivalence: The graphemes of two strings are compared.
+.IP \[bu] 2
+Compatibility equivalence: The abstract graphemes of two strings are compared.
+.RE
+.PP
+Binary comparison refers to comparing the code points of two strings.
+In C you can do this with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
+The drawback of a binary comparison is that two strings that display the same might not be considered equivalent.
+For example, the strings \f[C]U+0041 U+030A\f[R] and \f[C]U+00C5\f[R] represent the same grapheme, but would be considered inequivalent since their code points differ.
+.PP
+Canonical decomposition transforms the code points of a string in a predictable way that preserves graphemes.
+After this transformation is performed on two strings their code points can be compared and, if identical, indicates their graphemes are equivalent.
+.PP
+Compatibility decomposition transforms the code points of a string in a predictable way that preserves the abstract meaning of the graphemes.
+For example, the string \f[C]U+3392\f[R] and \f[C]U+004D U+0048 U+007A\f[R] have distinct visual appearances, but identical in meaning.
+If these strings were compared canonically, they would be considered inequivalent, but when compared for compatibility they are considered equivalent.
+.PP
+Compatibility decomposition is unsupported by Unicorn because it has limited usefulness.
+It’s intended for fuzzy equivalence tests which are useful in search engines and database queries where the meaning of the string is more important than its visual appearance.
+.PP
+Unicode Normalization Forms are formally defined normalizations of Unicode strings which make it possible to determine whether any two Unicode strings are equivalent to each other.
+Depending on the particular Unicode Normalization Form, that equivalence can either be a canonical or a compatibility equivalence.
+Unicorn does not support normalization forms for testing compatibility equivalence, therefore only normalization forms for canonical equivalence testing are available.
+.PP
+To test two strings for canonical equivalence they must be normalized into a normalization form.
+Unicorn supports two normalization forms for testing canonical equivalence: Normalization Form D (NFD) and Normalization Form C (NFC).
+The former performs canonical decomposition and the latter canonical composition.
+.PP
+Canonical composition maps multiple code points to a precomposed code point.
+For example, the string \f[C]U+006B U+0301\f[R] would canonically compose to the code point \f[C]U+1E31\f[R].
+This is useful for reducing memory consumption and for legacy applications that cannot handle multi-code point graphemes gracefully.
+.PP
+Most real world text is stored in Normalization Form C (NFC).
+This is because it is more compatible with strings converted from legacy encodings.
+For example, text exclusively containing ASCII characters is left unaffected by all of the Normalization Forms which is effectively the same as saying that all Latin-1 text is already normalized to NFC.
+.PP
+The normal forms are not closed under string concatenation.
+That is, even if two strings X and Y are normalized, their string concatenation X+Y is not guaranteed to be normalized.
+By contrast, all Normalization Forms are closed under substringing.
+For example, the extracted substring of a normalized string X is always normalized.
+.PP
+All normalization transformations are idempotent.
+Once a string has been normalized it will never change if renormalized to the same normalization form.
+In other words:
+.PP
+.RS
+.IP \[bu] 2
+toNFC(toNFC(x)) = toNFC(x)
+.IP \[bu] 2
+toNFD(toNFD(x)) = toNFD(x)
+.RE
+.PP
+More more information on Unicode normalization and normalization forms, see
+.UR https://unicode.org/reports/tr15/
+Unicode Technical Report #15
+.UE .
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_norm\fR(3);T{
+Normalize text.
+T}
+\fBuni_normcmp\fR(3);T{
+Canonical equivalence.
+T}
+\fBuni_normchk\fR(3);T{
+Normalization check.
+T}
+\fBuni_normqchk\fR(3);T{
+Normalization quick check.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBuninormform\fR(3);T{
+Unicode normalization forms.
+T}
+\fBuninormchk\fR(3);T{
+Quick check constants.
+T}
+.TE
+.SS Case Mapping
+Case mapping is the process of transforming characters from one case to another for comparison or presentation.
+.PP
+Case conversion transforms text into a particular cased form.
+The resulting text is presentable to an end user.
+.PP
+There are three case conversion operations:
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_LOWER\f[R]
+.IP \[bu] 2
+\f[B]UNI_TITLE\f[R]
+.IP \[bu] 2
+\f[B]UNI_UPPER\f[R]
+.RE
+.PP
+Case conversion is context sensitive which means characters are mapped based on their surrounding characters.
+If only one character is being case converted in isolation then the following simple case mapping functions may be used:
+.PP
+.RS
+.IP \[bu] 2
+\f[B]uni_tolower\f[R](3)
+.IP \[bu] 2
+\f[B]uni_totitle\f[R](3)
+.IP \[bu] 2
+\f[B]uni_toupper\f[R](3)
+.RE
+.PP
+Support for case conversion must be enabled in the JSON configuration file.
+Where string values “lower”, “title”, and “upper” correspond to the \f[B]UNI_LOWER\f[R], \f[B]UNI_TITLE\f[R], and \f[B]UNI_UPPER\f[R] constants, respectively.
+.PP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "caseConversion": [
+            "lower",
+            "title",
+            "upper"
+        ],
+    }
+}
+.EE
+.in
+.PP
+Case folding transforms text into a form intended for case-insensitive string comparisons.
+Case folding is primarily based on the simple lowercase mappings, but there are instances where uppercase characters are used such as Cherokee characters.
+A case folded string must never be displayed to an end-user.
+It’s only intended for internal case-insensitive comparisons.
+.PP
+There are two variations of case folding supported by Unicorn:
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_DEFAULT\f[R]
+.IP \[bu] 2
+\f[B]UNI_CANONICAL\f[R]
+.RE
+.PP
+Default case folding is intended for comparing strings for binary equivalence where as canonical case folding is intended for testing canonical caseless equivalence.
+.PP
+Default case folding does not preserve normalization forms.
+This means a string in a particular Unicode normalization form is not guaranteed to be in that same normalization form after being case folded.
+.PP
+Support for case folding must be enabled in the JSON configuration file.
+Where string values “default” and “canonical” correspond to the \f[B]UNI_DEFAULT\f[R] and \f[B]UNI_CANONICAL\f[R] constants, respectively.
+.PP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "caseFolding": [
+            "default",
+            "canonical"
+        ],
+    }
+}
+.EE
+.in
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_caseconv\fR(3);T{
+Perform case conversion.
+T}
+\fBuni_caseconvchk\fR(3);T{
+Check case status.
+T}
+\fBuni_casefold\fR(3);T{
+Perform case folding.
+T}
+\fBuni_casefoldcmp\fR(3);T{
+Case-insensitive string comparison.
+T}
+\fBuni_casefoldchk\fR(3);T{
+Check case fold status.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBunicaseconv\fR(3);T{
+Case conversion operations.
+T}
+\fBunicasefold\fR(3);T{
+Case folding operations.
+T}
+.TE
+.SS Collation
+Collation is the process and function of determining the sorting order of strings.
+Collation varies according to language and culture: Germans, French and Swedes sort the same characters differently.
+Unicorn is not an internationalization library therefore it does not contain language specific rules for sorting.
+Instead, it uses the Default Collation Element Table (DUCET), which is a data table specifying the “default” collation order for all Unicode characters.
+The goal of the DUCET is to provide a reasonable default ordering for all scripts, regardless of language.
+.PP
+To address the complexities of sorting, a multilevel comparison algorithm is employed.
+In comparing two strings, the most important feature is the identity of the base letters.
+For example, the difference between an A and a B. Accent differences are typically ignored, if the base letters differ.
+Case differences (uppercase versus lowercase) are typically ignored, if the base letters or their accents differ.
+The number of levels that are considered in comparison is known as the strength and are programmatically indicating by the elements of the \f[B]unistrength\f[R](3) enumeration.
+.PP
+Collation is one of the most performance-critical features in a system.
+Consider the number of comparison operations that are involved in sorting or searching large databases.
+When comparing strings multiple times it’s recommended to generate and cache a sort key.
+A sort key is an array of unsigned 16-bit integers that is generated from a single string in combination with other collation settings.
+Sort keys must be generated with the same settings for their order to make sense.
+Two sort keys can be compared to produce either a less than, greater than, or equal to result.
+This result can be used with a sorting algorithm, like merge sort, to sort a collection of strings.
+.PP
+Sort keys are generated with \f[B]uni_sortkeymk\f[R](3).
+This function accepts a string, collation settings, and produces the 16-bit sort key.
+.PP
+.in +4n
+.EX
+const char *string = "The quick brown fox jumps over the lazy dog.";
+uint16_t sortkey[16];
+size_t sortkey_len = 16;
+uni_sortkeymk(string, -1, UNI_UTF8, UNI_PRIMARY, UNI_SHIFTED, NULL, &sortkey_len);
+.EE
+.in
+.PP
+Once two sort keys are generated, they can be compared with \f[B]uni_sortkeycmp\f[R](3).
+.PP
+In the case of comparing one-off pairs of strings, generating a sort key makes less sense.
+For these cases, a one-off comparison can be made using \f[B]uni_collate\f[R](3).
+This function is conceptually like the \f[B]strcoll\f[R](3) function provided by the C standard library.
+.PP
+The Unicode Collation Algorithm provides a complete, unambiguous, specified ordering for all characters.
+Canonical decomposition is performed as part of the algorithm therefore whether strings are normalized or not is irrelevant.
+.PP
+The relationship between two strings (two sort keys) is stable between versions of Unicode, however, the 16-bit values of a sort key may change.
+If sort keys are retained in persistent storage, it is recommended to store the Unicode version they were generated against.
+If the current version of the standard does not match what is stored, then all sort keys must be regenerated.
+The version of the Unicode Standard can be obtained with \f[B]uni_getucdversion\f[R](3).
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_sortkeymk\fR(3);T{
+Make sort key.
+T}
+\fBuni_sortkeycmp\fR(3);T{
+Compare sort keys.
+T}
+\fBuni_collate\fR(3);T{
+Compare strings for sorting.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBunistrength\fR(3);T{
+Collation comparison levels.
+T}
+\fBuniweighting\fR(3);T{
+Collation weighting algorithm.
+T}
+.TE
+.SS Segmentation
+A string of Unicode-encoded text often needs to be broken into text elements programmatically.
+Common examples of text elements include user-perceived characters, words, and sentences.
+Where these text elements begin and end is called the boundary and the process of boundary determination is called segmentation.
+.PP
+The precise determination of text elements varies according to orthographic conventions for a given script or language.
+The goal of matching user perceptions cannot always be met exactly because the text alone does not always contain enough information to unambiguously decide boundaries.
+For example, the period character (U+002E FULL STOP) is used ambiguously, sometimes for end-of-sentence purposes, sometimes for abbreviations, and sometimes for numbers.
+In most cases, however, programmatic text boundaries can match user perceptions quite closely, although sometimes the best that can be done is to not surprise the user.
+.PP
+Unicorn supports grapheme, word, and sentence segmentation.
+These text elements are identified by the following constants:
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_GRAPHEME\f[R]
+.IP \[bu] 2
+\f[B]UNI_WORD\f[R]
+.IP \[bu] 2
+\f[B]UNI_SENTENCE\f[R]
+.RE
+.PP
+The algorithms for word and sentence segmentation are intended for languages that use white space to delimit words.
+Thai, Lao, Khmer, Myanmar, and ideographic scripts such as Japanese and Chinese do not typically use spaces between words and require language-specific break rules.
+Unicorn is not an internationalization library and therefore does not include rules specific to these languages.
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_nextbrk\fR(3);T{
+Compute next boundary.
+T}
+\fBuni_prevbrk\fR(3);T{
+Compute preceding boundary.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBunibreak\fR(3);T{
+Detectable text elements.
+T}
+.TE
+.SS Character Properties
+The Unicode Character Database defines a large repertoire of character properties.
+Most characters properties are only applicable to specific applications, i.e. text shaping or rendering.
+Other properties are informational, for example a character’s name or the version it was introduced into the Unicode Standard.
+Other properties are only relevant when implementing various Unicode algorithms.
+The properties supported by Unicorn are those that are relevant when parsing plain text.
+.PP
+Character properties have a value associated with them.
+For example, there are binary character properties which have the boolean values \f[C]true\f[R] and \f[C]false\f[R], enumeration character properties that have one of a fixed set of values, and string character properties which map to one or more code points.
+Most Unicode characters properties are binary properties.
+.PP
+All character properties have a default value.
+The default value is the value a character property takes for an unassigned code point.
+For example, the default value of a binary Unicode character property is always \f[C]false\f[R].
+.PP
+Updates to character properties in the Unicode Character Database may be required for any of three reasons:
+.PP
+.RS
+.IP \[bu] 2
+To cover new characters added to the standard.
+.IP \[bu] 2
+To add new character properties to the standard.
+.IP \[bu] 2
+To change the assigned values for a property for some characters already in the standard.
+.RE
+.PP
+While the Unicode Consortium tries to keep the values of all character properties as stable as possible between versions, occasionally circumstances may arise which require changing them.
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_gc\fR(3);T{
+General category.
+T}
+\fBuni_ccc\fR(3);T{
+Canonical combining class.
+T}
+\fBuni_is\fR(3);T{
+Binary property value.
+T}
+\fBuni_numval\fR(3);T{
+Numeric property.
+T}
+\fBuni_tolower\fR(3);T{
+Simple lower case mapping.
+T}
+\fBuni_totitle\fR(3);T{
+Simple title case mapping.
+T}
+\fBuni_toupper\fR(3);T{
+Simple upper case mapping.
+T}
+
+.T&
+l l.
+\fBEnumerations\fR;\fBDescription\fR
+_
+\fBunigc\fR(3);T{
+General category.
+T}
+\fBunibp\fR(3);T{
+Binary properties.
+T}
+.TE
+.SS Compression
+Lossless data compression algorithms, like
+.UR https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch
+LZW
+.UE ,
+perform compression by deduplicating repetitions within a data stream.
+These algorithms are general purpose and are designed to operate on “bags of bytes” without any prior knowledge or assumptions about the structure or semantics of the data.
+.PP
+Unicode Technical Report #34 defines two algorithms designed specifically for the compression Unicode encoded text.
+These algorithms are Standard Compression Scheme for Unicode (SCSU) and Binary Ordered Compression for Unicode (BOCU).
+These algorithm leverages knowledge of the Unicode character set and beat general purpose compression algorithms for shorter strings.
+Both algorithms are intended for short to medium length Unicode strings (about several hundred characters in length).
+Once strings becomes longer and include many repetitions, then a general purpose compressor is preferable.
+.PP
+Support for compression must be enabled in the JSON configuration file.
+.PP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "compression": true
+    }
+}
+.EE
+.in
+.PP
+Unicorn implements the BOCU-1 algorithm.
+The BOCU-1 algorithm is deterministic: the same input text is encoded identically by all encoders which makes it suitable for interchange.
+BOCU-1 is a MIME compatible Unicode compression scheme.
+That means it can be used directly in emails and similar protocols.
+It is ideal for transmitting short messages over a network or writing to persistent storage.
+.PP
+With BOCU-1, text in languages with Latin-based scripts take about the same amount of space as with UTF-8, while texts in all other languages take about 25%-60% less space.
+Compared to UTF-16, texts in all languages with small character repertoires take approximately half as much space in BOCU-1.
+For large character sets, i.e. Chinese/Japanese/Korean, texts are about the same size for UTF-16 and BOCU-1.
+.PP
+BOCU-1 is an IANA registered charset and has its own BOM: \f[C]0xFB 0xEE 0x28\f[R].
+Unicorn’s implementation does not prepend the BOM and its decompressor will ignore it.
+.PP
+The BOCU-1 algorithm is documented in
+.UR https://www.unicode.org/notes/tn6/
+Unicode Technical Note #6
+.UE .
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_compress\fR(3);T{
+Compress text.
+T}
+\fBuni_decompress\fR(3);T{
+Decompress text.
+T}
+.TE
+.SS Text Encodings
+The Unicode Standard defines plain text as a sequence of Unicode scalar values.
+A Unicode scalar value is any \f[B]unichar\f[R](3) excluding surrogate characters (surrogates are used exclusively for encoding UTF-16).
+A code point is a 21-bit integer in the Unicode code space used to identify a character.
+The Unicode code space defines the range of integers code points can be allocated from.
+It starts at integer 0 and goes up to and includes the integer 1114111.
+The Unicode Standard version 16.0 defines 155,063 encoded characters.
+.PP
+In Unicode a character represents what your machine (i.e. your computer) considers to be a character.
+It’s not necessarily what you, the human, think to be a character.
+For example, the END OF LINE (U+000A) character is a control character denoting a line boundary.
+A human would never think of this character as being a “character” but the machine does.
+What humans perceive as a character is called a grapheme.
+Graphemes can be composed of one or more Unicode characters.
+The segmentation of characters into graphemes can be performed with the segmentation interface.
+.PP
+An encoding form defines how a code point is represented in memory.
+The Unicode Standard defines three encoding forms for encoding Unicode characters: UTF-8, UTF-16, and UTF-32.
+An encoding form uses a bit combination to represent a code point.
+The smallest unit of this bit combination is referred to as a code unit.
+The Unicode Standard uses 8-bit code units in the UTF-8 encoding form, 16-bit code units in the UTF-16 encoding form, and 32-bit code units in the UTF-32 encoding form.
+For example, in UTF-8 the code point \f[C]U+1F6F8\f[R] is represented by four code units, in UTF-16 it’s represented by two units, and in UTF-32 it’s represented by one code unit.
+.PP
+UTF-32 is the odd encoding form out because it doesn’t really “encode” anything.
+It’s value is always identical to the value of the code point.
+It might be tempting to think of UTF-32 and code points as synonymous, but that would be semantically incorrect: a code point is a 21-bit integer in the Unicode codespace and UTF-32 is a storage standard that says “use a 32-bit integer as the storage for the 21-bit code point.”
+.PP
+Unicorn implements the function \f[B]uni_convert\f[R](3) for converting between Unicode encoding forms.
+It also defines the functions \f[B]uni_next\f[R](3), \f[B]uni_prev\f[R](3), and \f[B]uni_encode\f[R](3) for decoding and encoding Unicode scalar values.
+.PP
+Support for each encoding form is enabled individually in the JSON configuration file.
+Where string values “UTF-8”, “UTF-16”, and “UTF-32” correspond to the \f[B]UNI_UTF8\f[R], \f[B]UNI_UTF16\f[R], and \f[B]UNI_UTF32\f[R] constants, respectively.
+.PP
+.in +4n
+.EX
+{
+    "encodingForms": [
+        "UTF-8",
+        "UTF-16",
+        "UTF-32"
+    ]
+}
+.EE
+.in
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fBuni_next\fR(3);T{
+Decode a scalar value.
+T}
+\fBuni_prev\fR(3);T{
+Decode the previous scalar value.
+T}
+\fBuni_encode\fR(3);T{
+Encode a scalar value.
+T}
+\fBuni_convert\fR(3);T{
+Convert encoding forms.
+T}
+\fBuni_validate\fR(3);T{
+Validate text.
+T}
+.TE
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

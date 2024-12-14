@@ -1,0 +1,47 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+unistrength \- collation comparison levels
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum unistrength {
+.RS
+.B UNI_PRIMARY,
+.B UNI_SECONDARY,
+.B UNI_TERTIARY,
+.B UNI_QUATERNARY,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+The Unicode collation algorithm is a multilevel comparison algorithm.
+The number of levels that are considered in comparison is known as the collation strength.
+This enumeration defines constants for each level.
+.SH CONSTANTS
+.TP
+.BR UNI_PRIMARY
+Represents differences in the base letter or symbol.
+.TP
+.BR UNI_SECONDARY
+Represents differences in accents.
+.TP
+.BR UNI_TERTIARY
+Represents differences in case or variants of symbols.
+.TP
+.BR UNI_QUATERNARY
+Represents differences in punctuation.
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

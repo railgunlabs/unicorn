@@ -1,0 +1,26 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_getucdversion \- unicode standard version
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "void uni_getucdversion(int *" major ", int *" minor ", int *" patch ");"
+.fi
+.SH DESCRIPTION
+Writes the major, minor, and patch version of the Unicode Standard to \f[I]major\f[R], \f[I]minor\f[R], and \f[I]patch\f[R], respectively.
+Null arguments are ignored.
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

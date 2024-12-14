@@ -1,0 +1,61 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uninormform \- unicode normalization forms
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum uninormform {
+.RS
+.B UNI_NFC,
+.B UNI_NFD,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+Normalization forms define how strings should be transformed for the purposes of testing equivalence.
+.SH CONSTANTS
+.TP
+.BR UNI_NFC
+Performs Canonical Decomposition followed by Canonical Composition.
+.IP
+Support for canonical composition can be enabled in the JSON configuration file.
+.IP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "normalization": ["NFC"]
+    }
+}
+.EE
+.in
+.TP
+.BR UNI_NFD
+Performs Canonical Decomposition.
+.IP
+Support for canonical decomposition can be enabled in the JSON configuration file.
+.IP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "normalization": ["NFD"]
+    }
+}
+.EE
+.in
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

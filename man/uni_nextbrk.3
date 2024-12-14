@@ -1,0 +1,63 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_nextbrk \- compute next boundary
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_nextbrk(unibreak " boundary ", const void *" text ", unisize " length ", uniattr " attributes ", unisize *" index ");"
+.fi
+.SH DESCRIPTION
+Compute the next \f[I]boundary\f[R] for \f[I]text\f[R] starting from a known code point specified by code unit index \f[I]index\f[R].
+The implementation sets \f[I]index\f[R] to the code unit offset of the next \f[I]boundary\f[R].
+.SH RETURN VALUE
+.TP
+UNI_OK
+If the break iterator was successfully repositioned.
+.TP
+UNI_DONE
+If \f[I]index\f[R] is beyond the last character of \f[I]text\f[R].
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]index\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is malformed; this is never returned if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R].
+.SH EXAMPLES
+This example iterates the extended grapheme clusters of a a UTF-8 encoded string and prints the indices where each grapheme begins.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char *string = u8"Hi, 世界";
+    unisize index = 0;
+    while (uni_nextbrk(UNI_GRAPHEME, string, -1, UNI_UTF8, &index) == UNI_OK)
+    {
+        printf("%d\n", index); // prints '1', '2', '3', '4', 7', '10'
+    }
+    return 0;
+}
+.EE
+.in
+.SH SEE ALSO
+.BR uniattr (3),
+.BR unibreak (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

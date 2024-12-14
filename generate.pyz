@@ -1444,7 +1444,7 @@ if __name__=='__main__':
   cC=sys.version_info.major
   cD=sys.version_info.minor
  if cC<3 or cD<9:
-  raise Exception('This script requires Python 3.6 or newer')
+  raise Exception('This script requires Python 3.9 or newer')
  dy=argparse.ArgumentParser(description='Build Unicorn source and header.')
  dy.add_argument('--config',dest='config_file',action='store',help='path to configuration file')
  dy.add_argument('--output',dest='output_dir',action='store',help='path to write generated C source files')

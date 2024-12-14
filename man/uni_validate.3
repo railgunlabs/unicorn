@@ -1,0 +1,44 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_validate \- validate text
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_validate(const void *" text ", unisize " length ", uniattr " attributes ");"
+.fi
+.SH DESCRIPTION
+Check if \f[I]text\f[R] is well-formed.
+The length of \f[I]text\f[R] is given in code units by \f[I]length\f[R] and its encoding form is specified by \f[I]attributes\f[R].
+.PP
+The \f[B]UNI_TRUST\f[R] flag has no effect when used with \f[I]attributes\f[R] as the entire purposes of this function is to verify \f[I]text\f[R] is well-formed and assuming it is well-formed would defeat the purpose.
+.SH RETURN VALUE
+.TP
+UNI_OK
+If \f[I]text\f[R] is well-formed.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If the encoding of \f[I]text\f[R] is malformed.
+.TP
+UNI_FEATURE_DISABLED
+If the encoding form flagged in \f[I]attributes\f[R] is disabled.
+.SH SEE ALSO
+.BR uniattr (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

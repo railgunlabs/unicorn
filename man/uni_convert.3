@@ -1,0 +1,81 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_convert \- convert encoding forms
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_convert(const void *" src ", unisize " src_len ", uniattr " src_attr ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
+.fi
+.SH DESCRIPTION
+Convert the text pointed to by \f[I]src\f[R], which is in the encoding form specified by \f[I]src_attr\f[R], to the encoding specified by \f[I]dst_attr\f[R] and write the result to \f[I]dst\f[R].
+If \f[I]src_len\f[R] is -1, then \f[I]src\f[R] is assumed to be null terminated.
+.PP
+If \f[I]dst\f[R] isn’t large enough to contain the re-encoded \f[I]src\f[R] text, then it will be truncated to the nearest code point boundary and \f[B]UNI_NO_SPACE\f[R] will be returned.
+If \f[I]dst\f[R] is large enough, then \f[B]UNI_OK\f[R] is returned.
+.PP
+If \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is zero, then the implementation writes to \f[I]dst_len\f[R] the number of code units in the fully re-encoded text and returns \f[B]UNI_OK\f[R].
+Call the function this way to compute the total length of the destination buffer before calling it again with a sufficiently sized buffer.
+.PP
+If \f[I]src_attr\f[R] and \f[I]dst_attr\f[R] are identical, then this function behaves like \f[B]memcpy\f[R](3).
+.SH RETURN VALUE
+.TP
+UNI_OK
+On success.
+.TP
+UNI_BAD_OPERATION
+If \f[I]src\f[R] or \f[C]dest_len\f[R] are \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]src\f[R] is not well-formed (checks are omitted if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_NO_SPACE
+If \f[C]dest\f[R] is too small.
+.TP
+UNI_FEATURE_DISABLED
+If the \f[I]src_attr\f[R] and \f[I]dst_attr\f[R] encoding forms are disabled.
+.SH EXAMPLES
+This example re-encodes text from UTF-32 to UTF-8.
+It uses \f[C]char32_t\f[R] and 'U' literal strings from C11.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <uchar.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char32_t in[] = U"👨🏻‍🚀🧑🏼‍🚀 landed on the 🌕 in 1969.";
+    char out[64];
+    unisize outlen = sizeof(out);
+
+    if (uni_convert(in, -1, UNI_UTF32, out, &outlen, UNI_UTF8) != UNI_OK)
+    {
+        // something went wrong
+        return 1;
+    }
+
+    printf("%.*s", outlen, out);
+    return 0;
+}
+.EE
+.in
+.SH SEE ALSO
+.BR unistat (3),
+.BR uniattr (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

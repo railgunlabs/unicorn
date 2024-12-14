@@ -1,0 +1,149 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uniattr \- text attributes
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B enum uniattr {
+.RS
+.B UNI_SCALAR,
+.B UNI_UTF8,
+.B UNI_UTF16,
+.B UNI_UTF32,
+.B UNI_BIG,
+.B UNI_LITTLE,
+.B UNI_NATIVE,
+.B UNI_TRUST,
+.B UNI_NULIFY,
+.RE
+.B };
+.fi
+.SH DESCRIPTION
+Unless documented otherwise, all functions that accept a \f[B]uniattr\f[R](3) must observe the following rules:
+.PP
+There must be exactly one of the following character encoding flags present.
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_SCALAR\f[R]
+.IP \[bu] 2
+\f[B]UNI_UTF8\f[R]
+.IP \[bu] 2
+\f[B]UNI_UTF16\f[R]
+.IP \[bu] 2
+\f[B]UNI_UTF32\f[R]
+.RE
+.PP
+There can optionally be one of the following endian flags.
+If none are present, then \f[B]UNI_NATIVE\f[R] is assumed.
+These flags are incompatible with \f[B]UNI_SCALAR\f[R] which is always in native byte order.
+These flags have no effect with \f[B]UNI_UTF8\f[R] because UTF-8 is endian independent.
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_NATIVE\f[R]
+.IP \[bu] 2
+\f[B]UNI_LITTLE\f[R]
+.IP \[bu] 2
+\f[B]UNI_BIG\f[R]
+.RE
+.PP
+There can optionally be any combination of the following flags.
+.PP
+.RS
+.IP \[bu] 2
+\f[B]UNI_TRUST\f[R]
+.IP \[bu] 2
+\f[B]UNI_NULIFY\f[R]
+.RE
+.PP
+The following example demonstrates using these flags with \f[B]uni_next\f[R](3) to parse the first code point of a UTF-16 big endian string.
+.PP
+.in +4n
+.EX
+const char16_t text[] = u"Hello, World!";
+int index = 0;
+unichar cp;
+uni_next(text, -1, UNI_UTF16 | UNI_BIG, &index, &cp);
+.EE
+.in
+.SH CONSTANTS
+.TP
+.BR UNI_SCALAR
+This is a pseudo-encoding that indicates the text is stored as Unicode scalar values wth \f[B]unichar\f[R](3) for storage.
+Unicode scalars are not the same as code points.
+The former excludes surrogate characters whereas the latter does not.
+.TP
+.BR UNI_UTF8
+Text encoded as UTF-8.
+The implementation uses an unsigned 8-bit integer (\f[C]uint8_t\f[R]) to represent UTF-8 code units.
+.TP
+.BR UNI_UTF16
+Text encoded as UTF-16 in native byte order.
+The implementation uses an unsigned 16-bit integer (\f[C]uint16_t\f[R]) to represent UTF-16 code units.
+.TP
+.BR UNI_UTF32
+Text encoded as UTF-32 in native byte order.
+The implementation uses an unsigned 32-bit integer (\f[C]uint32_t\f[R]) to represent UTF-32 code units.
+.TP
+.BR UNI_BIG
+This flag indicates the text is encoded in big endian byte order.
+It’s incompatible with the \f[B]UNI_LITTLE\f[R] flag.
+.IP
+The flag is intended for use with \f[B]UNI_UTF16\f[R] and \f[B]UNI_UTF32\f[R].
+It has no effect when used with \f[B]UNI_UTF8\f[R] or \f[B]UNI_SCALAR\f[R].
+.TP
+.BR UNI_LITTLE
+This flag indicates the text is encoded in little endian byte order.
+It’s incompatible with the \f[B]UNI_BIG\f[R] flag.
+.IP
+The flag is intended for use with \f[B]UNI_UTF16\f[R] and \f[B]UNI_UTF32\f[R].
+It has no effect when used with \f[B]UNI_UTF8\f[R] or \f[B]UNI_SCALAR\f[R].
+.TP
+.BR UNI_NATIVE
+This flag indicates the text is encoded in native endian byte order.
+It’s incompatible with the \f[B]UNI_BIG\f[R] and \f[B]UNI_LITTLE\f[R] flag.
+.IP
+The flag is intended for use with \f[B]UNI_UTF16\f[R] and \f[B]UNI_UTF32\f[R].
+It has no effect when used with \f[B]UNI_UTF8\f[R] or \f[B]UNI_SCALAR\f[R].
+.TP
+.BR UNI_TRUST
+Under normal usage Unicorn processes text with the assumption that it might be malformed.
+This means it performs safety checks which are redundant if the text has already been validated with \f[B]uni_validate\f[R](3).
+The purpose of this flag is to inform Unicorn that it can skip redundant validation checks thereby improving performance.
+.IP
+Usage of this flag means functions will never return \f[B]UNI_BAD_ENCODING\f[R].
+.IP
+Some functions, like \f[B]uni_norm\f[R](3), accept an input buffer and an output buffer.
+Using this flag with an output buffer will produce \f[B]UNI_BAD_OPERATION\f[R].
+.TP
+.BR UNI_NULIFY
+Some functions, like \f[B]uni_norm\f[R](3), accept an input buffer and an output buffer.
+The output buffer is the destination buffer that the implementation writes encoded characters to.
+When this flag is applied to the output buffer the implementation guarantees a NUL character (U+0000) is appended, even if it means truncating the last non-null character.
+Conceptually, this behavior is like the BSD function \f[C]strlcpy\f[R] which also guarantees the destination buffer is null terminated.
+.IP
+The implementation will never append an extraneous null character if the output buffer is already null terminated.
+.IP
+Using this flag with an input buffer will produce \f[B]UNI_BAD_OPERATION\f[R].
+.SH SEE ALSO
+.BR uni_next (3),
+.BR unichar (3),
+.BR uni_validate (3),
+.BR unistat (3),
+.BR uni_norm (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

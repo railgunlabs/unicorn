@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: unicorn
+Description: Embeddable Unicode algorithms.
+Version: @VERSION@
+URL: https://railgunlabs.com/unicorn/
+
+Cflags: -I${includedir}
+Libs: -L${libdir} -lunicorn

@@ -1,0 +1,42 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_ccc \- canonical combining class
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "uint8_t uni_ccc(unichar " c ");"
+.fi
+.SH DESCRIPTION
+Return the \f[C]Canonical_Combining_Class\f[R] property for the code point \f[I]c\f[R].
+The canonical combining class property is used during the Unicode normalization algorithm to sort combining characters.
+.PP
+Support for the canonical combining class property must be enabled in the JSON configuration file otherwise the function will always return zero.
+.PP
+.in +4n
+.EX
+{
+    "characterProperties": [
+        "Canonical_Combining_Class"
+    ]
+}
+.EE
+.in
+.SH RETURN VALUE
+The canonical combining class of \f[I]c\f[R].
+.SH SEE ALSO
+.BR unichar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

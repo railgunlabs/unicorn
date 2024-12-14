@@ -1,0 +1,67 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_normqchk \- normalization quick check
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_normqchk(uninormform " form ", const void *" text ", unisize " length ", uniattr " attributes ", uninormchk *" result ");"
+.fi
+.SH DESCRIPTION
+Performs a quick check to see if \f[I]text\f[R] is, is not, or might be normalized.
+For a definitive yes/no answer, use \f[B]uni_normchk\f[R](3).
+.PP
+The implementation behaves as follows:
+.RS
+.IP \[bu] 2
+\f[I]result\f[R] is set to \f[B]UNI_YES\f[R] if all characters in \f[I]text\f[R] quick check to yes.
+.IP \[bu] 2
+\f[I]result\f[R] is set to \f[B]UNI_NO\f[R] if at least one character in \f[I]text\f[R] is quick checks to no.
+.IP \[bu] 2
+\f[I]result\f[R] is set to \f[B]UNI_MAYBE\f[R] if at least one character in \f[I]text\f[R] quick checks to maybe and no characters quick check to no.
+.RE
+.PP
+Support for normalization quick check must be enabled in the JSON configuration file.
+.PP
+.in +4n
+.EX
+{
+    "algorithms": {
+        "normalizationQuickCheck": true
+    }
+}
+.EE
+.in
+.SH RETURN VALUE
+.TP
+UNI_OK
+On success.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is malformed; this is never returned if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R].
+.TP
+UNI_FEATURE_DISABLED
+If Unicorn was built without support for \f[C]normform\f[R].
+.SH SEE ALSO
+.BR uni_normchk (3),
+.BR uninormchk (3),
+.BR uniattr (3),
+.BR uninormform (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

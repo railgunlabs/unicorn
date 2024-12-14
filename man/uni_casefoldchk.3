@@ -1,0 +1,49 @@
+.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.SH NAME
+uni_casefoldchk \- check case fold status
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.BI "unistat uni_casefoldchk(unicasefold " casing ", const void *" text ", unisize " length ", uniattr " attributes ", bool *" result ");"
+.fi
+.SH DESCRIPTION
+Check if \f[I]text\f[R] is in casing form \f[I]casing\f[R].
+If it is, then the implementation writes \f[C]true\f[R] to \f[I]result\f[R] else it writes \f[C]false\f[R].
+.PP
+The text attributes of \f[I]text\f[R] are specified by \f[I]attributes\f[R].
+If \f[I]length\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]text\f[R] is null terminated.
+.SH RETURN VALUE
+.TP
+UNI_OK
+On success.
+.TP
+UNI_BAD_OPERATION
+If \f[I]text\f[R] or \f[I]result\f[R] is \f[C]NULL\f[R].
+.TP
+UNI_BAD_ENCODING
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R]).
+.TP
+UNI_FEATURE_DISABLED
+If Unicorn was built without support for case folding.
+.TP
+UNI_NO_MEMORY
+If dynamic memory allocation failed.
+.SH SEE ALSO
+.BR uniattr (3),
+.BR unicasefold (3),
+.BR unisize (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.
