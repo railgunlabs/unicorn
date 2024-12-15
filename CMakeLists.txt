@@ -52,8 +52,6 @@ set(SOURCES
 add_library(unicorn STATIC ${SOURCES})
 add_dependencies(unicorn unicorn_generate)
 
-add_subdirectory(man)
-
 # Generate version information.
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(${CMAKE_BINARY_DIR}/UnicornConfigVersion.cmake COMPATIBILITY SameMajorVersion)
@@ -78,6 +76,10 @@ else ()
     set(includedir "\${prefix}/include")
     configure_file("${CMAKE_SOURCE_DIR}/UnicornConfig.cmake.in" "${CMAKE_BINARY_DIR}/UnicornConfig.cmake" @ONLY)
     configure_file("${CMAKE_SOURCE_DIR}/unicorn.pc.in" "${CMAKE_BINARY_DIR}/unicorn.pc" @ONLY)
+
+    # Only install man pages when running "make install" locally.
+    # No need to place them in the amalgamated archive.
+    add_subdirectory(man)
 
     # This is the "make install" action.
     set_target_properties(unicorn PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/unicorn.h)
