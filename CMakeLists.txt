@@ -74,6 +74,7 @@ else ()
     set(exec_prefix "\${prefix}")
     set(libdir "\${exec_prefix}/lib")
     set(includedir "\${prefix}/include")
+    set(VERSION ${PROJECT_VERSION})
     configure_file("${CMAKE_SOURCE_DIR}/UnicornConfig.cmake.in" "${CMAKE_BINARY_DIR}/UnicornConfig.cmake" @ONLY)
     configure_file("${CMAKE_SOURCE_DIR}/unicorn.pc.in" "${CMAKE_BINARY_DIR}/unicorn.pc" @ONLY)
 
