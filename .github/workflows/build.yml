@@ -15,7 +15,7 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: '3.9'
-    - name: Build and Check
+    - name: CMake Build and Check
       env:
         CC: ${{ matrix.platform.CC }}
         CFLAGS: ${{ matrix.platform.CFLAGS }}
@@ -23,3 +23,12 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
         ctest --output-on-failure --test-dir build
+    - name: Autotools Build
+      env:
+        CC: ${{ matrix.platform.CC }}
+        CFLAGS: ${{ matrix.platform.CFLAGS }}
+      run: |
+        ./autogen.sh
+        ./configure
+        make
+        make distcheck
