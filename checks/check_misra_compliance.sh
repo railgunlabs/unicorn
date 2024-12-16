@@ -3,7 +3,7 @@
 cd ..
 
 if ! test -f ./unicorn.c; then
-    echo "missing 'unicorn.c' - please run 'unicorn.py' and try again"
+    echo "missing 'unicorn.c' - please run 'generate.pyz' and try again"
     exit 1
 fi
 
