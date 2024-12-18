@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_normcmp \- canonical equivalence
 .SH LIBRARY
@@ -33,7 +33,7 @@ UNI_BAD_OPERATION
 If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], if \f[I]s1_len\f[R] or \f[I]s2_len\f[R] are negative, or if \f[I]result\f[R] is \f[C]NULL\f[R].
 .TP
 UNI_BAD_ENCODING
-If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R]).
+If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_NO_MEMORY
 If dynamic memory allocation failed.
@@ -41,6 +41,7 @@ If dynamic memory allocation failed.
 .BR uni_norm (3),
 .BR uninormform (3),
 .BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR unisize (3)
 .SH AUTHOR
 .UR https://railgunlabs.com

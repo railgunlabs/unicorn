@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_sortkeymk \- make sort key
 .SH LIBRARY
@@ -7,12 +7,12 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_sortkeymk(const void *" text ", unisize " length ", uniattr " attributes ", uniweighting " weighting ", unistrength " strength ", uint16_t *" sortkey ", size_t *" sortkey_cap ");"
+.BI "unistat uni_sortkeymk(const void *" text ", unisize " text_len ", uniattr " text_attr ", uniweighting " weighting ", unistrength " strength ", uint16_t *" sortkey ", size_t *" sortkey_cap ");"
 .fi
 .SH DESCRIPTION
 Build a sort key for \f[I]text\f[R] and writes the result to \f[I]sortkey\f[R].
-The number of code units in \f[I]text\f[R] is specified by \f[I]length\f[R].
-If \f[I]length\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
+The number of code units in \f[I]text\f[R] is specified by \f[I]text_len\f[R].
+If \f[I]text_len\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
 Pairs of sort keys can be compared with \f[B]uni_sortkeycmp\f[R](3).
 .PP
 The capacity of \f[I]sortkey\f[R] is specified by \f[I]sortkey_cap\f[R].
@@ -45,7 +45,7 @@ UNI_BAD_OPERATION
 If \f[I]text\f[R] or \f[I]sortkey_cap\f[R] are NULL.
 .TP
 UNI_BAD_ENCODING
-If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R]).
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_NO_MEMORY
 If dynamic memory allocation failed.
@@ -91,8 +91,9 @@ int main(void)
 .BR unistat (3),
 .BR uniweighting (3),
 .BR unistrength (3),
-.BR uniattr (3),
-.BR unisize (3)
+.BR UNI_TRUST (3),
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

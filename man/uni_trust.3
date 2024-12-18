@@ -1,0 +1,38 @@
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
+.SH NAME
+UNI_TRUST \- well-formed text
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B #define UNI_TRUST 0x40
+.fi
+.SH DESCRIPTION
+Text attribute bit flag that indicates that the encoded text is well-formed.
+.PP
+Under normal usage Unicorn processes text with the assumption that it might be malformed.
+This means it performs safety checks which are redundant if the text has already been validated with \f[B]uni_validate\f[R](3).
+The purpose of this flag is to inform Unicorn that it can skip redundant validation checks thereby improving performance.
+.PP
+Usage of this flag means functions will never return \f[B]UNI_BAD_ENCODING\f[R].
+.PP
+Some functions, like \f[B]uni_norm\f[R](3), accept an input buffer and an output buffer.
+Using this flag with an output buffer will produce \f[B]UNI_BAD_OPERATION\f[R].
+.SH SEE ALSO
+.BR uni_validate (3),
+.BR unistat (3),
+.BR uni_norm (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

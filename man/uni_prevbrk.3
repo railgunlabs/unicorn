@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_prevbrk \- compute preceding boundary
 .SH LIBRARY
@@ -7,7 +7,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_prevbrk(unibreak " boundary ", const void *" text ", unisize " length ", uniattr " attributes ", unisize *" index ");"
+.BI "unistat uni_prevbrk(unibreak " boundary ", const void *" text ", unisize " text_len ", uniattr " text_attr ", unisize *" index ");"
 .fi
 .SH DESCRIPTION
 Compute the preceding \f[I]boundary\f[R] for \f[I]text\f[R] starting from a known code point specified by code unit index \f[I]index\f[R].
@@ -24,11 +24,12 @@ UNI_BAD_OPERATION
 If \f[I]text\f[R] or \f[I]index\f[R] is \f[C]NULL\f[R].
 .TP
 UNI_BAD_ENCODING
-If \f[I]text\f[R] is malformed; this is never returned if \f[I]attributes\f[R] has \f[B]UNI_TRUST\f[R].
+If \f[I]text\f[R] is malformed; this is never returned if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3).
 .SH SEE ALSO
-.BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR unibreak (3),
-.BR unisize (3)
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

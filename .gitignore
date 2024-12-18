@@ -40,6 +40,7 @@ Win32
 _CPack_Packages
 
 # Automake
+Makefile
 Makefile.in
 /ar-lib
 /mdate-sh
@@ -51,6 +52,7 @@ Makefile.in
 
 # Autoconf
 autom4te.cache
+configure~
 /autoscan.log
 /autoscan-*.log
 /aclocal.m4
@@ -76,3 +78,4 @@ unicorn.pc
 
 # Generated files
 *.tar.gz
+*.zip

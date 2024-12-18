@@ -1,24 +1,17 @@
 .TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
-uni_is \- binary property value
+UNI_UTF32 \- UTF-32 encoding form
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "bool uni_is(unichar " c ", unibp " p ");"
+.B #define UNI_UTF32 0x8
 .fi
 .SH DESCRIPTION
-Retrieve the value of the binary property \f[I]p\f[R] for the character \f[I]c\f[R].
-.PP
-The binary character property \f[I]p\f[R] must be enabled in the JSON configuration file otherwise \f[C]false\f[R] is always returned.
-Instructions for enabling it are documented alongside property \f[I]p\f[R] in the \f[B]unibp\f[R](3) enumeration.
-.SH RETURN VALUE
-\f[C]true\f[R] if the character has the property else \f[C]false\f[R].
-.SH SEE ALSO
-.BR unibp (3),
-.BR unichar (3)
+Text attribute bit flag that indicates text is encoded as UTF-32.
+The implementation uses an unsigned 32-bit integer (\f[C]uint32_t\f[R]) to represent UTF-32 code units.
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

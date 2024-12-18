@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 unicorn.h \- public interface for the Unicorn library
 .SH LIBRARY
@@ -64,13 +64,42 @@ T}
 
 .T&
 l l.
+\fBDefines\fR;\fBDescription\fR
+_
+\fBUNI_SCALAR\fR(3);T{
+Unicode scalar value.
+T}
+\fBUNI_UTF8\fR(3);T{
+UTF-8 encoding form.
+T}
+\fBUNI_UTF16\fR(3);T{
+UTF-16 encoding form.
+T}
+\fBUNI_UTF32\fR(3);T{
+UTF-32 encoding form.
+T}
+\fBUNI_BIG\fR(3);T{
+Big endian byte order.
+T}
+\fBUNI_LITTLE\fR(3);T{
+Little endian byte order.
+T}
+\fBUNI_NATIVE\fR(3);T{
+Native endian byte order.
+T}
+\fBUNI_TRUST\fR(3);T{
+Well-formed text.
+T}
+\fBUNI_NULIFY\fR(3);T{
+Null terminated output.
+T}
+
+.T&
+l l.
 \fBEnumerations\fR;\fBDescription\fR
 _
 \fBunistat\fR(3);T{
 Status code.
-T}
-\fBuniattr\fR(3);T{
-Text attributes.
 T}
 .TE
 .SS Normalization
@@ -546,7 +575,7 @@ Unicorn implements the function \f[B]uni_convert\f[R](3) for converting between 
 It also defines the functions \f[B]uni_next\f[R](3), \f[B]uni_prev\f[R](3), and \f[B]uni_encode\f[R](3) for decoding and encoding Unicode scalar values.
 .PP
 Support for each encoding form is enabled individually in the JSON configuration file.
-Where string values “UTF-8”, “UTF-16”, and “UTF-32” correspond to the \f[B]UNI_UTF8\f[R], \f[B]UNI_UTF16\f[R], and \f[B]UNI_UTF32\f[R] constants, respectively.
+Where string values “UTF-8”, “UTF-16”, and “UTF-32” correspond to the \f[B]UNI_UTF8\f[R](3), \f[B]UNI_UTF16\f[R](3), and \f[B]UNI_UTF32\f[R](3) constants, respectively.
 .PP
 .in +4n
 .EX

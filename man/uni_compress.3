@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_compress \- compress text
 .SH LIBRARY
@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_compress(const void *" text ", unisize " text_len ", uniattr " text_attr ", uint8_t *" buffer ", size_t *" buffer_length ");"
 .fi
 .SH DESCRIPTION
-Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and writes the results ot \f[I]buffer\f[R].
+Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and writes the results to \f[I]buffer\f[R].
 Text is compressed based on its code points, i.e. UTF-8, 16, and 32 will compress to the same byte sequence.
 .PP
 The capacity of \f[I]buffer\f[R] is specified by \f[I]buffer_length\f[R].
@@ -29,14 +29,15 @@ UNI_BAD_OPERATION
 If \f[I]text\f[R] or \f[I]buffer_length\f[R] is \f[C]NULL\f[R].
 .TP
 UNI_BAD_ENCODING
-If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_FEATURE_DISABLED
 If Unicorn was configured without support for the compression algorithm.
 .SH SEE ALSO
 .BR unistat (3),
-.BR uniattr (3),
-.BR unisize (3)
+.BR UNI_TRUST (3),
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

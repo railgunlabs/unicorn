@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_encode \- encode a scalar value
 .SH LIBRARY
@@ -7,16 +7,16 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_encode(unichar " cp ", void *" buffer ", unisize *" count ", uniattr " attributes ");"
+.BI "unistat uni_encode(unichar " cp ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
 .fi
 .SH DESCRIPTION
-Encoded the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]attributes\f[R] and write the resulting code units to \f[I]buffer\f[R].
-The code unit capacity of \f[I]buffer\f[R] is specified by \f[I]count\f[R].
-The implementation will write the number of code units needed to encode \f[I]cp\f[R] to \f[I]count\f[R] on output.
+Encoded the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]dst_attr\f[R] and write the resulting code units to \f[I]dst\f[R].
+The code unit capacity of \f[I]dst\f[R] is specified by \f[I]dst_len\f[R].
+The implementation will write the number of code units needed to encode \f[I]cp\f[R] to \f[I]dst_len\f[R] on output.
 .PP
-If the capacity of \f[C]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
 .PP
-To ensure the \f[I]buffer\f[R] is sufficiently-sized, the following table lists the number of code units needed to encode any character within its respective encoding form.
+To ensure the \f[I]dst\f[R] is sufficiently-sized, the following table lists the number of code units needed to encode any character within its respective encoding form.
 .PP
 .TS
 allbox tab(|);
@@ -39,20 +39,20 @@ T}|T{
 T}
 .TE
 .PP
-If \f[I]buffer\f[R] is \f[C]NULL\f[R] and \f[I]count\f[R] is zero, then the number of code units needed will be computed by the implementation and written to \f[I]count\f[R] and \f[B]UNI_OK\f[R] is returned.
+If \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is zero, then the number of code units needed will be computed by the implementation and written to \f[I]dst_len\f[R] and \f[B]UNI_OK\f[R] is returned.
 .SH RETURN VALUE
 .TP
 UNI_OK
 If the character was encoded successfully.
 .TP
 UNI_BAD_OPERATION
-If \f[I]cp\f[R] is not a Unicode scalar value, if \f[I]count\f[R] is \f[C]NULL\f[R], or if \f[I]buffer\f[R] is \f[C]NULL\f[R] and \f[I]count\f[R] is non-zero.
+If \f[I]cp\f[R] is not a Unicode scalar value, if \f[I]dst_len\f[R] is \f[C]NULL\f[R], or if \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is non-zero.
 .TP
 UNI_NO_SPACE
 If \f[C]dest\f[R] is too small.
 .TP
 UNI_FEATURE_DISABLED
-If Unicorn was built without support for the encoding form specified by \f[I]attributes\f[R].
+If Unicorn was built without support for the encoding form specified by \f[I]dst_attr\f[R].
 .SH SEE ALSO
 .BR unistat (3),
 .BR unichar (3),

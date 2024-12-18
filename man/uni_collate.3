@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_collate \- compare strings for sorting
 .SH LIBRARY
@@ -7,7 +7,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_collate(const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", uniweighting " weighting ", unistrength " strength ", int *" result ");"
+.BI "unistat uni_collate(const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", uniweighting " weighting ", unistrength " strength ", int32_t *" result ");"
 .fi
 .SH DESCRIPTION
 Compare strings \f[I]s1\f[R] and \f[I]s2\f[R] and write -1, 0, or 1 to \f[I]result\f[R] depending on if \f[C]s1 < s2\f[R], \f[C]s1 = s2\f[R], or \f[C]s1 > s2\f[R].
@@ -40,7 +40,7 @@ UNI_BAD_OPERATION
 If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], or if \f[I]result\f[R] is \f[C]NULL\f[R].
 .TP
 UNI_BAD_ENCODING
-If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R]).
+If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_FEATURE_DISABLED
 If Unicorn was built without support for collation.
@@ -53,6 +53,7 @@ If dynamic memory allocation failed.
 .BR uniweighting (3),
 .BR unistrength (3),
 .BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR unisize (3)
 .SH AUTHOR
 .UR https://railgunlabs.com

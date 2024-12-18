@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_caseconv \- perform case conversion
 .SH LIBRARY
@@ -27,7 +27,7 @@ UNI_BAD_OPERATION
 If \f[I]src\f[R] is \f[C]NULL\f[R], if \f[I]dst_len\f[R] is \f[C]NULL\f[R], or if \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is non-zero.
 .TP
 UNI_BAD_ENCODING
-If \f[I]src\f[R] is not well-formed (checks are omitted if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+If \f[I]src\f[R] is not well-formed (checks are omitted if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_NO_SPACE
 If \f[I]dst\f[R] was not large enough to accommodate the case converted text.
@@ -61,9 +61,10 @@ int main(void)
 .in
 .SH SEE ALSO
 .BR unistat (3),
-.BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR unicaseconv (3),
-.BR unisize (3)
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

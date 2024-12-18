@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_caseconvchk \- check case status
 .SH LIBRARY
@@ -7,14 +7,14 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_caseconvchk(unicaseconv " casing ", const void *" text ", unisize " length ", uniattr " attributes ", bool *" result ");"
+.BI "unistat uni_caseconvchk(unicaseconv " casing ", const void *" text ", unisize " text_len ", uniattr " text_attr ", bool *" result ");"
 .fi
 .SH DESCRIPTION
 Check if \f[I]text\f[R] is in casing form \f[I]casing\f[R].
 If it is, then the implementation writes \f[C]true\f[R] to \f[I]result\f[R] else it writes \f[C]false\f[R].
 .PP
-The text attributes of \f[I]text\f[R] are specified by \f[I]attributes\f[R].
-If \f[I]length\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]text\f[R] is null terminated.
+The text attributes of \f[I]text\f[R] are specified by \f[I]text_attr\f[R].
+If \f[I]text_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]text\f[R] is null terminated.
 .SH RETURN VALUE
 .TP
 UNI_OK
@@ -24,14 +24,15 @@ UNI_BAD_OPERATION
 If \f[I]text\f[R] or \f[I]result\f[R] is \f[C]NULL\f[R].
 .TP
 UNI_BAD_ENCODING
-If \f[I]text\f[R] is not well-formed (checks are omitted if \f[C]src_attr\f[R] has \f[B]UNI_TRUST\f[R]).
+If \f[I]text\f[R] is not well-formed (checks are omitted if \f[C]src_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_FEATURE_DISABLED
 If Unicorn was built without support for case conversion.
 .SH SEE ALSO
-.BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR unicaseconv (3),
-.BR unisize (3)
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_norm \- normalize text
 .SH LIBRARY
@@ -26,7 +26,7 @@ UNI_BAD_OPERATION
 If \f[I]src\f[R] is \f[C]NULL\f[R], if \f[I]dst_len\f[R] is negative, or if \f[I]dst\f[R] is NULL and \f[I]dst_len\f[R] is greater than zero.
 .TP
 UNI_BAD_ENCODING
-If \f[I]src\f[R] is malformed; this is never returned if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R].
+If \f[I]src\f[R] is malformed; this is never returned if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R](3).
 .TP
 UNI_NO_SPACE
 If \f[I]dst\f[R] lacks the capacity to store the normalization of \f[I]src\f[R].
@@ -64,9 +64,10 @@ int main(void)
 .in
 .SH SEE ALSO
 .BR unistat (3),
-.BR uniattr (3),
+.BR UNI_TRUST (3),
 .BR uninormform (3),
-.BR unisize (3)
+.BR unisize (3),
+.BR uniattr (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

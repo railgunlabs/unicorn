@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Dec 14th 2024" "Unicorn 0.8.0"
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
 uni_sortkeycmp \- compare sort keys
 .SH LIBRARY
@@ -7,7 +7,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "unistat uni_sortkeycmp(const uint16_t *" sk1 ", size_t " sk1_len ", const uint16_t *" sk2 ", size_t " sk2_len ", int *" result ");"
+.BI "unistat uni_sortkeycmp(const uint16_t *" sk1 ", size_t " sk1_len ", const uint16_t *" sk2 ", size_t " sk2_len ", int32_t *" result ");"
 .fi
 .SH DESCRIPTION
 Compare sort keys \f[I]sk1\f[R] and \f[I]sk2\f[R] and write either -1, 0, or 1 to \f[I]result\f[R] depending on if \f[C]sk1 < sk2\f[R], \f[C]sk1 = sk2\f[R], or \f[C]sk1 > sk2\f[R].

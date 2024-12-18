@@ -1,0 +1,37 @@
+.TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
+.SH NAME
+UNI_NULIFY \- null terminated output
+.SH LIBRARY
+Embeddable Unicode Algorithms (libunicorn, -lunicorn)
+.SH SYNOPSIS
+.nf
+.B #include <unicorn.h>
+.PP
+.B #define UNI_NULIFY 0x80
+.fi
+.SH DESCRIPTION
+Text attribute bit flag that indicates that the output buffer must be null terminated by the implementation.
+.PP
+Some functions, like \f[B]uni_norm\f[R](3), accept an input buffer and an output buffer.
+The output buffer is the destination buffer that the implementation writes encoded characters to.
+When this flag is applied to the output buffer the implementation guarantees a NUL character (U+0000) is appended, even if it means truncating the last non-null character.
+Conceptually, this behavior is like the BSD function \f[C]strlcpy\f[R] which also guarantees the destination buffer is null terminated.
+.PP
+The implementation will never append an extraneous null character if the output buffer is already null terminated.
+.PP
+Using this flag with an input buffer will produce \f[B]UNI_BAD_OPERATION\f[R].
+.SH SEE ALSO
+.BR uni_norm (3),
+.BR unistat (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/unicorn
+Railgun Labs website
+.UE .
+.SH LICENSING
+Unicorn is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Unicorn and for a DISCLAIMER OF ALL WARRANTIES.

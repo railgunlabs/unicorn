@@ -1,24 +1,27 @@
 .TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
-uni_is \- binary property value
+UNI_NATIVE \- native endian byte order
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "bool uni_is(unichar " c ", unibp " p ");"
+.B #define UNI_NATIVE
 .fi
 .SH DESCRIPTION
-Retrieve the value of the binary property \f[I]p\f[R] for the character \f[I]c\f[R].
+Text attribute bit flag that indicates the text is encoded in big endian byte order.
+The value of this flag will be \f[B]UNI_BIG\f[R](3) or \f[B]UNI_LITTLE\f[R](3).
 .PP
-The binary character property \f[I]p\f[R] must be enabled in the JSON configuration file otherwise \f[C]false\f[R] is always returned.
-Instructions for enabling it are documented alongside property \f[I]p\f[R] in the \f[B]unibp\f[R](3) enumeration.
-.SH RETURN VALUE
-\f[C]true\f[R] if the character has the property else \f[C]false\f[R].
+The flag is intended for use with \f[B]UNI_UTF16\f[R](3) and \f[B]UNI_UTF32\f[R](3).
+It has no effect when used with \f[B]UNI_UTF8\f[R](3) or \f[B]UNI_SCALAR\f[R](3).
 .SH SEE ALSO
-.BR unibp (3),
-.BR unichar (3)
+.BR UNI_BIG (3),
+.BR UNI_LITTLE (3),
+.BR UNI_UTF16 (3),
+.BR UNI_UTF32 (3),
+.BR UNI_UTF8 (3),
+.BR UNI_SCALAR (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

@@ -1,23 +1,21 @@
 .TH "UNICORN" "3" "Dec 18th 2024" "Unicorn 1.0.2"
 .SH NAME
-uni_is \- binary property value
+UNI_SCALAR \- unicode scalar value
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
 .nf
 .B #include <unicorn.h>
 .PP
-.BI "bool uni_is(unichar " c ", unibp " p ");"
+.B #define UNI_SCALAR 0x1
 .fi
 .SH DESCRIPTION
-Retrieve the value of the binary property \f[I]p\f[R] for the character \f[I]c\f[R].
+Text attribute bit flag that indicates the text is encoded as Unicode scalar values.
+This is a pseudo-encoding that uses the \f[B]unichar\f[R](3) type for storage.
 .PP
-The binary character property \f[I]p\f[R] must be enabled in the JSON configuration file otherwise \f[C]false\f[R] is always returned.
-Instructions for enabling it are documented alongside property \f[I]p\f[R] in the \f[B]unibp\f[R](3) enumeration.
-.SH RETURN VALUE
-\f[C]true\f[R] if the character has the property else \f[C]false\f[R].
+Unicode scalars are not the same as code points.
+The former excludes surrogate characters whereas the latter does not.
 .SH SEE ALSO
-.BR unibp (3),
 .BR unichar (3)
 .SH AUTHOR
 .UR https://railgunlabs.com

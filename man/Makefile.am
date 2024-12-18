@@ -3,12 +3,15 @@ man3_MANS = \
 	unistat.3 \
 	unibp.3 \
 	unimemfunc.3 \
+	uni_nulify.3 \
 	uniweighting.3 \
 	uni_prev.3 \
 	uninormchk.3 \
 	uni_getversion.3 \
 	uni_is.3 \
 	unicaseconv.3 \
+	uni_utf32.3 \
+	uni_trust.3 \
 	unisize.3 \
 	unigc.3 \
 	unichar.3 \
@@ -21,19 +24,24 @@ man3_MANS = \
 	uni_toupper.3 \
 	unicorn.3 \
 	uniattr.3 \
+	uni_scalar.3 \
 	uni_setmemfunc.3 \
 	uni_sortkeymk.3 \
 	uni_prevbrk.3 \
+	uni_utf16.3 \
 	uni_getucdversion.3 \
 	uni_numval.3 \
 	uni_caseconvchk.3 \
+	uni_big.3 \
 	uni_seterrfunc.3 \
 	uni_casefold.3 \
 	uni_convert.3 \
+	uni_utf8.3 \
 	uni_sortkeycmp.3 \
 	uninormform.3 \
 	uni_gc.3 \
 	uni_normqchk.3 \
+	uni_native.3 \
 	uni_norm.3 \
 	unibreak.3 \
 	uni_totitle.3 \
@@ -43,6 +51,7 @@ man3_MANS = \
 	uni_next.3 \
 	uni_casefoldcmp.3 \
 	uni_decompress.3 \
+	uni_little.3 \
 	uni_validate.3 \
 	unicasefold.3 \
 	uni_casefoldchk.3 \

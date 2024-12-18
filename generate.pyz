@@ -173,8 +173,8 @@ def cL(fi,struct,function):
  source+='    }\n'
  source+='    else\n'
  source+='    {\n'
- source+='        const int stage2_offset = {0}_stage1_table[cp >> UNICHAR_C({1})];\n'.format(function,dD.bit_length()-1)
- source+='        const int codepoint_index = {0}_stage2_table[stage2_offset + (cp & UNICHAR_C({1}))];\n'.format(function,dD-1)
+ source+='        const uint16_t stage2_offset = {0}_stage1_table[cp >> UNICHAR_C({1})];\n'.format(function,dD.bit_length()-1)
+ source+='        const uint16_t codepoint_index = {0}_stage2_table[stage2_offset + (cp & UNICHAR_C({1}))];\n'.format(function,dD-1)
  source+='        data = &{0}_unicode_codepoints[codepoint_index];\n'.format(function)
  source+='    }\n'
  source+='\n'
@@ -186,7 +186,7 @@ def cL(fi,struct,function):
  for eC in eJ:
   header+=f'     {i[eC.ea]} {eC.g};\n'
  header+='};\n'
- header+=f'const struct {struct} *{function}(unichar ch);\n'
+ header+=f'const struct {struct} *{function}(unichar cp);\n'
  return fe(source,header,'',size)
 from typing import List,Set,Dict,Any,Optional,Tuple,cast
 import sys
@@ -754,7 +754,7 @@ class cU(Feature):
    size+=4
   source+='};\n\n'
   header=f'#define CASING_IN_TABLE(C) (((C) & UINT16_C({dI})) == UINT16_C({dI}))\n'
-  header+='#define GET_CASED_VALUE(C) ((C) & INT16_C(0x3FFF))\n'
+  header+='#define GET_CASED_VALUE(C) ((C) & UINT16_C(0x3FFF))\n'
   header+=f'#define CASING_DIFF INT32_C({ey})\n'
   header+='extern const unichar unicorn_simple_case_mappings[{0}];\n'.format(len(et))
   assert len(et)<65535,'cannot use unsigned 16-bit integer anymore'
@@ -952,7 +952,7 @@ class ds(Feature):
     else:
      dt=max(dt,len(eh))
   if fh.optimize==er.el:
-   source='const unichar unicorn_canonical_decomposition_mappings[] = {'
+   source='const unichar uni_canonical_decomp_mappings[] = {'
    for index,eS in enumerate(eE):
     if index%8==0:
      source+='\n'
@@ -961,7 +961,7 @@ class ds(Feature):
    source+='\n'
    source+='};\n\n'
   else:
-   source='const uint8_t unicorn_canonical_decomposition_mappings[] = {'
+   source='const uint8_t uni_canonical_decomp_mappings[] = {'
    for index,eS in enumerate(eE):
     if index%8==0:
      source+='\n'
@@ -970,9 +970,9 @@ class ds(Feature):
    source+='\n'
    source+='};\n\n'
   if fh.optimize==er.el:
-   header='extern const unichar unicorn_canonical_decomposition_mappings[{0}];\n'.format(len(eE))
+   header='extern const unichar uni_canonical_decomp_mappings[{0}];\n'.format(len(eE))
   else:
-   header='extern const uint8_t unicorn_canonical_decomposition_mappings[{0}];\n'.format(len(eE))
+   header='extern const uint8_t uni_canonical_decomp_mappings[{0}];\n'.format(len(eE))
   header+='#define LONGEST_UNICHAR_DECOMPOSITION {0}\n'.format(du+1)
   header+='#define LONGEST_RAW_DECOMPOSITION {0}\n'.format(dt+1)
   fd='#define UNICORN_FEATURE_NFD\n'
@@ -1005,7 +1005,7 @@ class aL(Feature):
    fi.set(dP,aI,count)
    fi.eb(dP,dX,cd)
   size=0
-  source='const struct CanonicalCompositionPair unicorn_canonical_composition_pairs[] = {\n'
+  source='const struct CanonicalCompositionPair uni_canonical_comp_pairs[] = {\n'
   for cu in ct:
    aJ=cu[0]
    aK=cu[1]
@@ -1018,7 +1018,7 @@ class aL(Feature):
   header+='    unichar composed_codepoint;\n'
   header+='};\n'
   header+='#define CHAR_IS_COMPOSABLE UINT32_C({0})\n'.format(cd)
-  header+='extern const struct CanonicalCompositionPair unicorn_canonical_composition_pairs[{0}];\n'.format(len(ct))
+  header+='extern const struct CanonicalCompositionPair uni_canonical_comp_pairs[{0}];\n'.format(len(ct))
   header+='\n'
   fd='#define UNICORN_FEATURE_NFC\n'
   return fe(source,header,fd,size)
@@ -1434,7 +1434,7 @@ def main(args):
  file.close()
  copyright='/*\n *  Unicorn: Embeddable Unicode algorithms software library.\n *  Copyright (c) 2024 Railgun Labs, LLC\n *\n *  This file is part of Unicorn, distributed under the Railgun\n *  Limited Public License. For the full terms see the included\n *  LICENSE file. If you did not receive a LICENSE file then\n *  contact us at <https://RailgunLabs.com/contact/>.\n */\n\n// The Unicorn source code has been amalgamated into a monolithic source\n// and header file. As part of the amalgamation process all code comments\n// and extraneous white space have been removed.\n//\n// The amalgamation is intended for consumption, not development. The\n// unamalgamated source code can be obtained by purchasing a license\n// from Railgun Labs at https://RailgunLabs.com/unicorn/license.\n\n'
  filename=os.path.join(args.output_dir,'unicorn.c')
- fp=open(filename,'w',encoding='utf-8')
+ fp=open(filename,'w',encoding='utf-8',newline='\n')
  fp.write(copyright)
  fp.write(bf)
  fp.write(bi)
@@ -1444,7 +1444,7 @@ def main(args):
  fp.close()
  print('writing:',os.path.realpath(filename))
  filename=os.path.join(args.output_dir,'unicorn.h')
- fp=open(filename,'w',encoding='utf-8')
+ fp=open(filename,'w',encoding='utf-8',newline='\n')
  fp.write(copyright)
  fp.write('#ifndef UNICORN_H\n')
  fp.write('#define UNICORN_H\n')
