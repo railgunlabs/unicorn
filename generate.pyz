@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #  Unicorn - Embeddable Unicode Library
-#  Copyright (c) 2021-2024 Railgun Labs, LLC - All Rights Reserved
+#  Copyright (c) 2021-2025 Railgun Labs, LLC - All Rights Reserved
 #
 #  All information contained herein is and remains the property of Railgun Labs.
 #  The intellectual and technical concepts contained herein are proprietary to
@@ -144,7 +144,7 @@ def cL(fi,struct,function):
  for eo in ek.keys():
   source+='        {'
   for eC in eJ:
-   source+='UINT32_C({0}),'.format(eo.eB[eC.id])
+   source+='{0}u,'.format(eo.eB[eC.id])
    size+=eC.ea.c()
   source+='},\n'
  source+='    };\n\n'
@@ -153,7 +153,7 @@ def cL(fi,struct,function):
   if index%8==0:
    source+='\n'
    source+='        '
-  source+='UINT16_C(%d), '%value
+  source+='%d, '%value
   size+=2
  source+='\n'
  source+='    };\n\n'
@@ -162,7 +162,7 @@ def cL(fi,struct,function):
   if index%8==0:
    source+='\n'
    source+='        '
-  source+='UINT16_C(%d), '%value
+  source+='%d, '%value
   size+=2
  source+='\n'
  source+='    };\n\n'
@@ -753,9 +753,9 @@ class cU(Feature):
    source+='UNICHAR_C(0x{:04X}), '.format(eS)
    size+=4
   source+='};\n\n'
-  header=f'#define CASING_IN_TABLE(C) (((C) & UINT16_C({dI})) == UINT16_C({dI}))\n'
-  header+='#define GET_CASED_VALUE(C) ((C) & UINT16_C(0x3FFF))\n'
-  header+=f'#define CASING_DIFF INT32_C({ey})\n'
+  header=f'#define CASING_IN_TABLE(C) (((C) & (uint16_t){dI}) == (uint16_t){dI})\n'
+  header+='#define GET_CASED_VALUE(C) ((C) & (uint16_t)0x3FFF)\n'
+  header+=f'#define CASING_DIFF {ey}\n'
   header+='extern const unichar unicorn_simple_case_mappings[{0}];\n'.format(len(et))
   assert len(et)<65535,'cannot use unsigned 16-bit integer anymore'
   fg=cL(eG,'CharCaseData','unicorn_get_character_casing')
@@ -778,8 +778,8 @@ class cm(Feature):
   mappings=fg['characterFlags']
   file.close()
   dX=fi.get(dW[0])
-  header+='#define IS_CASED UINT32_C({0})\n'.format(u)
-  header+='#define IS_CASE_IGNORABLE UINT32_C({0})\n'.format(v)
+  header+='#define IS_CASED {0}u\n'.format(u)
+  header+='#define IS_CASE_IGNORABLE {0}u\n'.format(v)
   for fb,flags in mappings.items():
    fi.eb(int(fb,16),dX,flags)
   return fe(source=source,header=header,size=size)
@@ -829,8 +829,8 @@ class cp(Feature):
    fi.eb(fb,dX,cf)
   for fb,offset in aw:
    fi.set(fb,ay,offset)
-  header+='#define UNICORN_CHAR_NEEDS_NORMALIZATION UINT32_C({0})\n'.format(ce)
-  header+='#define UNICORN_CHAR_CHANGES_WHEN_CASEFOLDED UINT32_C({0})\n'.format(cf)
+  header+='#define UNICORN_CHAR_NEEDS_NORMALIZATION {0}u\n'.format(ce)
+  header+='#define UNICORN_CHAR_CHANGES_WHEN_CASEFOLDED {0}u\n'.format(cf)
   fd='#define UNICORN_FEATURE_CASEFOLD_DEFAULT\n'
   return fe(source,header,fd,size)
 class az(Feature):
@@ -966,7 +966,7 @@ class ds(Feature):
     if index%8==0:
      source+='\n'
      source+='    '
-    source+='UINT8_C(0x{:02X}), '.format(eS)
+    source+='(uint8_t)0x{:02X}, '.format(eS)
    source+='\n'
    source+='};\n\n'
   if fh.optimize==er.el:
@@ -1017,7 +1017,7 @@ class aL(Feature):
   header+='    unichar codepoint;\n'
   header+='    unichar composed_codepoint;\n'
   header+='};\n'
-  header+='#define CHAR_IS_COMPOSABLE UINT32_C({0})\n'.format(cd)
+  header+='#define CHAR_IS_COMPOSABLE {0}u\n'.format(cd)
   header+='extern const struct CanonicalCompositionPair uni_canonical_comp_pairs[{0}];\n'.format(len(ct))
   header+='\n'
   fd='#define UNICORN_FEATURE_NFC\n'
@@ -1138,7 +1138,7 @@ class aV(Feature):
   for dR,en in enumerate(dO):
    if dR%4==0:
     source+='\n    '
-   source+='UINT32_C(0x{:08X}), '.format(en)
+   source+='0x{:08X}u, '.format(en)
    size+=4
   source+='};\n\n'
   source+='const struct CollationNode unicorn_collation_mappings_trie[] = {\n'
@@ -1147,20 +1147,20 @@ class aV(Feature):
    ep=len(eN.eF)<<24|eN.ev
    aT=eN.dY
    aU=eN.cy
-   source+=f'    {{ UINT32_C({ep}), UINT16_C({aT}), UINT16_C({aU}) }},\n'
+   source+=f'    {{ {ep}u, {aT}, {aU} }},\n'
    size+=8
   source+='};\n\n'
   header=fg.header
   header+=aP
   header+='#define UNICORN_MAX_COLLATION {0}\n'.format(de+1)
-  header+='#define INLINE_CE_FLAG UINT32_C({0})\n'.format(db)
-  header+='#define IN_WEIGHT_TABLE_FLAG UINT32_C({0})\n'.format(cv)
-  header+='#define IN_TRIE_FLAG UINT32_C({0})\n'.format(cw)
-  header+='#define CONTINUATION_FLAG UINT32_C({0})\n'.format(cx)
+  header+='#define INLINE_CE_FLAG {0}u\n'.format(db)
+  header+='#define IN_WEIGHT_TABLE_FLAG {0}u\n'.format(cv)
+  header+='#define IN_TRIE_FLAG {0}u\n'.format(cw)
+  header+='#define CONTINUATION_FLAG {0}u\n'.format(cx)
   header+='#define LONGEST_INITIAL_SUBSTRING {0}\n'.format(aQ)
-  header+='#define UNICORN_IN_COLLATION_TABLE(NODE) ((NODE)->collation_mappings_offset > UINT16_C(0))\n'
-  header+='#define GET_NODE_CODE_POINT(NODE) ((NODE)->codepoint_and_childcount & UINT32_C(0x1FFFFF))\n'
-  header+='#define GET_NODE_CHILD_COUNT(NODE) ((NODE)->codepoint_and_childcount >> UINT32_C(24))\n'
+  header+='#define UNICORN_IN_COLLATION_TABLE(NODE) ((NODE)->collation_mappings_offset > (uint16_t)0)\n'
+  header+='#define GET_NODE_CODE_POINT(NODE) ((NODE)->codepoint_and_childcount & 0x1FFFFFu)\n'
+  header+='#define GET_NODE_CHILD_COUNT(NODE) ((NODE)->codepoint_and_childcount >> 24u)\n'
   header+='struct CollationNode {\n'
   header+='    uint32_t codepoint_and_childcount;\n'
   header+='    uint16_t collation_mappings_offset;\n'
@@ -1297,7 +1297,7 @@ def be(args,ff):
  header+='#define UNICODE_VERSION_MINOR {0}\n'.format(dj[1])
  header+='#define UNICODE_VERSION_PATCH {0}\n'.format(dj[2])
  if fh.optimize==er.el:
-  header+='#define UNICORN_OPTIMIZE_FOR_SPEED\n'
+  header+='#define UNICORN_OPTIMIZE_FOR_SPEED // cppcheck-suppress misra-c2012-2.5\n'
  else:
   header+='#define UNICORN_OPTIMIZE_FOR_SIZE\n'
  if fh.algorithms.dU&ed.bq:
@@ -1432,7 +1432,7 @@ def main(args):
  file=ff.open('code.h')
  bj=file.read().decode('utf-8-sig')
  file.close()
- copyright='/*\n *  Unicorn: Embeddable Unicode algorithms software library.\n *  Copyright (c) 2024 Railgun Labs, LLC\n *\n *  This file is part of Unicorn, distributed under the Railgun\n *  Limited Public License. For the full terms see the included\n *  LICENSE file. If you did not receive a LICENSE file then\n *  contact us at <https://RailgunLabs.com/contact/>.\n */\n\n// The Unicorn source code has been amalgamated into a monolithic source\n// and header file. As part of the amalgamation process all code comments\n// and extraneous white space have been removed.\n//\n// The amalgamation is intended for consumption, not development. The\n// unamalgamated source code can be obtained by purchasing a license\n// from Railgun Labs at https://RailgunLabs.com/unicorn/license.\n\n'
+ copyright='/*\n *  Unicorn: Embeddable Unicode algorithms software library.\n *  Copyright (c) 2025 Railgun Labs, LLC\n *\n *  This file is part of Unicorn, distributed under a non-commercial use software\n *  license. For the full terms see the included LICENSE file. If you did not\n *  receive a LICENSE file or you would like to purchase a commercial license,\n *  contact us at <https://RailgunLabs.com/contact/>.\n */\n\n// The Unicorn source code has been amalgamated into a monolithic source\n// and header file. As part of the amalgamation process all code comments\n// and extraneous white space have been removed.\n//\n// The amalgamation is intended for consumption, not development. The\n// unamalgamated source code can be obtained by purchasing a license\n// from Railgun Labs at https://RailgunLabs.com/unicorn/license.\n\n'
  filename=os.path.join(args.output_dir,'unicorn.c')
  fp=open(filename,'w',encoding='utf-8',newline='\n')
  fp.write(copyright)

@@ -61,7 +61,7 @@ It's written in C99 and only requires a few features from libc which are listed 
 
 ## MISRA C:2012 Compliance
 
-Unicorn honors all Mandatory, most Required, and most Advisory rules defined by MIRSA C:2012.
+Unicorn honors all Mandatory, most Required, and most Advisory rules defined by MIRSA C:2012 and its amendments.
 Deviations are [documented here](https://RailgunLabs.com/unicorn/manual/misra-compliance/).
 You are encouraged to audit Unicorn and verify its level of conformance is acceptable.
 
