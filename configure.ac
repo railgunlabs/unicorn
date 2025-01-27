@@ -1,4 +1,4 @@
-AC_INIT([unicorn], [1.0.3])
+AC_INIT([unicorn], [1.0.4])
 AM_INIT_AUTOMAKE([foreign])
 AC_PROG_CC
 AC_PROG_CPP

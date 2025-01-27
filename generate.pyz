@@ -153,7 +153,7 @@ def cL(fi,struct,function):
   if index%8==0:
    source+='\n'
    source+='        '
-  source+='%d, '%value
+  source+='%du, '%value
   size+=2
  source+='\n'
  source+='    };\n\n'
@@ -162,7 +162,7 @@ def cL(fi,struct,function):
   if index%8==0:
    source+='\n'
    source+='        '
-  source+='%d, '%value
+  source+='%du, '%value
   size+=2
  source+='\n'
  source+='    };\n\n'
@@ -954,7 +954,7 @@ class ds(Feature):
   if fh.optimize==er.el:
    source='const unichar uni_canonical_decomp_mappings[] = {'
    for index,eS in enumerate(eE):
-    if index%8==0:
+    if index%6==0:
      source+='\n'
      source+='    '
     source+='UNICHAR_C(0x{:02X}), '.format(eS)
@@ -966,7 +966,7 @@ class ds(Feature):
     if index%8==0:
      source+='\n'
      source+='    '
-    source+='(uint8_t)0x{:02X}, '.format(eS)
+    source+='0x{:02X}u, '.format(eS)
    source+='\n'
    source+='};\n\n'
   if fh.optimize==er.el:
