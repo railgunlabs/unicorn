@@ -98,8 +98,6 @@ This also means if an error occurs, like an out of memory error, then you can re
 * Code sanitizers (UBSAN, ASAN, and MSAN)
 * Extensive use of assert() and run-time checks
 
-Unit tests are executed on both little and big endian hardware as part of continuous integration.
-
 ## Installation
 
 Download a prebuilt header/source amalgamation from the [releases page](https://github.com/RailgunLabs/unicorn/releases) or generate one yourself by running `./generate.pyz` (requires Python 3.9 or newer).
