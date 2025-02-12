@@ -9,6 +9,9 @@ Unicorn is a lightweight, embeddable implementation of essential Unicode® algor
 Unicorn is compliant with the **MISRA C:2012** coding standard.
 It's perfect for resource constrained devices like microcontrollers and IoT devices.
 
+This repository contains the scripts to generate the Unicorn header/source amalgamation.
+The unamalgamated source code is available exclusively to commercial licensees.
+
 [![Build Status](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml/badge.svg)](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml)
 ![Unicode Version](https://img.shields.io/badge/Unicode-v16.0.0-blue)
 
@@ -61,7 +64,7 @@ It's written in C99 and only requires a few features from libc which are listed 
 
 ## MISRA C:2012 Compliance
 
-Unicorn honors all Mandatory, most Required, and most Advisory rules defined by MIRSA C:2012 and its amendments.
+Unicorn honors all Mandatory, most Required, and most Advisory rules defined by MISRA C:2012 and its amendments.
 Deviations are [documented here](https://RailgunLabs.com/unicorn/manual/misra-compliance/).
 You are encouraged to audit Unicorn and verify its level of conformance is acceptable.
 
@@ -100,7 +103,7 @@ This also means if an error occurs, like an out of memory error, then you can re
 
 ## Installation
 
-Download a prebuilt header/source amalgamation from the [releases page](https://github.com/RailgunLabs/unicorn/releases) or generate one yourself by running `./generate.pyz` (requires Python 3.9 or newer).
+Download a prebuilt header/source amalgamation from the [releases page](https://github.com/RailgunLabs/unicorn/releases) or generate one yourself by running `./generate.pyz` (requires Python 3.10 or newer).
 The prebuilt amalgamation includes _all_ features whereas the one you generate yourself only includes the features you specify in [features.json](features.json).
 
 Alternatively, build a linkable library with
