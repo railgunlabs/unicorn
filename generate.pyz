@@ -20,144 +20,135 @@
 b='16.0.0'
 from enum import IntEnum
 from dataclasses import dataclass
-class eV(IntEnum):
- bk=32
- ej=16
- eI=8
+class eW(IntEnum):
+ bl=32
+ ek=16
+ eJ=8
  def c(self):
   return int(self/8)
 @dataclass
-class fe:
- def __init__(self,source='',header='',fd='',size=0):
+class ff:
+ def __init__(self,source='',header='',fe='',size=0):
   self.source=source
   self.header=header
-  self.fd=fd
+  self.fe=fe
   self.size=size
 from typing import List,Dict,Any,Optional
 from dataclasses import dataclass
-eR=int
+eS=int
 a=1114112
-dD=128
+dE=128
 @dataclass
-class dE:
+class dF:
  name:str
- dP:eR
- d:eR
+ dQ:eS
+ d:eS
  def __hash__(self):
   return hash(self.name)
- def __eq__(self,dQ):
-  if isinstance(dQ,dE):
-   return self.name==dQ.name
+ def __eq__(self,dR):
+  if isinstance(dR,dF):
+   return self.name==dR.name
   return False
-def cH(e):
- return [int(fb,16) for fb in e.split()]
-class dZ:
+def cI(e):
+ return [int(fc,16) for fc in e.split()]
+class ea:
  def __init__(self,f):
-  self.eB=[0]*f
+  self.eC=[0]*f
  def __hash__(self):
-  bl=5381
-  for value in self.eB:
-   bl^=hash(value)
-  return bl
- def __eq__(self,dQ):
-  if isinstance(dQ,dZ):
-   if len(self.eB)!=len(dQ.eB):
+  bm=5381
+  for value in self.eC:
+   bm^=hash(value)
+  return bm
+ def __eq__(self,dR):
+  if isinstance(dR,ea):
+   if len(self.eC)!=len(dR.eC):
     return False
-   for dR in range(len(self.eB)):
-    if self.eB[dR]!=dQ.eB[dR]:
+   for dS in range(len(self.eC)):
+    if self.eC[dS]!=dR.eC[dS]:
      return False
    return True
   return False
-class bm:
- def __init__(self,index,name,dS,ea):
+class bn:
+ def __init__(self,index,name,dT,eb):
   self.id=index
   self.g=name
-  self.dS=dS
-  self.ea=ea
-class fc:
+  self.dT=dT
+  self.eb=eb
+class fd:
  def __init__(self):
   self.characters={}
-  self.eJ={}
-  self.dl=None
- def eU(self,property,dS,ea):
-  if property not in self.eJ:
-   self.eJ[property]=bm(len(self.eJ),property,dS,ea)
-  return self.eJ[property].id
+  self.eK={}
+  self.dm=None
+ def eV(self,property,dT,eb):
+  if property not in self.eK:
+   self.eK[property]=bn(len(self.eK),property,dT,eb)
+  return self.eK[property].id
  def get(self,property):
-  return self.eJ[property].id
+  return self.eK[property].id
  def h(self):
-  self.dl=dZ(len(self.eJ))
-  for eC in self.eJ.values():
-   self.dl.eB[eC.id]=eC.dS
- def bn(self,fb):
-  if fb in self.characters:
-   return self.characters[fb]
+  self.dm=ea(len(self.eK))
+  for eD in self.eK.values():
+   self.dm.eC[eD.id]=eD.dT
+ def bo(self,fc):
+  if fc in self.characters:
+   return self.characters[fc]
   else:
-   eo=dZ(len(self.eJ))
-   for eC in self.eJ.values():
-    eo.eB[eC.id]=eC.dS
-   self.characters[fb]=eo
-   return eo
- def set(self,fb,property,value):
-  self.bn(fb).eB[property]=value
- def eb(self,fb,property,value):
-  self.bn(fb).eB[property]|=value
-def cL(fi,struct,function):
- if len(fi.eJ)==0:
-  return fe()
- fi.h()
- ek={}
- assert fi.dl is not None
- ek[fi.dl]=0
- dm=0
- for eS,ev in fi.characters.items():
-  if ev not in ek:
-   ek[ev]=len(ek)
-  if ek[ev]!=0:
-   dm=max(dm,eS)
- cI=[]
+   ep=ea(len(self.eK))
+   for eD in self.eK.values():
+    ep.eC[eD.id]=eD.dT
+   self.characters[fc]=ep
+   return ep
+ def set(self,fc,property,value):
+  self.bo(fc).eC[property]=value
+ def ec(self,fc,property,value):
+  self.bo(fc).eC[property]|=value
+def cM(fj,struct,function):
+ if len(fj.eK)==0:
+  return ff()
+ fj.h()
+ el={}
+ assert fj.dm is not None
+ el[fj.dm]=0
+ dn=0
+ for eT,ew in fj.characters.items():
+  if ew not in el:
+   el[ew]=len(el)
+  if el[ew]!=0:
+   dn=max(dn,eT)
  cJ=[]
  cK=[]
- eJ=sorted(fi.eJ.values(),key=lambda ep:ep.ea,reverse=True)
- for code in range(dm+1):
-  if code%dD!=0:
+ cL=[]
+ eK=sorted(fj.eK.values(),key=lambda er:er.eb,reverse=True)
+ for code in range(dn+1):
+  if code%dE!=0:
    continue
-  dT=[]
-  for bo in range(code,code+dD):
-   if bo in fi.characters:
-    ev=fi.characters[bo]
-    if ev in ek:
-     dT+=[ek[ev]]
+  dU=[]
+  for bp in range(code,code+dE):
+   if bp in fj.characters:
+    ew=fj.characters[bp]
+    if ew in el:
+     dU+=[el[ew]]
      continue
-   dT+=[0]
-  if dT in cK:
-   cI+=[cK.index(dT)*dD]
+   dU+=[0]
+  if dU in cL:
+   cJ+=[cL.index(dU)*dE]
   else:
-   cI+=[len(cJ)]
-   cJ+=dT
-   cK+=[dT]
+   cJ+=[len(cK)]
+   cK+=dU
+   cL+=[dU]
  size=0
  source=''
  source+=f'const struct {struct} *{function}(unichar cp)\n'
  source+='{\n'
  source+=f'    static const struct {struct} {function}_unicode_codepoints[] = {{\n'
- for eo in ek.keys():
+ for ep in el.keys():
   source+='        {'
-  for eC in eJ:
-   source+='{0}u,'.format(eo.eB[eC.id])
-   size+=eC.ea.c()
+  for eD in eK:
+   source+='{0}u,'.format(ep.eC[eD.id])
+   size+=eD.eb.c()
   source+='},\n'
  source+='    };\n\n'
  source+=f'    static const uint16_t {function}_stage1_table[] = {{'
- for index,value in enumerate(cI):
-  if index%8==0:
-   source+='\n'
-   source+='        '
-  source+='%du, '%value
-  size+=2
- source+='\n'
- source+='    };\n\n'
- source+=f'    static const uint16_t {function}_stage2_table[] = {{'
  for index,value in enumerate(cJ):
   if index%8==0:
    source+='\n'
@@ -166,66 +157,74 @@ def cL(fi,struct,function):
   size+=2
  source+='\n'
  source+='    };\n\n'
+ source+=f'    static const uint16_t {function}_stage2_table[] = {{'
+ for index,value in enumerate(cK):
+  if index%8==0:
+   source+='\n'
+   source+='        '
+  source+='%du, '%value
+  size+=2
+ source+='\n'
+ source+='    };\n\n'
  source+=f'    const struct {struct} *data = NULL;\n'
- source+='    if (cp > UNICHAR_C({0}))\n'.format(dm)
+ source+='    if (cp > UNICHAR_C({0}))\n'.format(dn)
  source+='    {\n'
  source+='        data = &{0}_unicode_codepoints[0]; // code point out of range\n'.format(function)
  source+='    }\n'
  source+='    else\n'
  source+='    {\n'
- source+='        const uint16_t stage2_offset = {0}_stage1_table[cp >> UNICHAR_C({1})];\n'.format(function,dD.bit_length()-1)
- source+='        const uint16_t codepoint_index = {0}_stage2_table[stage2_offset + (cp & UNICHAR_C({1}))];\n'.format(function,dD-1)
+ source+='        const uint16_t stage2_offset = {0}_stage1_table[cp >> UNICHAR_C({1})];\n'.format(function,dE.bit_length()-1)
+ source+='        const uint16_t codepoint_index = {0}_stage2_table[stage2_offset + (cp & UNICHAR_C({1}))];\n'.format(function,dE-1)
  source+='        data = &{0}_unicode_codepoints[codepoint_index];\n'.format(function)
  source+='    }\n'
  source+='\n'
  source+='    return data;\n'
  source+='}\n\n'
- i={eV.eI:'uint8_t',eV.ej:'uint16_t',eV.bk:'uint32_t'}
+ i={eW.eJ:'uint8_t',eW.ek:'uint16_t',eW.bl:'uint32_t'}
  header=''
  header+=f'struct {struct} {{\n'
- for eC in eJ:
-  header+=f'     {i[eC.ea]} {eC.g};\n'
+ for eD in eK:
+  header+=f'     {i[eD.eb]} {eD.g};\n'
  header+='};\n'
  header+=f'const struct {struct} *{function}(unichar cp);\n'
- return fe(source,header,'',size)
+ return ff(source,header,'',size)
 from typing import List,Set,Dict,Any,Optional,Tuple,cast
 import sys
 import enum
 import json
 import zipfile
 import fnmatch
-class dF(enum.Enum):
- bp=enum.auto()
- cM=enum.auto()
-class er(enum.Enum):
- el=enum.auto()
- j=enum.auto()
-class ec(enum.IntFlag):
- eD=enum.auto()
- cN=enum.auto()
- cO=enum.auto()
-class ed(enum.IntFlag):
- eD=enum.auto()
+class dG(enum.Enum):
  bq=enum.auto()
+ cN=enum.auto()
+class es(enum.Enum):
+ em=enum.auto()
+ j=enum.auto()
+class ed(enum.IntFlag):
+ eE=enum.auto()
+ cO=enum.auto()
+ cP=enum.auto()
+class ee(enum.IntFlag):
+ eE=enum.auto()
  br=enum.auto()
  bs=enum.auto()
-class dG(enum.IntFlag):
- eD=enum.auto()
  bt=enum.auto()
+class dH(enum.IntFlag):
+ eE=enum.auto()
  bu=enum.auto()
-class ee(enum.IntFlag):
- eD=enum.auto()
  bv=enum.auto()
+class ef(enum.IntFlag):
+ eE=enum.auto()
  bw=enum.auto()
  bx=enum.auto()
-class ef(enum.IntFlag):
- eD=enum.auto()
  by=enum.auto()
+class eg(enum.IntFlag):
+ eE=enum.auto()
  bz=enum.auto()
  bA=enum.auto()
-class eY(enum.IntFlag):
- eD=enum.auto()
  bB=enum.auto()
+class eZ(enum.IntFlag):
+ eE=enum.auto()
  bC=enum.auto()
  bD=enum.auto()
  bE=enum.auto()
@@ -245,55 +244,56 @@ class eY(enum.IntFlag):
  bS=enum.auto()
  bT=enum.auto()
  bU=enum.auto()
+ bV=enum.auto()
 class k:
  def __init__(self):
-  self.normalization=ec.eD
-  self.dU=ed.eD
-  self.dn=dG.eD
-  self.segmentation=ef.eD
+  self.normalization=ed.eE
+  self.dV=ee.eE
+  self.do=dH.eE
+  self.segmentation=eg.eE
   self.compression=False
   self.collation=False
-  self.bV=False
-class fa:
+  self.bW=False
+class fb:
  def __init__(self):
-  self.endian=dF.cM if sys.byteorder=='big' else dF.bp
-  self.bW=True
-  self.cP='uint32_t'
-  self.optimize=er.el
-  self.bX=32
-  self.do=[]
-  self.dV=ee.eD
+  self.endian=dG.cN if sys.byteorder=='big' else dG.bq
+  self.bX=True
+  self.cQ='uint32_t'
+  self.optimize=es.em
+  self.bY=32
+  self.dp=[]
+  self.dW=ef.eE
   self.algorithms=k()
-  self.eW=eY.eD
- def l(self,fb):
-  blocks=self.do
-  cQ=0
-  cR=len(blocks)-1
-  while cQ<=cR:
-   dp=(cR+cQ)//2
-   if fb<blocks[dp].dP:
-    cR=dp-1
-   elif fb>blocks[dp].d:
-    cQ=dp+1
+  self.eX=eZ.eE
+ def l(self,fc):
+  blocks=self.dp
+  cR=0
+  cS=len(blocks)-1
+  while cR<=cS:
+   dq=(cS+cR)//2
+   if fc<blocks[dq].dQ:
+    cS=dq-1
+   elif fc>blocks[dq].d:
+    cR=dq+1
    else:
     return False
   return True
  def m(self):
-  if self.cP.find('64')>0:
+  if self.cQ.find('64')>0:
    return 8
   return 4
 def q(p):
- dH=[]
+ dI=[]
  for o in p.split('.'):
-  dH.append(int(o))
- while len(dH)<2:
-  dH.append(0)
- return (dH[0],dH[1])
-def eQ(bY,bZ):
- bY.lower().lstrip('is').replace('_','').replace(' ','')
- bZ.lower().rstrip('is').replace('_','').replace(' ','')
- return bY==bZ
-def t(fh,algorithms):
+  dI.append(int(o))
+ while len(dI)<2:
+  dI.append(0)
+ return (dI[0],dI[1])
+def eR(bZ,ca):
+ bZ.lower().lstrip('is').replace('_','').replace(' ','')
+ ca.lower().rstrip('is').replace('_','').replace(' ','')
+ return bZ==ca
+def t(fi,algorithms):
  if not isinstance(algorithms,Dict):
   print("error: expected object for 'algorithms'")
   sys.exit(1)
@@ -302,102 +302,102 @@ def t(fh,algorithms):
    if not isinstance(value,List):
     print("error: expected string list for 'normalization'")
     sys.exit(1)
-   for ew in value:
-    if not isinstance(ew,str):
+   for ex in value:
+    if not isinstance(ex,str):
      print("error: expected string list for 'normalization'")
      sys.exit(1)
-    if ew.lower()=='nfc':
-     fh.algorithms.normalization|=ec.cN
-    elif ew.lower()=='nfd':
-     fh.algorithms.normalization|=ec.cO
+    if ex.lower()=='nfc':
+     fi.algorithms.normalization|=ed.cO
+    elif ex.lower()=='nfd':
+     fi.algorithms.normalization|=ed.cP
     else:
-     print('warning: ignoring unknown normalization form: {0}'.format(ew))
+     print('warning: ignoring unknown normalization form: {0}'.format(ex))
   elif key=='normalizationQuickCheck':
    if not isinstance(value,bool):
     print("error: expected boolean value for 'normalizationQuickCheck'")
     sys.exit(1)
-   fh.algorithms.bV=value
+   fi.algorithms.bW=value
   elif key=='caseConversion':
    if not isinstance(value,List):
     print("error: expected string list for 'caseConversion'")
     sys.exit(1)
-   for ex in value:
-    if not isinstance(ex,str):
+   for ey in value:
+    if not isinstance(ey,str):
      print("error: expected string list for 'caseConversion'")
      sys.exit(1)
-    if ex.lower()=='lower':
-     fh.algorithms.dU|=ed.bq
-    elif ex.lower()=='upper':
-     fh.algorithms.dU|=ed.br
-    elif ex.lower()=='title':
-     fh.algorithms.dU|=ed.bs
+    if ey.lower()=='lower':
+     fi.algorithms.dV|=ee.br
+    elif ey.lower()=='upper':
+     fi.algorithms.dV|=ee.bs
+    elif ey.lower()=='title':
+     fi.algorithms.dV|=ee.bt
     else:
-     print('warning: ignoring unknown case conversion target: {0}'.format(ex))
+     print('warning: ignoring unknown case conversion target: {0}'.format(ey))
   elif key=='caseFolding':
    if not isinstance(value,List):
     print("error: expected string list for 'caseFolding'")
     sys.exit(1)
-   for ex in value:
-    if not isinstance(ex,str):
+   for ey in value:
+    if not isinstance(ey,str):
      print("error: expected string list for 'caseFolding'")
      sys.exit(1)
-    if ex.lower()=='default':
-     fh.algorithms.dn|=dG.bt
-    elif ex.lower()=='canonical':
-     fh.algorithms.dn|=dG.bu
+    if ey.lower()=='default':
+     fi.algorithms.do|=dH.bu
+    elif ey.lower()=='canonical':
+     fi.algorithms.do|=dH.bv
     else:
-     print('warning: ignoring unknown case fold target: {0}'.format(ex))
+     print('warning: ignoring unknown case fold target: {0}'.format(ey))
   elif key=='segmentation':
    if not isinstance(value,List):
     print("error: expected string list for 'segmentation'")
     sys.exit(1)
-   for ew in value:
-    if not isinstance(ew,str):
+   for ex in value:
+    if not isinstance(ex,str):
      print("error: expected string list for 'segmentation'")
      sys.exit(1)
-    if ew.lower()=='grapheme':
-     fh.algorithms.segmentation|=ef.by
-    elif ew.lower()=='word':
-     fh.algorithms.segmentation|=ef.bz
-    elif ew.lower()=='sentence':
-     fh.algorithms.segmentation|=ef.bA
+    if ex.lower()=='grapheme':
+     fi.algorithms.segmentation|=eg.bz
+    elif ex.lower()=='word':
+     fi.algorithms.segmentation|=eg.bA
+    elif ex.lower()=='sentence':
+     fi.algorithms.segmentation|=eg.bB
     else:
-     print('warning: ignoring unknown segmentation form: {0}'.format(ew))
+     print('warning: ignoring unknown segmentation form: {0}'.format(ex))
   elif key=='compression':
    if not isinstance(value,bool):
     print("error: expected boolean value for 'compression'")
     sys.exit(1)
-   fh.algorithms.compression=value
+   fi.algorithms.compression=value
   elif key=='collation':
    if not isinstance(value,bool):
     print("error: expected boolean value for 'collation'")
     sys.exit(1)
-   fh.algorithms.collation=value
+   fi.algorithms.collation=value
   else:
    print('warning: ignoring unknown algorithm: {0}'.format(key))
-def parse(filename,ff):
- fh=fa()
+def parse(filename,fg):
+ fi=fb()
  if filename is None:
-  return fh
+  return fi
  try:
-  ca=open(filename,'r',encoding='utf-8')
+  cb=open(filename,'r',encoding='utf-8')
  except FileNotFoundError:
   print('error: file not found: {0}'.format(filename))
   sys.exit(1)
- fg=json.load(ca)
- ca.close()
- if 'version' not in fg:
+ fh=json.load(cb)
+ cb.close()
+ if 'version' not in fh:
   print('error: missing version: {0}'.format(filename))
   sys.exit(1)
- version=q(fg['version'])
+ version=q(fh['version'])
  if version[0]<1:
   print('error: illegal version: {0}'.format(version))
   sys.exit(1)
- cb=set()
- file=ff.open('blocks.json')
- blocks=[dE(*block) for block in json.loads(file.read())['blocks']]
+ cc=set()
+ file=fg.open('blocks.json')
+ blocks=[dF(*block) for block in json.loads(file.read())['blocks']]
  file.close()
- for key,value in fg.items():
+ for key,value in fh.items():
   if key=='version':
    continue
   elif key=='endian':
@@ -405,9 +405,9 @@ def parse(filename,ff):
     print("error: expected string value for 'endian'")
     sys.exit(1)
    if value.lower()=='little':
-    fh.endian=dF.bp
+    fi.endian=dG.bq
    elif value.lower()=='big':
-    fh.endian=dF.cM
+    fi.endian=dG.cN
    elif value.lower()=='native':
     pass
    else:
@@ -417,41 +417,41 @@ def parse(filename,ff):
     print("error: expected string value for 'optimizeFor'")
     sys.exit(1)
    if value.lower()=='speed':
-    fh.optimize=er.el
+    fi.optimize=es.em
    elif value.lower()=='size':
-    fh.optimize=er.j
+    fi.optimize=es.j
    else:
     print("warning: expected 'speed' or 'size' for 'optimizeFor'")
   elif key=='hasStandardAllocators':
    if not isinstance(value,bool):
     print("error: expected boolean value for 'hasStandardAllocators'")
     sys.exit(1)
-   fh.bW=value
+   fi.bX=value
   elif key=='characterStorage':
    if not isinstance(value,str) or len(value.strip())==0:
     print("error: expected string value for 'characterStorage'")
     sys.exit(1)
-   fh.cP=value
+   fi.cQ=value
   elif key=='stackBufferSize':
    if not isinstance(value,int) or value<1:
     print("error: expected a positive integer value for 'stackBufferSize'")
     sys.exit(1)
-   cS=4
-   if value<cS:
-    print(f"warning: rounding up 'stackBufferSize' from {value} to {cS} (the minimum)")
-    value=cS
-   fh.bX=value
+   cT=4
+   if value<cT:
+    print(f"warning: rounding up 'stackBufferSize' from {value} to {cT} (the minimum)")
+    value=cT
+   fi.bY=value
   elif key=='excludeCharacterBlocks':
    if not isinstance(value,List):
     print("error: expected string list for 'excludeCharacterBlocks'")
     sys.exit(1)
-   for cc in value:
-    if not isinstance(cc,str):
+   for cd in value:
+    if not isinstance(cd,str):
      print("error: expected string list for 'excludeCharacterBlocks'")
      sys.exit(1)
     for block in blocks:
-     if fnmatch.fnmatch(block.name,cc):
-      cb.add(block)
+     if fnmatch.fnmatch(block.name,cd):
+      cc.add(block)
   elif key=='encodingForms':
    if not isinstance(value,List):
     print("error: expected string list for 'encodingForms'")
@@ -461,91 +461,91 @@ def parse(filename,ff):
      print("error: expected string list for 'encodingForms'")
      sys.exit(1)
     if encoding.lower()=='utf-8':
-     fh.dV|=ee.bv
+     fi.dW|=ef.bw
     elif encoding.lower()=='utf-16':
-     fh.dV|=ee.bw
+     fi.dW|=ef.bx
     elif encoding.lower()=='utf-32':
-     fh.dV|=ee.bx
+     fi.dW|=ef.by
     else:
      print("warning: expected 'utf-8' or 'utf-16' or 'utf-32' for 'encodingForms'")
   elif key=='characterProperties':
    if not isinstance(value,List):
     print("error: expected string list for 'characterProperties'")
     sys.exit(1)
-   for eT in value:
-    if not isinstance(eT,str):
+   for eU in value:
+    if not isinstance(eU,str):
      print("error: expected string list for 'characterProperties'")
      sys.exit(1)
-    if eQ(eT,'Alphabetic'):
-     fh.eW|=eY.bB
-    elif eQ(eT,'Canonical_Combining_Class'):
-     fh.eW|=eY.bC
-    elif eQ(eT,'Dash'):
-     fh.eW|=eY.bD
-    elif eQ(eT,'Diacritic'):
-     fh.eW|=eY.bE
-    elif eQ(eT,'Extender'):
-     fh.eW|=eY.bF
-    elif eQ(eT,'General_Category'):
-     fh.eW|=eY.bG
-    elif eQ(eT,'Hex_Digit'):
-     fh.eW|=eY.bH
-    elif eQ(eT,'Ideographic'):
-     fh.eW|=eY.bI
-    elif eQ(eT,'Lowercase'):
-     fh.eW|=eY.bJ
-    elif eQ(eT,'Math'):
-     fh.eW|=eY.bK
-    elif eQ(eT,'Noncharacter_Code_Point'):
-     fh.eW|=eY.bL
-    elif eQ(eT,'Numeric_Value'):
-     fh.eW|=eY.bM
-    elif eQ(eT,'Quotation_Mark'):
-     fh.eW|=eY.bN
-    elif eQ(eT,'Simple_Lowercase_Mapping'):
-     fh.eW|=eY.bO
-    elif eQ(eT,'Simple_Uppercase_Mapping'):
-     fh.eW|=eY.bP
-    elif eQ(eT,'Simple_Titlecase_Mapping'):
-     fh.eW|=eY.bQ
-    elif eQ(eT,'Terminal_Punctuation'):
-     fh.eW|=eY.bR
-    elif eQ(eT,'Unified_Ideograph'):
-     fh.eW|=eY.bS
-    elif eQ(eT,'Uppercase'):
-     fh.eW|=eY.bT
-    elif eQ(eT,'White_Space'):
-     fh.eW|=eY.bU
+    if eR(eU,'Alphabetic'):
+     fi.eX|=eZ.bC
+    elif eR(eU,'Canonical_Combining_Class'):
+     fi.eX|=eZ.bD
+    elif eR(eU,'Dash'):
+     fi.eX|=eZ.bE
+    elif eR(eU,'Diacritic'):
+     fi.eX|=eZ.bF
+    elif eR(eU,'Extender'):
+     fi.eX|=eZ.bG
+    elif eR(eU,'General_Category'):
+     fi.eX|=eZ.bH
+    elif eR(eU,'Hex_Digit'):
+     fi.eX|=eZ.bI
+    elif eR(eU,'Ideographic'):
+     fi.eX|=eZ.bJ
+    elif eR(eU,'Lowercase'):
+     fi.eX|=eZ.bK
+    elif eR(eU,'Math'):
+     fi.eX|=eZ.bL
+    elif eR(eU,'Noncharacter_Code_Point'):
+     fi.eX|=eZ.bM
+    elif eR(eU,'Numeric_Value'):
+     fi.eX|=eZ.bN
+    elif eR(eU,'Quotation_Mark'):
+     fi.eX|=eZ.bO
+    elif eR(eU,'Simple_Lowercase_Mapping'):
+     fi.eX|=eZ.bP
+    elif eR(eU,'Simple_Uppercase_Mapping'):
+     fi.eX|=eZ.bQ
+    elif eR(eU,'Simple_Titlecase_Mapping'):
+     fi.eX|=eZ.bR
+    elif eR(eU,'Terminal_Punctuation'):
+     fi.eX|=eZ.bS
+    elif eR(eU,'Unified_Ideograph'):
+     fi.eX|=eZ.bT
+    elif eR(eU,'Uppercase'):
+     fi.eX|=eZ.bU
+    elif eR(eU,'White_Space'):
+     fi.eX|=eZ.bV
     else:
-     print('warning: ignoring unknown character property: {0}'.format(eT))
+     print('warning: ignoring unknown character property: {0}'.format(eU))
   elif key=='algorithms':
-   t(fh,value)
+   t(fi,value)
   else:
    print('warning: ignoring unknown feature: {0}'.format(key))
- for block in cb:
-  fh.do.append(block)
- fh.do=sorted(fh.do,key=lambda ep:ep.dP)
- return fh
+ for block in cc:
+  fi.dp.append(block)
+ fi.dp=sorted(fi.dp,key=lambda er:er.dQ)
+ return fi
 from typing import Set,Tuple,Type
 import zipfile
 class Feature(object):
  def __init__(self):
-  self.dq=0
- def eP(self,fi):
+  self.dr=0
+ def eQ(self,fj):
   pass
- def eX(self,ff,fi,fh):
-  return fe()
- def cT(self,ff,fi,fh):
-  return fe()
+ def eY(self,fg,fj,fi):
+  return ff()
+ def cU(self,fg,fj,fi):
+  return ff()
  @staticmethod
- def eO():
+ def eP():
   return set()
-dW=('flags',0,eV.eI)
-cd=1
+dX=('flags',0,eW.eJ)
+ce=1
 u=2
 v=4
-ce=8
-cf=16
+cf=8
+cg=16
 from typing import Dict,Set,Type
 import zipfile
 import json
@@ -564,451 +564,451 @@ K=2048
 N=4096
 O=8192
 class P(Feature):
- def eP(self,fi):
-  fi.eU('binary_properties',0,eV.ej)
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_BINARY_PROPERTIES\n'
-  return fe(fd=fd)
-class eL(Feature):
+ def eQ(self,fj):
+  fj.eV('binary_properties',0,eW.ek)
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_BINARY_PROPERTIES\n'
+  return ff(fe=fe)
+class eM(Feature):
  @staticmethod
- def eO():
+ def eP():
   return set([P])
- def eK(self,ff,fi,Q,R,V):
-  file=ff.open('binary_properties.json')
-  fg=json.loads(file.read())
-  mappings=fg[Q]
+ def eL(self,fg,fj,Q,R,V):
+  file=fg.open('binary_properties.json')
+  fh=json.loads(file.read())
+  mappings=fh[Q]
   file.close()
-  binary_properties=fi.get('binary_properties')
-  for fb in mappings.keys():
-   fi.eb(int(fb,16),binary_properties,R)
+  binary_properties=fj.get('binary_properties')
+  for fc in mappings.keys():
+   fj.ec(int(fc,16),binary_properties,R)
   header='#define {0}\n'.format(V)
-  return fe(fd=header)
-class W(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isNoncharacterCodePoint',x,'UNICORN_FEATURE_NONCHARACTER_CODE_POINT')
-class Y(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isAlphabetic',y,'UNICORN_FEATURE_ALPHABETIC')
-class Z(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isLowercase',z,'UNICORN_FEATURE_LOWERCASE')
-class aa(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isUppercase',B,'UNICORN_FEATURE_UPPERCASE')
-class ab(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isHexDigit',C,'UNICORN_FEATURE_HEX_DIGIT')
-class ac(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isWhiteSpace',D,'UNICORN_FEATURE_WHITE_SPACE')
-class ad(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isMath',E,'UNICORN_FEATURE_MATH')
-class ae(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isDash',F,'UNICORN_FEATURE_DASH')
-class af(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isDiacritic',G,'UNICORN_FEATURE_DIACRITIC')
-class ag(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isExtender',H,'UNICORN_FEATURE_EXTENDER')
-class ah(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isIdeographic',J,'UNICORN_FEATURE_IDEOGRAPHIC')
-class ai(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isQuotationMark',K,'UNICORN_FEATURE_QUOTATION_MARK')
-class aj(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isUnifiedIdeograph',N,'UNICORN_FEATURE_UNIFIED_IDEOGRAPH')
-class ak(eL):
- def eX(self,ff,fi,fh):
-  return self.eK(ff,fi,'isTerminalPunctuation',O,'UNICORN_FEATURE_TERMINAL_PUNCTUATION')
+  return ff(fe=header)
+class W(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isNoncharacterCodePoint',x,'UNICORN_FEATURE_NONCHARACTER_CODE_POINT')
+class Y(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isAlphabetic',y,'UNICORN_FEATURE_ALPHABETIC')
+class Z(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isLowercase',z,'UNICORN_FEATURE_LOWERCASE')
+class aa(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isUppercase',B,'UNICORN_FEATURE_UPPERCASE')
+class ab(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isHexDigit',C,'UNICORN_FEATURE_HEX_DIGIT')
+class ac(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isWhiteSpace',D,'UNICORN_FEATURE_WHITE_SPACE')
+class ad(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isMath',E,'UNICORN_FEATURE_MATH')
+class ae(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isDash',F,'UNICORN_FEATURE_DASH')
+class af(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isDiacritic',G,'UNICORN_FEATURE_DIACRITIC')
+class ag(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isExtender',H,'UNICORN_FEATURE_EXTENDER')
+class ah(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isIdeographic',J,'UNICORN_FEATURE_IDEOGRAPHIC')
+class ai(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isQuotationMark',K,'UNICORN_FEATURE_QUOTATION_MARK')
+class aj(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isUnifiedIdeograph',N,'UNICORN_FEATURE_UNIFIED_IDEOGRAPH')
+class ak(eM):
+ def eY(self,fg,fj,fi):
+  return self.eL(fg,fj,'isTerminalPunctuation',O,'UNICORN_FEATURE_TERMINAL_PUNCTUATION')
 from typing import Dict
 import zipfile
 import json
 class am(Feature):
- def eP(self,fi):
-  fi.eU('general_category',29,eV.eI)
- def eX(self,ff,fi,fh):
-  file=ff.open('gc.json')
-  fg=json.loads(file.read())
-  characters=fg['characters']
+ def eQ(self,fj):
+  fj.eV('general_category',29,eW.eJ)
+ def eY(self,fg,fj,fi):
+  file=fg.open('gc.json')
+  fh=json.loads(file.read())
+  characters=fh['characters']
   file.close()
-  al=fi.get('general_category')
-  for fb,value in characters.items():
-   fi.set(int(fb,16),al,value)
-  fd='#define UNICORN_FEATURE_GC\n'
-  return fe(fd=fd)
+  al=fj.get('general_category')
+  for fc,value in characters.items():
+   fj.set(int(fc,16),al,value)
+  fe='#define UNICORN_FEATURE_GC\n'
+  return ff(fe=fe)
 from typing import Dict
 import zipfile
 import json
 class ao(Feature):
- def eP(self,fi):
-  fi.eU('numeric_value_offset',0,eV.eI)
- def eX(self,ff,fi,fh):
-  file=ff.open('numeric_values.json')
-  fg=json.loads(file.read())
-  mappings=fg['mappings']
-  source=fg['source']
-  header=fg['header']
-  size=fg['size']
+ def eQ(self,fj):
+  fj.eV('numeric_value_offset',0,eW.eJ)
+ def eY(self,fg,fj,fi):
+  file=fg.open('numeric_values.json')
+  fh=json.loads(file.read())
+  mappings=fh['mappings']
+  source=fh['source']
+  header=fh['header']
+  size=fh['size']
   file.close()
-  an=fi.get('numeric_value_offset')
-  for fb,index in mappings.items():
-   fi.set(int(fb,16),an,index)
-  fd='#define UNICORN_FEATURE_NUMERIC_VALUE\n'
-  return fe(source,header,fd,size)
+  an=fj.get('numeric_value_offset')
+  for fc,index in mappings.items():
+   fj.set(int(fc,16),an,index)
+  fe='#define UNICORN_FEATURE_NUMERIC_VALUE\n'
+  return ff(source,header,fe,size)
 from typing import List,Dict,Set,Type
 import zipfile
 import json
-es={}
-et=[0]
-eG=fc()
-dI=32768
-ey=8191
-class ch(Feature):
+et={}
+eu=[0]
+eH=fd()
+dJ=32768
+ez=8191
+class ci(Feature):
  @staticmethod
- def eO():
-  return set([cU])
- def eP(self,_):
-  (eG.eU('simple_lowercase_mapping',ey,eV.ej),)
- def eX(self,ff,_,eg):
-  file=ff.open('simple_case_mappings.json')
-  fg=json.loads(file.read())
-  ap=fg['lowercase']
+ def eP():
+  return set([cV])
+ def eQ(self,_):
+  (eH.eV('simple_lowercase_mapping',ez,eW.ek),)
+ def eY(self,fg,_,eh):
+  file=fg.open('simple_case_mappings.json')
+  fh=json.loads(file.read())
+  ap=fh['lowercase']
   file.close()
-  cg=eG.get('simple_lowercase_mapping')
-  for fb,value in ap.items():
-   eS=int(fb,16)
-   dJ=int(value,16)
-   em=eS-dJ
-   if abs(em)>ey:
-    if dJ not in es:
-     es[dJ]=len(et)
-     et.append(dJ)
-    eG.set(eS,cg,dI|es[dJ])
-   else:
-    eG.set(eS,cg,em+ey)
-  fd='#define UNICORN_FEATURE_SIMPLE_LOWERCASE_MAPPINGS\n'
-  return fe(fd=fd)
-class cj(Feature):
- @staticmethod
- def eO():
-  return set([cU])
- def eP(self,_):
-  (eG.eU('simple_uppercase_mapping',ey,eV.ej),)
- def eX(self,ff,_,eg):
-  file=ff.open('simple_case_mappings.json')
-  fg=json.loads(file.read())
-  aq=fg['uppercase']
-  file.close()
-  ci=eG.get('simple_uppercase_mapping')
-  for fb,value in aq.items():
-   eS=int(fb,16)
+  ch=eH.get('simple_lowercase_mapping')
+  for fc,value in ap.items():
+   eT=int(fc,16)
    dK=int(value,16)
-   em=eS-dK
-   if abs(em)>ey:
-    if dK not in es:
-     es[dK]=len(et)
-     et.append(dK)
-    eG.set(eS,ci,dI|es[dK])
+   en=eT-dK
+   if abs(en)>ez:
+    if dK not in et:
+     et[dK]=len(eu)
+     eu.append(dK)
+    eH.set(eT,ch,dJ|et[dK])
    else:
-    eG.set(eS,ci,em+ey)
-  fd='#define UNICORN_FEATURE_SIMPLE_UPPERCASE_MAPPINGS\n'
-  return fe(fd=fd)
-class cl(Feature):
+    eH.set(eT,ch,en+ez)
+  fe='#define UNICORN_FEATURE_SIMPLE_LOWERCASE_MAPPINGS\n'
+  return ff(fe=fe)
+class ck(Feature):
  @staticmethod
- def eO():
-  return set([cU])
- def eP(self,_):
-  (eG.eU('simple_titlecase_mapping',ey,eV.ej),)
- def eX(self,ff,_,eg):
-  file=ff.open('simple_case_mappings.json')
-  fg=json.loads(file.read())
-  ar=fg['titlecase']
+ def eP():
+  return set([cV])
+ def eQ(self,_):
+  (eH.eV('simple_uppercase_mapping',ez,eW.ek),)
+ def eY(self,fg,_,eh):
+  file=fg.open('simple_case_mappings.json')
+  fh=json.loads(file.read())
+  aq=fh['uppercase']
   file.close()
-  ck=eG.get('simple_titlecase_mapping')
-  for fb,value in ar.items():
-   eS=int(fb,16)
+  cj=eH.get('simple_uppercase_mapping')
+  for fc,value in aq.items():
+   eT=int(fc,16)
    dL=int(value,16)
-   em=eS-dL
-   if abs(em)>ey:
-    if dL not in es:
-     es[dL]=len(et)
-     et.append(dL)
-    eG.set(eS,ck,dI|es[dL])
+   en=eT-dL
+   if abs(en)>ez:
+    if dL not in et:
+     et[dL]=len(eu)
+     eu.append(dL)
+    eH.set(eT,cj,dJ|et[dL])
    else:
-    eG.set(eS,ck,em+ey)
-  fd='#define UNICORN_FEATURE_SIMPLE_TITLECASE_MAPPINGS\n'
-  return fe(fd=fd)
-class cU(Feature):
- def cT(self,ff,eg,dr):
+    eH.set(eT,cj,en+ez)
+  fe='#define UNICORN_FEATURE_SIMPLE_UPPERCASE_MAPPINGS\n'
+  return ff(fe=fe)
+class cm(Feature):
+ @staticmethod
+ def eP():
+  return set([cV])
+ def eQ(self,_):
+  (eH.eV('simple_titlecase_mapping',ez,eW.ek),)
+ def eY(self,fg,_,eh):
+  file=fg.open('simple_case_mappings.json')
+  fh=json.loads(file.read())
+  ar=fh['titlecase']
+  file.close()
+  cl=eH.get('simple_titlecase_mapping')
+  for fc,value in ar.items():
+   eT=int(fc,16)
+   dM=int(value,16)
+   en=eT-dM
+   if abs(en)>ez:
+    if dM not in et:
+     et[dM]=len(eu)
+     eu.append(dM)
+    eH.set(eT,cl,dJ|et[dM])
+   else:
+    eH.set(eT,cl,en+ez)
+  fe='#define UNICORN_FEATURE_SIMPLE_TITLECASE_MAPPINGS\n'
+  return ff(fe=fe)
+class cV(Feature):
+ def cU(self,fg,eh,ds):
   size=0
   source='const unichar unicorn_simple_case_mappings[] = {'
-  for index,eS in enumerate(et):
+  for index,eT in enumerate(eu):
    if index%4==0:
     source+='\n    '
-   source+='UNICHAR_C(0x{:04X}), '.format(eS)
+   source+='UNICHAR_C(0x{:04X}), '.format(eT)
    size+=4
   source+='};\n\n'
-  header=f'#define CASING_IN_TABLE(C) (((C) & (uint16_t){dI}) == (uint16_t){dI})\n'
+  header=f'#define CASING_IN_TABLE(C) (((C) & (uint16_t){dJ}) == (uint16_t){dJ})\n'
   header+='#define GET_CASED_VALUE(C) ((C) & (uint16_t)0x3FFF)\n'
-  header+=f'#define CASING_DIFF {ey}\n'
-  header+='extern const unichar unicorn_simple_case_mappings[{0}];\n'.format(len(et))
-  assert len(et)<65535,'cannot use unsigned 16-bit integer anymore'
-  fg=cL(eG,'CharCaseData','unicorn_get_character_casing')
-  source+=fg.source
-  header+=fg.header
-  size+=fg.size
-  return fe(source,header,'',size)
+  header+=f'#define CASING_DIFF {ez}\n'
+  header+='extern const unichar unicorn_simple_case_mappings[{0}];\n'.format(len(eu))
+  assert len(eu)<65535,'cannot use unsigned 16-bit integer anymore'
+  fh=cM(eH,'CharCaseData','unicorn_get_character_casing')
+  source+=fh.source
+  header+=fh.header
+  size+=fh.size
+  return ff(source,header,'',size)
 from typing import Dict,Set,Type
 import zipfile
 import json
-class cm(Feature):
- def eP(self,fi):
-  fi.eU(*dW)
- def eX(self,ff,fi,fh):
-  file=ff.open('special_case_mappings.json')
-  fg=json.loads(file.read())
-  source=fg['source']
-  header=fg['header']
-  size=fg['size']
-  mappings=fg['characterFlags']
+class cn(Feature):
+ def eQ(self,fj):
+  fj.eV(*dX)
+ def eY(self,fg,fj,fi):
+  file=fg.open('special_case_mappings.json')
+  fh=json.loads(file.read())
+  source=fh['source']
+  header=fh['header']
+  size=fh['size']
+  mappings=fh['characterFlags']
   file.close()
-  dX=fi.get(dW[0])
+  dY=fj.get(dX[0])
   header+='#define IS_CASED {0}u\n'.format(u)
   header+='#define IS_CASE_IGNORABLE {0}u\n'.format(v)
-  for fb,flags in mappings.items():
-   fi.eb(int(fb,16),dX,flags)
-  return fe(source=source,header=header,size=size)
-class cn(Feature):
+  for fc,flags in mappings.items():
+   fj.ec(int(fc,16),dY,flags)
+  return ff(source=source,header=header,size=size)
+class co(Feature):
  @staticmethod
- def eO():
-  return set([ch,cm])
- def eX(self,_,eg,dr):
-  fd='#define UNICORN_FEATURE_LOWERCASE_CONVERT\n'
-  return fe(fd=fd)
+ def eP():
+  return set([ci,cn])
+ def eY(self,_,eh,ds):
+  fe='#define UNICORN_FEATURE_LOWERCASE_CONVERT\n'
+  return ff(fe=fe)
 class at(Feature):
  @staticmethod
- def eO():
-  return set([cj,cm])
- def eX(self,_,eg,dr):
-  fd='#define UNICORN_FEATURE_UPPERCASE_CONVERT\n'
-  return fe(fd=fd)
+ def eP():
+  return set([ck,cn])
+ def eY(self,_,eh,ds):
+  fe='#define UNICORN_FEATURE_UPPERCASE_CONVERT\n'
+  return ff(fe=fe)
 class au(Feature):
  @staticmethod
- def eO():
-  return set([cl,co,dM,cn])
- def eX(self,_,eg,dr):
-  fd='#define UNICORN_FEATURE_TITLECASE_CONVERT\n'
-  return fe(fd=fd)
+ def eP():
+  return set([cm,cp,dN,co])
+ def eY(self,_,eh,ds):
+  fe='#define UNICORN_FEATURE_TITLECASE_CONVERT\n'
+  return ff(fe=fe)
 from typing import List,Set,Type,Tuple
 import zipfile
 import json
-class cp(Feature):
- def eP(self,fi):
-  fi.eU('full_casefold_mapping_offset',0,eV.ej)
-  fi.eU(*dW)
- def eX(self,ff,fi,fh):
-  file=ff.open('casefold.json')
-  fg=json.loads(file.read())
-  source=fg['source']
-  header=fg['header']
-  size=fg['size']
-  av=fg['hasGreek']
-  aw=fg['caseFoldings']
-  ax=fg['changesWhenCasefolded']
+class cq(Feature):
+ def eQ(self,fj):
+  fj.eV('full_casefold_mapping_offset',0,eW.ek)
+  fj.eV(*dX)
+ def eY(self,fg,fj,fi):
+  file=fg.open('casefold.json')
+  fh=json.loads(file.read())
+  source=fh['source']
+  header=fh['header']
+  size=fh['size']
+  av=fh['hasGreek']
+  aw=fh['caseFoldings']
+  ax=fh['changesWhenCasefolded']
   file.close()
-  dX=fi.get(dW[0])
-  ay=fi.get('full_casefold_mapping_offset')
-  for fb in av:
-   fi.eb(fb,dX,ce)
-  for fb in ax:
-   fi.eb(fb,dX,cf)
-  for fb,offset in aw:
-   fi.set(fb,ay,offset)
-  header+='#define UNICORN_CHAR_NEEDS_NORMALIZATION {0}u\n'.format(ce)
-  header+='#define UNICORN_CHAR_CHANGES_WHEN_CASEFOLDED {0}u\n'.format(cf)
-  fd='#define UNICORN_FEATURE_CASEFOLD_DEFAULT\n'
-  return fe(source,header,fd,size)
+  dY=fj.get(dX[0])
+  ay=fj.get('full_casefold_mapping_offset')
+  for fc in av:
+   fj.ec(fc,dY,cf)
+  for fc in ax:
+   fj.ec(fc,dY,cg)
+  for fc,offset in aw:
+   fj.set(fc,ay,offset)
+  header+='#define UNICORN_CHAR_NEEDS_NORMALIZATION {0}u\n'.format(cf)
+  header+='#define UNICORN_CHAR_CHANGES_WHEN_CASEFOLDED {0}u\n'.format(cg)
+  fe='#define UNICORN_FEATURE_CASEFOLD_DEFAULT\n'
+  return ff(source,header,fe,size)
 class az(Feature):
  @staticmethod
- def eO():
-  return set([cp,ds])
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_CASEFOLD_CANONICAL\n'
-  return fe(fd=fd)
+ def eP():
+  return set([cq,dt])
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_CASEFOLD_CANONICAL\n'
+  return ff(fe=fe)
 from typing import Dict
 import zipfile
 import json
-class dM(Feature):
- def eP(self,fi):
-  fi.eU('canonical_combining_class',0,eV.eI)
- def eX(self,ff,fi,fh):
-  file=ff.open('ccc.json')
+class dN(Feature):
+ def eQ(self,fj):
+  fj.eV('canonical_combining_class',0,eW.eJ)
+ def eY(self,fg,fj,fi):
+  file=fg.open('ccc.json')
   mappings=json.loads(file.read())['ccc']
   file.close()
-  aA=fi.get('canonical_combining_class')
-  for fb,ccc in mappings.items():
-   fi.set(int(fb,16),aA,ccc)
-  fd='#define UNICORN_FEATURE_CCC\n'
-  return fe(fd=fd)
+  aA=fj.get('canonical_combining_class')
+  for fc,ccc in mappings.items():
+   fj.set(int(fc,16),aA,ccc)
+  fe='#define UNICORN_FEATURE_CCC\n'
+  return ff(fe=fe)
 from typing import Dict,Set,Type
 import zipfile
 import json
 class aC(Feature):
  @staticmethod
- def eO():
-  return set([dM])
- def eP(self,fi):
-  fi.eU('quick_check_flags',0,eV.eI)
- def eX(self,ff,fi,_):
-  file=ff.open('quickcheck.json')
-  fg=json.loads(file.read())
-  aB=fg['quickCheckNFC']
+ def eP():
+  return set([dN])
+ def eQ(self,fj):
+  fj.eV('quick_check_flags',0,eW.eJ)
+ def eY(self,fg,fj,_):
+  file=fg.open('quickcheck.json')
+  fh=json.loads(file.read())
+  aB=fh['quickCheckNFC']
   file.close()
-  cV=fi.get('quick_check_flags')
-  for fb,cW in aB.items():
-   fi.eb(int(fb,16),cV,cW<<4)
-  fd='#define UNICORN_FEATURE_NFC_QUICK_CHECK\n'
-  return fe(fd=fd)
+  cW=fj.get('quick_check_flags')
+  for fc,cX in aB.items():
+   fj.ec(int(fc,16),cW,cX<<4)
+  fe='#define UNICORN_FEATURE_NFC_QUICK_CHECK\n'
+  return ff(fe=fe)
 class aE(Feature):
  @staticmethod
- def eO():
-  return set([dM])
- def eP(self,fi):
-  fi.eU('quick_check_flags',0,eV.eI)
- def eX(self,ff,fi,_):
-  file=ff.open('quickcheck.json')
-  fg=json.loads(file.read())
-  aD=fg['quickCheckNFD']
+ def eP():
+  return set([dN])
+ def eQ(self,fj):
+  fj.eV('quick_check_flags',0,eW.eJ)
+ def eY(self,fg,fj,_):
+  file=fg.open('quickcheck.json')
+  fh=json.loads(file.read())
+  aD=fh['quickCheckNFD']
   file.close()
-  cV=fi.get('quick_check_flags')
-  for fb,cW in aD.items():
-   fi.eb(int(fb,16),cV,cW)
-  fd='#define UNICORN_FEATURE_NFD_QUICK_CHECK\n'
-  return fe(fd=fd)
+  cW=fj.get('quick_check_flags')
+  for fc,cX in aD.items():
+   fj.ec(int(fc,16),cW,cX)
+  fe='#define UNICORN_FEATURE_NFD_QUICK_CHECK\n'
+  return ff(fe=fe)
 from typing import List,Dict,Set,Type
 import zipfile
 import json
-class ds(Feature):
+class dt(Feature):
  @staticmethod
- def eO():
-  return set([dM,cq])
- def eP(self,fi):
-  fi.eU('canonical_decomposition_mapping_offset',0,eV.ej)
- def eX(self,ff,fi,fh):
-  aF=fi.get('canonical_decomposition_mapping_offset')
-  file=ff.open('normalize.json')
+ def eP():
+  return set([dN,cr])
+ def eQ(self,fj):
+  fj.eV('canonical_decomposition_mapping_offset',0,eW.ek)
+ def eY(self,fg,fj,fi):
+  aF=fj.get('canonical_decomposition_mapping_offset')
+  file=fg.open('normalize.json')
   mappings=json.loads(file.read())['decompositions']
   file.close()
-  cX={}
-  eE=[0]
+  cY={}
+  eF=[0]
   decompositions={}
   for key,value in mappings.items():
-   fb=int(key,16)
-   mapping=cH(value)
-   decompositions[fb]=mapping
-   cY=''.join([chr(aG) for aG in mapping])
-   if cY in cX:
-    canonical_decomposition_mapping_offset=cX[cY]
+   fc=int(key,16)
+   mapping=cI(value)
+   decompositions[fc]=mapping
+   cZ=''.join([chr(aG) for aG in mapping])
+   if cZ in cY:
+    canonical_decomposition_mapping_offset=cY[cZ]
    else:
-    canonical_decomposition_mapping_offset=len(eE)
-    cX[cY]=len(eE)
-    if fh.optimize==er.el:
-     eE.append(len(mapping))
-     eE+=mapping
+    canonical_decomposition_mapping_offset=len(eF)
+    cY[cZ]=len(eF)
+    if fi.optimize==es.em:
+     eF.append(len(mapping))
+     eF+=mapping
     else:
-     eh=[]
-     for eo in mapping:
-      eh+=[int(cZ) for cZ in chr(eo).encode('utf8')]
-     assert len(eh)<255
-     eE.append(len(eh))
-     eE+=eh
-   fi.set(fb,aF,canonical_decomposition_mapping_offset)
-  size=len(eE)
-  if fh.optimize==er.el:
-   size*=fh.m()
-  dt=0
+     ei=[]
+     for ep in mapping:
+      ei+=[int(da) for da in chr(ep).encode('utf8')]
+     assert len(ei)<255
+     eF.append(len(ei))
+     eF+=ei
+   fj.set(fc,aF,canonical_decomposition_mapping_offset)
+  size=len(eF)
+  if fi.optimize==es.em:
+   size*=fi.m()
   du=0
-  for fb,cr in decompositions.items():
-   for fb in cr:
-    dv=[fb]
-    dN=0
-    while dN<len(dv):
-     cs=dv[dN]
-     if cs not in decompositions:
-      dN+=1
+  dv=0
+  for fc,cs in decompositions.items():
+   for fc in cs:
+    dw=[fc]
+    dO=0
+    while dO<len(dw):
+     ct=dw[dO]
+     if ct not in decompositions:
+      dO+=1
       continue
-     dv[dN:dN+1]=decompositions[cs]
-    eh=[]
-    for eo in cr:
-     eh+=[int(cZ) for cZ in chr(eo).encode('utf8')]
-    du=max(du,len(dv))
-    if fh.optimize==er.el:
-     dt=du
+     dw[dO:dO+1]=decompositions[ct]
+    ei=[]
+    for ep in cs:
+     ei+=[int(da) for da in chr(ep).encode('utf8')]
+    dv=max(dv,len(dw))
+    if fi.optimize==es.em:
+     du=dv
     else:
-     dt=max(dt,len(eh))
-  if fh.optimize==er.el:
+     du=max(du,len(ei))
+  if fi.optimize==es.em:
    source='const unichar uni_canonical_decomp_mappings[] = {'
-   for index,eS in enumerate(eE):
+   for index,eT in enumerate(eF):
     if index%6==0:
      source+='\n'
      source+='    '
-    source+='UNICHAR_C(0x{:02X}), '.format(eS)
+    source+='UNICHAR_C(0x{:02X}), '.format(eT)
    source+='\n'
    source+='};\n\n'
   else:
    source='const uint8_t uni_canonical_decomp_mappings[] = {'
-   for index,eS in enumerate(eE):
+   for index,eT in enumerate(eF):
     if index%8==0:
      source+='\n'
      source+='    '
-    source+='0x{:02X}u, '.format(eS)
+    source+='0x{:02X}u, '.format(eT)
    source+='\n'
    source+='};\n\n'
-  if fh.optimize==er.el:
-   header='extern const unichar uni_canonical_decomp_mappings[{0}];\n'.format(len(eE))
+  if fi.optimize==es.em:
+   header='extern const unichar uni_canonical_decomp_mappings[{0}];\n'.format(len(eF))
   else:
-   header='extern const uint8_t uni_canonical_decomp_mappings[{0}];\n'.format(len(eE))
-  header+='#define LONGEST_UNICHAR_DECOMPOSITION {0}\n'.format(du+1)
-  header+='#define LONGEST_RAW_DECOMPOSITION {0}\n'.format(dt+1)
-  fd='#define UNICORN_FEATURE_NFD\n'
-  return fe(source,header,fd,size)
+   header='extern const uint8_t uni_canonical_decomp_mappings[{0}];\n'.format(len(eF))
+  header+='#define LONGEST_UNICHAR_DECOMPOSITION {0}\n'.format(dv+1)
+  header+='#define LONGEST_RAW_DECOMPOSITION {0}\n'.format(du+1)
+  fe='#define UNICORN_FEATURE_NFD\n'
+  return ff(source,header,fe,size)
 from typing import List,Set,Tuple,Type
 import zipfile
 import json
 class aL(Feature):
  @staticmethod
- def eO():
-  return set([ds])
- def eP(self,fi):
-  fi.eU('canonical_composition_mapping_offset',0,eV.ej)
-  fi.eU('canonical_composition_mapping_count',0,eV.eI)
-  fi.eU(*dW)
- def eX(self,ff,fi,fh):
-  file=ff.open('normalize.json')
-  fg=json.loads(file.read())
-  mappings=fg['compositionMappings']
-  ct=fg['compositionPairs']
+ def eP():
+  return set([dt])
+ def eQ(self,fj):
+  fj.eV('canonical_composition_mapping_offset',0,eW.ek)
+  fj.eV('canonical_composition_mapping_count',0,eW.eJ)
+  fj.eV(*dX)
+ def eY(self,fg,fj,fi):
+  file=fg.open('normalize.json')
+  fh=json.loads(file.read())
+  mappings=fh['compositionMappings']
+  cu=fh['compositionPairs']
   file.close()
-  aH=fi.get('canonical_composition_mapping_offset')
-  aI=fi.get('canonical_composition_mapping_count')
-  dX=fi.get(dW[0])
-  for da in mappings:
-   dP=da[0]
-   offset=da[1]
-   count=da[2]
-   fi.set(dP,aH,offset)
-   fi.set(dP,aI,count)
-   fi.eb(dP,dX,cd)
+  aH=fj.get('canonical_composition_mapping_offset')
+  aI=fj.get('canonical_composition_mapping_count')
+  dY=fj.get(dX[0])
+  for db in mappings:
+   dQ=db[0]
+   offset=db[1]
+   count=db[2]
+   fj.set(dQ,aH,offset)
+   fj.set(dQ,aI,count)
+   fj.ec(dQ,dY,ce)
   size=0
   source='const struct CanonicalCompositionPair uni_canonical_comp_pairs[] = {\n'
-  for cu in ct:
-   aJ=cu[0]
-   aK=cu[1]
+  for cv in cu:
+   aJ=cv[0]
+   aK=cv[1]
    source+='    {{ UNICHAR_C(0x{:04X}), UNICHAR_C(0x{:04X}) }},\n'.format(aJ,aK)
    size+=8
   source+='};\n\n'
@@ -1017,146 +1017,146 @@ class aL(Feature):
   header+='    unichar codepoint;\n'
   header+='    unichar composed_codepoint;\n'
   header+='};\n'
-  header+='#define CHAR_IS_COMPOSABLE {0}u\n'.format(cd)
-  header+='extern const struct CanonicalCompositionPair uni_canonical_comp_pairs[{0}];\n'.format(len(ct))
+  header+='#define CHAR_IS_COMPOSABLE {0}u\n'.format(ce)
+  header+='extern const struct CanonicalCompositionPair uni_canonical_comp_pairs[{0}];\n'.format(len(cu))
   header+='\n'
-  fd='#define UNICORN_FEATURE_NFC\n'
-  return fe(source,header,fd,size)
+  fe='#define UNICORN_FEATURE_NFC\n'
+  return ff(source,header,fe,size)
 import zipfile
 class aM(Feature):
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_COMPRESSION\n'
-  return fe(fd=fd)
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_COMPRESSION\n'
+  return ff(fe=fe)
 from typing import List,Dict,Set,Type
 import zipfile
 import json
 aN=1<<31
-db=aN
-cv=1<<30
-cw=1<<29
-cx=db
+dc=aN
+cw=1<<30
+cx=1<<29
+cy=dc
 class CollationNode:
  def __init__(self):
-  self.ev=0
-  self.eF={}
-  self.cy=0
-  self.dY=0
+  self.ew=0
+  self.eG={}
   self.cz=0
- def cA(self,fb):
-  if fb in self.eF:
-   return self.eF[fb]
-  eN=CollationNode()
-  eN.ev=fb
-  self.eF[fb]=eN
-  return eN
- def cB(self,ez):
-  eF=list(self.eF.values())
-  eF=sorted(eF,key=lambda ep:ep.ev)
-  if len(eF)>0:
-   self.cy=len(ez)
-   for dw in eF:
-    dw.cz=len(ez)
-    ez.append(dw)
-   for dw in eF:
-    dw.cB(ez)
+  self.dZ=0
+  self.cA=0
+ def cB(self,fc):
+  if fc in self.eG:
+   return self.eG[fc]
+  eO=CollationNode()
+  eO.ew=fc
+  self.eG[fc]=eO
+  return eO
+ def cC(self,eA):
+  eG=list(self.eG.values())
+  eG=sorted(eG,key=lambda er:er.ew)
+  if len(eG)>0:
+   self.cz=len(eA)
+   for dx in eG:
+    dx.cA=len(eA)
+    eA.append(dx)
+   for dx in eG:
+    dx.cC(eA)
  def aO(self):
-  ez=[]
-  self.cB(ez)
-  return ez
+  eA=[]
+  self.cC(eA)
+  return eA
 class aV(Feature):
  @staticmethod
- def eO():
-  return set([ds])
- def eP(self,fi):
-  fi.eU('collation_subtype',0,eV.eI)
- def eX(self,ff,fi,fh):
-  dO=[0]
-  dx={}
-  def cC(eu):
-   nonlocal dO
-   nonlocal dx
-   dy=[]
-   for dR,en in enumerate(eu):
-    if dR<len(eu)-1:
-     dy.append(en|cx)
+ def eP():
+  return set([dt])
+ def eQ(self,fj):
+  fj.eV('collation_subtype',0,eW.eJ)
+ def eY(self,fg,fj,fi):
+  dP=[0]
+  dy={}
+  def cD(ev):
+   nonlocal dP
+   nonlocal dy
+   dz=[]
+   for dS,eo in enumerate(ev):
+    if dS<len(ev)-1:
+     dz.append(eo|cy)
     else:
-     dy.append(en)
-   dc=' '.join([str(en) for en in dy])
-   if dc in dx:
-    return dx[dc]
+     dz.append(eo)
+   dd=' '.join([str(eo) for eo in dz])
+   if dd in dy:
+    return dy[dd]
    else:
-    dY=len(dO)
-    for en in dy:
-     dO.append(en)
-    dx[dc]=dY
-    return dY
-  collation=fc()
-  dd=collation.eU('value',0,eV.bk)
-  file=ff.open('allkeys.json')
-  fg=json.loads(file.read())
-  aP=fg['header']
-  mappings=fg['mappings']
-  cD=fg['contractionStarters']
-  aQ=fg['longestInitialSubstring']
-  subtypes=fg['subtypes']
+    dZ=len(dP)
+    for eo in dz:
+     dP.append(eo)
+    dy[dd]=dZ
+    return dZ
+  collation=fd()
+  de=collation.eV('value',0,eW.bl)
+  file=fg.open('allkeys.json')
+  fh=json.loads(file.read())
+  aP=fh['header']
+  mappings=fh['mappings']
+  cE=fh['contractionStarters']
+  aQ=fh['longestInitialSubstring']
+  subtypes=fh['subtypes']
   file.close()
-  aR=fi.get('collation_subtype')
+  aR=fj.get('collation_subtype')
   for key,aS in subtypes.items():
-   eS=int(key,16)
-   fi.set(eS,aR,aS)
+   eT=int(key,16)
+   fj.set(eT,aR,aS)
   root=CollationNode()
-  for string,eu in mappings.items():
-   dz=string.split()[0]
-   if not fh.l(int(dz,16)):
+  for string,ev in mappings.items():
+   dA=string.split()[0]
+   if not fi.l(int(dA,16)):
     continue
-   if dz in cD:
-    ei=cH(string)
-    eN=root
-    for fb in ei:
-     eN=eN.cA(fb)
-    assert eN.dY==0,'expected contractions to be unqiue'
-    eN.dY=cC(eu)
-  ez=root.aO()
-  de=0
-  for string,eu in mappings.items():
-   de=max(len(eu),de)
-   ei=cH(string)
-   dz=string.split()[0]
-   if dz in cD:
-    eN=root.cA(ei[0])
-    collation.set(ei[0],dd,eN.cz|cw)
+   if dA in cE:
+    ej=cI(string)
+    eO=root
+    for fc in ej:
+     eO=eO.cB(fc)
+    assert eO.dZ==0,'expected contractions to be unqiue'
+    eO.dZ=cD(ev)
+  eA=root.aO()
+  df=0
+  for string,ev in mappings.items():
+   df=max(len(ev),df)
+   ej=cI(string)
+   dA=string.split()[0]
+   if dA in cE:
+    eO=root.cB(ej[0])
+    collation.set(ej[0],de,eO.cA|cx)
    else:
-    assert len(ei)==1,'expected a single character mapping'
-    if len(eu)==1:
-     collation.set(ei[0],dd,eu[0]|db)
+    assert len(ej)==1,'expected a single character mapping'
+    if len(ev)==1:
+     collation.set(ej[0],de,ev[0]|dc)
     else:
-     collation.set(ei[0],dd,cC(eu)|cv)
-  fg=cL(collation,'CollationChararacterData','uni_get_collation_data')
-  size=fg.size
-  source=fg.source
+     collation.set(ej[0],de,cD(ev)|cw)
+  fh=cM(collation,'CollationChararacterData','uni_get_collation_data')
+  size=fh.size
+  source=fh.source
   source+='const uint32_t unicorn_collation_mappings[] = {\n'
-  for dR,en in enumerate(dO):
-   if dR%4==0:
+  for dS,eo in enumerate(dP):
+   if dS%4==0:
     source+='\n    '
-   source+='0x{:08X}u, '.format(en)
+   source+='0x{:08X}u, '.format(eo)
    size+=4
   source+='};\n\n'
   source+='const struct CollationNode unicorn_collation_mappings_trie[] = {\n'
-  for eN in ez:
-   assert len(eN.eF)<=255
-   ep=len(eN.eF)<<24|eN.ev
-   aT=eN.dY
-   aU=eN.cy
-   source+=f'    {{ {ep}u, {aT}, {aU} }},\n'
+  for eO in eA:
+   assert len(eO.eG)<=255
+   er=len(eO.eG)<<24|eO.ew
+   aT=eO.dZ
+   aU=eO.cz
+   source+=f'    {{ {er}u, {aT}, {aU} }},\n'
    size+=8
   source+='};\n\n'
-  header=fg.header
+  header=fh.header
   header+=aP
-  header+='#define UNICORN_MAX_COLLATION {0}\n'.format(de+1)
-  header+='#define INLINE_CE_FLAG {0}u\n'.format(db)
-  header+='#define IN_WEIGHT_TABLE_FLAG {0}u\n'.format(cv)
-  header+='#define IN_TRIE_FLAG {0}u\n'.format(cw)
-  header+='#define CONTINUATION_FLAG {0}u\n'.format(cx)
+  header+='#define UNICORN_MAX_COLLATION {0}\n'.format(df+1)
+  header+='#define INLINE_CE_FLAG {0}u\n'.format(dc)
+  header+='#define IN_WEIGHT_TABLE_FLAG {0}u\n'.format(cw)
+  header+='#define IN_TRIE_FLAG {0}u\n'.format(cx)
+  header+='#define CONTINUATION_FLAG {0}u\n'.format(cy)
   header+='#define LONGEST_INITIAL_SUBSTRING {0}\n'.format(aQ)
   header+='#define UNICORN_IN_COLLATION_TABLE(NODE) ((NODE)->collation_mappings_offset > (uint16_t)0)\n'
   header+='#define GET_NODE_CODE_POINT(NODE) ((NODE)->codepoint_and_childcount & 0x1FFFFFu)\n'
@@ -1166,270 +1166,273 @@ class aV(Feature):
   header+='    uint16_t collation_mappings_offset;\n'
   header+='    uint16_t child_offset;\n'
   header+='};\n'
-  header+='extern const struct CollationNode unicorn_collation_mappings_trie[{0}];\n'.format(len(ez))
-  header+='extern const uint32_t unicorn_collation_mappings[{0}];\n'.format(len(dO))
-  fd='#define UNICORN_FEATURE_COLLATION\n'
-  return fe(source,header,fd,size)
+  header+='extern const struct CollationNode unicorn_collation_mappings_trie[{0}];\n'.format(len(eA))
+  header+='extern const uint32_t unicorn_collation_mappings[{0}];\n'.format(len(dP))
+  fe='#define UNICORN_FEATURE_COLLATION\n'
+  return ff(source,header,fe,size)
 from typing import Set,Type
 import zipfile
 import json
-eA=0
-class df(Feature):
- def cT(self,ff,eg,dr):
-  gcb=ff.open('segmentation.json')
-  fg=json.loads(gcb.read())
-  header=fg['header']
+eB=0
+class dg(Feature):
+ def cU(self,fg,eh,ds):
+  gcb=fg.open('segmentation.json')
+  fh=json.loads(gcb.read())
+  header=fh['header']
   gcb.close()
-  header+='#define MAX_BREAK_STATES {0}\n'.format(eA)
-  fd='#define UNICORN_FEATURE_SEGMENTATION\n'
-  return fe(header=header,fd=fd)
+  header+='#define MAX_BREAK_STATES {0}\n'.format(eB)
+  fe='#define UNICORN_FEATURE_SEGMENTATION\n'
+  return ff(header=header,fe=fe)
 class aY(Feature):
  @staticmethod
- def eO():
-  return set([df])
- def eP(self,fi):
-  fi.eU('gcb',0,eV.eI)
-  fi.eU('incb',0,eV.eI)
- def eX(self,ff,fi,_):
-  gcb=ff.open('gcb.json')
-  fg=json.loads(gcb.read())
-  header=fg['header']
-  source=fg['source']
-  size=fg['size']
+ def eP():
+  return set([dg])
+ def eQ(self,fj):
+  fj.eV('gcb',0,eW.eJ)
+  fj.eV('incb',0,eW.eJ)
+ def eY(self,fg,fj,_):
+  gcb=fg.open('gcb.json')
+  fh=json.loads(gcb.read())
+  header=fh['header']
+  source=fh['source']
+  size=fh['size']
   gcb.close()
-  global eA
-  eA=max(int(fg['states']),eA)
-  aW=fi.get('gcb')
-  for eM in fg['gcb']:
-   fi.set(eM[0],aW,eM[1])
-  aX=fi.get('incb')
-  for eM in fg['incb']:
-   fi.set(eM[0],aX,eM[1])
-  fd='#define UNICORN_FEATURE_GCB\n'
-  return fe(source,header,fd,size)
-class co(Feature):
+  global eB
+  eB=max(int(fh['states']),eB)
+  aW=fj.get('gcb')
+  for eN in fh['gcb']:
+   fj.set(eN[0],aW,eN[1])
+  aX=fj.get('incb')
+  for eN in fh['incb']:
+   fj.set(eN[0],aX,eN[1])
+  fe='#define UNICORN_FEATURE_GCB\n'
+  return ff(source,header,fe,size)
+class cp(Feature):
  @staticmethod
- def eO():
-  return set([df])
- def eP(self,fi):
-  fi.eU('wb',0,eV.eI)
-  fi.eU('wbx',0,eV.eI)
- def eX(self,ff,fi,_):
-  wb=ff.open('wb.json')
-  fg=json.loads(wb.read())
-  header=fg['header']
-  source=fg['source']
-  size=fg['size']
+ def eP():
+  return set([dg])
+ def eQ(self,fj):
+  fj.eV('wb',0,eW.eJ)
+  fj.eV('wbx',0,eW.eJ)
+ def eY(self,fg,fj,_):
+  wb=fg.open('wb.json')
+  fh=json.loads(wb.read())
+  header=fh['header']
+  source=fh['source']
+  size=fh['size']
   wb.close()
-  global eA
-  eA=max(int(fg['states']),eA)
-  dg=fi.get('wb')
-  for eM in fg['wb']:
-   fi.set(eM[0],dg,eM[1])
-  aZ=fi.get('wbx')
-  for eM in fg['wbx']:
-   fi.set(eM[0],aZ,eM[1])
-  fd='#define UNICORN_FEATURE_WB\n'
-  return fe(source,header,fd,size)
+  global eB
+  eB=max(int(fh['states']),eB)
+  dh=fj.get('wb')
+  for eN in fh['wb']:
+   fj.set(eN[0],dh,eN[1])
+  aZ=fj.get('wbx')
+  for eN in fh['wbx']:
+   fj.set(eN[0],aZ,eN[1])
+  fe='#define UNICORN_FEATURE_WB\n'
+  return ff(source,header,fe,size)
 class ba(Feature):
  @staticmethod
- def eO():
-  return set([df])
- def eP(self,fi):
-  fi.eU('sb',0,eV.eI)
- def eX(self,ff,fi,_):
-  wb=ff.open('sb.json')
-  fg=json.loads(wb.read())
-  header=fg['header']
-  source=fg['source']
-  size=fg['size']
+ def eP():
+  return set([dg])
+ def eQ(self,fj):
+  fj.eV('sb',0,eW.eJ)
+ def eY(self,fg,fj,_):
+  wb=fg.open('sb.json')
+  fh=json.loads(wb.read())
+  header=fh['header']
+  source=fh['source']
+  size=fh['size']
   wb.close()
-  global eA
-  eA=max(int(fg['states']),eA)
-  dg=fi.get('sb')
-  for eM in fg['sb']:
-   fi.set(eM[0],dg,eM[1])
-  fd='#define UNICORN_FEATURE_SB\n'
-  return fe(source,header,fd,size)
+  global eB
+  eB=max(int(fh['states']),eB)
+  dh=fj.get('sb')
+  for eN in fh['sb']:
+   fj.set(eN[0],dh,eN[1])
+  fe='#define UNICORN_FEATURE_SB\n'
+  return ff(source,header,fe,size)
 import zipfile
-class cq(Feature):
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_ENCODING_UTF8\n'
-  return fe(fd=fd)
+class cr(Feature):
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_ENCODING_UTF8\n'
+  return ff(fe=fe)
 class bb(Feature):
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_ENCODING_UTF16\n'
-  return fe(fd=fd)
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_ENCODING_UTF16\n'
+  return ff(fe=fe)
 class bc(Feature):
- def eX(self,ff,fi,fh):
-  fd='#define UNICORN_FEATURE_ENCODING_UTF32\n'
-  return fe(fd=fd)
+ def eY(self,fg,fj,fi):
+  fe='#define UNICORN_FEATURE_ENCODING_UTF32\n'
+  return ff(fe=fe)
 from typing import List,Set,Tuple,Type
 import sys
 import os
 import argparse
 import zipfile
-class dh(argparse.Namespace):
+class di(argparse.Namespace):
  def __init__(self):
   self.config_file='features.json'
   self.output_dir=''
   self.verbose=False
-def di(s):
- return '\n'.join((cE for cE in s.splitlines() if cE.strip()))
-def be(args,ff):
+def dj(s):
+ return '\n'.join((cF for cF in s.splitlines() if cF.strip()))
+def be(args,fg):
  header=''
  source=''
- fd=''
- eZ=set()
- fh=parse(args.config_file,ff)
- fd+='#include <stdint.h>\n'
- if fh.endian==dF.cM:
-  fd+='#define UNICORN_BIG_ENDIAN\n'
+ fe=''
+ fa=set()
+ fi=parse(args.config_file,fg)
+ fe+='#include <stdint.h>\n'
+ if fi.endian==dG.cN:
+  fe+='#define UNICORN_BIG_ENDIAN\n'
  else:
-  fd+='#define UNICORN_LITTLE_ENDIAN\n'
- fd+='#define UNICORN_STACK_BUFFER_SIZE {0}\n'.format(fh.bX)
- fd+='typedef {0} unichar;\n'.format(fh.cP)
- if fh.bW:
-  fd+='#define UNICORN_HAVE_C_MEMORY_ROUTINES\n'
+  fe+='#define UNICORN_LITTLE_ENDIAN\n'
+ fe+='#define UNICORN_STACK_BUFFER_SIZE {0}\n'.format(fi.bY)
+ fe+='typedef {0} unichar;\n'.format(fi.cQ)
+ if fi.bX:
+  fe+='#define UNICORN_HAVE_C_MEMORY_ROUTINES\n'
  header+='#include "unicorn.h"\n'
- dj=b.split('.')
- header+='#define UNICODE_VERSION_MAJOR {0}\n'.format(dj[0])
- header+='#define UNICODE_VERSION_MINOR {0}\n'.format(dj[1])
- header+='#define UNICODE_VERSION_PATCH {0}\n'.format(dj[2])
- if fh.optimize==er.el:
+ dk=b.split('.')
+ header+='#define UNICODE_VERSION_MAJOR {0}\n'.format(dk[0])
+ header+='#define UNICODE_VERSION_MINOR {0}\n'.format(dk[1])
+ header+='#define UNICODE_VERSION_PATCH {0}\n'.format(dk[2])
+ if fi.optimize==es.em:
   header+='#define UNICORN_OPTIMIZE_FOR_SPEED // cppcheck-suppress misra-c2012-2.5\n'
  else:
   header+='#define UNICORN_OPTIMIZE_FOR_SIZE\n'
- if fh.algorithms.dU&ed.bq:
-  eZ.add(cn)
- if fh.algorithms.dU&ed.br:
-  eZ.add(at)
- if fh.algorithms.dU&ed.bs:
-  eZ.add(au)
- if fh.eW&eY.bL:
-  eZ.add(W)
- if fh.eW&eY.bB:
-  eZ.add(Y)
- if fh.eW&eY.bJ:
-  eZ.add(Z)
- if fh.eW&eY.bT:
-  eZ.add(aa)
- if fh.eW&eY.bH:
-  eZ.add(ab)
- if fh.eW&eY.bU:
-  eZ.add(ac)
- if fh.eW&eY.bK:
-  eZ.add(ad)
- if fh.eW&eY.bD:
-  eZ.add(ae)
- if fh.eW&eY.bE:
-  eZ.add(af)
- if fh.eW&eY.bF:
-  eZ.add(ag)
- if fh.eW&eY.bI:
-  eZ.add(ah)
- if fh.eW&eY.bN:
-  eZ.add(ai)
- if fh.eW&eY.bS:
-  eZ.add(aj)
- if fh.eW&eY.bR:
-  eZ.add(ak)
- if fh.algorithms.compression:
-  eZ.add(aM)
- if fh.algorithms.segmentation&ef.by:
-  eZ.add(aY)
- if fh.algorithms.segmentation&ef.bz:
-  eZ.add(co)
- if fh.algorithms.segmentation&ef.bA:
-  eZ.add(ba)
- if fh.algorithms.normalization&ec.cN:
-  eZ.add(aL)
- if fh.algorithms.normalization&ec.cO:
-  eZ.add(ds)
- if fh.algorithms.bV:
-  if fh.algorithms.normalization&ec.cN:
-   eZ.add(aC)
-  if fh.algorithms.normalization&ec.cO:
-   eZ.add(aE)
- if fh.algorithms.collation:
-  eZ.add(aV)
- if fh.algorithms.dn&dG.bt:
-  eZ.add(cp)
- if fh.algorithms.dn&dG.bu:
-  eZ.add(az)
- if fh.eW&eY.bG:
-  eZ.add(am)
- if fh.eW&eY.bC:
-  eZ.add(dM)
- if fh.eW&eY.bM:
-  eZ.add(ao)
- if fh.eW&eY.bO:
-  eZ.add(ch)
- if fh.eW&eY.bP:
-  eZ.add(cj)
- if fh.eW&eY.bQ:
-  eZ.add(cl)
- if fh.dV&ee.bv:
-  eZ.add(cq)
- if fh.dV&ee.bw:
-  eZ.add(bb)
- if fh.dV&ee.bx:
-  eZ.add(bc)
+ if fi.algorithms.dV&ee.br:
+  fa.add(co)
+ if fi.algorithms.dV&ee.bs:
+  fa.add(at)
+ if fi.algorithms.dV&ee.bt:
+  fa.add(au)
+ if fi.eX&eZ.bM:
+  fa.add(W)
+ if fi.eX&eZ.bC:
+  fa.add(Y)
+ if fi.eX&eZ.bK:
+  fa.add(Z)
+ if fi.eX&eZ.bU:
+  fa.add(aa)
+ if fi.eX&eZ.bI:
+  fa.add(ab)
+ if fi.eX&eZ.bV:
+  fa.add(ac)
+ if fi.eX&eZ.bL:
+  fa.add(ad)
+ if fi.eX&eZ.bE:
+  fa.add(ae)
+ if fi.eX&eZ.bF:
+  fa.add(af)
+ if fi.eX&eZ.bG:
+  fa.add(ag)
+ if fi.eX&eZ.bJ:
+  fa.add(ah)
+ if fi.eX&eZ.bO:
+  fa.add(ai)
+ if fi.eX&eZ.bT:
+  fa.add(aj)
+ if fi.eX&eZ.bS:
+  fa.add(ak)
+ if fi.algorithms.compression:
+  fa.add(aM)
+ if fi.algorithms.segmentation&eg.bz:
+  fa.add(aY)
+ if fi.algorithms.segmentation&eg.bA:
+  fa.add(cp)
+ if fi.algorithms.segmentation&eg.bB:
+  fa.add(ba)
+ if fi.algorithms.normalization&ed.cO:
+  fa.add(aL)
+ if fi.algorithms.normalization&ed.cP:
+  fa.add(dt)
+ if fi.algorithms.bW:
+  if fi.algorithms.normalization&ed.cO:
+   fa.add(aC)
+  if fi.algorithms.normalization&ed.cP:
+   fa.add(aE)
+ if fi.algorithms.collation:
+  fa.add(aV)
+ if fi.algorithms.do&dH.bu:
+  fa.add(cq)
+ if fi.algorithms.do&dH.bv:
+  fa.add(az)
+ if fi.eX&eZ.bH:
+  fa.add(am)
+ if fi.eX&eZ.bD:
+  fa.add(dN)
+ if fi.eX&eZ.bN:
+  fa.add(ao)
+ if fi.eX&eZ.bP:
+  fa.add(ci)
+ if fi.eX&eZ.bQ:
+  fa.add(ck)
+ if fi.eX&eZ.bR:
+  fa.add(cm)
+ if fi.dW&ef.bw:
+  fa.add(cr)
+ if fi.dW&ef.bx:
+  fa.add(bb)
+ if fi.dW&ef.by:
+  fa.add(bc)
  while True:
-  dA=eZ.copy()
-  for dk in eZ:
-   dA=dA.union(dk.eO())
-  if eZ==dA:
+  dB=fa.copy()
+  for dl in fa:
+   dB=dB.union(dl.eP())
+  if fa==dB:
    break
-  eZ=dA
- bd=sorted(list(eZ),key=lambda ep:ep.__class__.__name__)
- fi=fc()
+  fa=dB
+ bd=sorted(list(fa),key=lambda er:er.__class__.__name__)
+ fj=fd()
  size=0
- dB=[]
- for dk in bd:
-  eH=dk()
-  eH.eP(fi)
-  dB.append(eH)
- for eH in dB:
-  fg=eH.eX(ff,fi,fh)
-  source+=fg.source+'\n'
-  header+=fg.header+'\n'
-  fd+=fg.fd
-  size+=fg.size
-  eH.dq+=fg.size
- for eH in dB:
-  fg=eH.cT(ff,fi,fh)
-  source+=fg.source+'\n'
-  header+=fg.header+'\n'
-  fd+=fg.fd
-  size+=fg.size
-  eH.dq+=fg.size
- fg=cL(fi,'CodepointData','get_codepoint_data')
- source+=fg.source
- header+=fg.header
- size+=fg.size
+ dC=[]
+ for dl in bd:
+  eI=dl()
+  eI.eQ(fj)
+  dC.append(eI)
+ for eI in dC:
+  fh=eI.eY(fg,fj,fi)
+  source+=fh.source+'\n'
+  header+=fh.header+'\n'
+  fe+=fh.fe
+  size+=fh.size
+  eI.dr+=fh.size
+ for eI in dC:
+  fh=eI.cU(fg,fj,fi)
+  source+=fh.source+'\n'
+  header+=fh.header+'\n'
+  fe+=fh.fe
+  size+=fh.size
+  eI.dr+=fh.size
+ fh=cM(fj,'CodepointData','get_codepoint_data')
+ source+=fh.source
+ header+=fh.header
+ size+=fh.size
  if args.verbose:
-  for eH in dB:
-   if eH.dq>0:
-    print('Added: {} ({:.2f} kB)'.format(eH.__class__.__name__,eH.dq/1024))
+  for eI in dC:
+   if eI.dr>0:
+    print('Added: {} ({:.2f} kB)'.format(eI.__class__.__name__,eI.dr/1024))
    else:
-    print('Added: {}'.format(eH.__class__.__name__))
-  print('Character table size: ({:.2f} kB)'.format(fg.size/1024))
+    print('Added: {}'.format(eI.__class__.__name__))
+  print('Character table size: ({:.2f} kB)'.format(fh.size/1024))
   print('Total size: {:.2f} kB'.format(size/1024))
- source=di(source)
- header=di(header)
- fd=di(fd)
+ source=dj(source)
+ header=dj(header)
+ fe=dj(fe)
  source+='\n'
  header+='\n'
- fd+='\n'
- return (header,source,fd)
-def main(args):
- ff=zipfile.ZipFile('unicorn.bin','r')
- bf,bg,bh=be(args,ff)
- file=ff.open('code.c')
+ fe+='\n'
+ return (header,source,fe)
+def bk(args):
+ if not os.path.exists('unicorn.bin'):
+  print('error: cannot find unicorn.bin')
+  return 1
+ fg=zipfile.ZipFile('unicorn.bin','r')
+ bf,bg,bh=be(args,fg)
+ file=fg.open('code.c')
  bi=file.read().decode('utf-8-sig')
  file.close()
- file=ff.open('code.h')
+ file=fg.open('code.h')
  bj=file.read().decode('utf-8-sig')
  file.close()
  copyright='/*\n *  Unicorn: Embeddable Unicode algorithms software library.\n *  Copyright (c) 2025 Railgun Labs, LLC\n *\n *  This file is part of Unicorn, distributed under a non-commercial use software\n *  license. For the full terms see the included LICENSE file. If you did not\n *  receive a LICENSE file or you would like to purchase a commercial license,\n *  contact us at <https://RailgunLabs.com/contact/>.\n */\n\n// The Unicorn source code has been amalgamated into a monolithic source\n// and header file. As part of the amalgamation process all code comments\n// and extraneous white space have been removed.\n//\n// The amalgamation is intended for consumption, not development. The\n// unamalgamated source code can be obtained by purchasing a license\n// from Railgun Labs at https://RailgunLabs.com/unicorn/license.\n\n'
@@ -1456,17 +1459,17 @@ def main(args):
  return 0
 if __name__=='__main__':
  if isinstance(sys.version_info,tuple):
-  cF=sys.version_info[0]
-  cG=sys.version_info[1]
+  cG=sys.version_info[0]
+  cH=sys.version_info[1]
  else:
-  cF=sys.version_info.major
-  cG=sys.version_info.minor
- if cF<3 or cG<9:
-  raise Exception('This script requires Python 3.9 or newer')
- dC=argparse.ArgumentParser(description='Build Unicorn source and header.')
- dC.add_argument('--config',dest='config_file',action='store',help='path to configuration file')
- dC.add_argument('--output',dest='output_dir',action='store',help='path to write generated C source files')
- dC.add_argument('--verbose',dest='verbose',action='store_true',help='report added features and their size contributions')
- args=dh()
- dC.parse_args(namespace=args)
- sys.exit(main(args))
+  cG=sys.version_info.major
+  cH=sys.version_info.minor
+ if cG<3 or cH<10:
+  raise Exception('This script requires Python 3.10 or newer')
+ dD=argparse.ArgumentParser(description='Build Unicorn source and header.')
+ dD.add_argument('--config',dest='config_file',action='store',help='path to configuration file')
+ dD.add_argument('--output',dest='output_dir',action='store',help='path to write generated C source files')
+ dD.add_argument('--verbose',dest='verbose',action='store_true',help='report added features and their size contributions')
+ args=di()
+ dD.parse_args(namespace=args)
+ sys.exit(bk(args))

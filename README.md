@@ -92,6 +92,7 @@ This also means if an error occurs, like an out of memory error, then you can re
 
 ## Extensively Tested
 
+* 100% branch test coverage
 * Official Unicode conformance tests
 * Manually written tests
 * Out-of-memory tests
