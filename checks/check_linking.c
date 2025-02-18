@@ -1,20 +1,12 @@
 /*
-*  Unicorn
-*  Copyright (c) Railgun Labs, LLC
-*
-*  This software is dual-licensed: you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License version 3
-*  as published by the Free Software Foundation. For the terms
-*  of this license, see <http://www.gnu.org/licenses/>.
-*
-*  This software is free to use under the terms of the GNU General
-*  Public License, but WITHOUT ANY WARRANTY; without even the implied
-*  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*  See the GNU General Public License for more details.
-*
-*  Alternatively, you can license this software under a commercial
-*  license, as set out in <https://RailgunLabs.com/license>.
-*/
+ *  Unicorn - Embeddable Unicode Library
+ *  Copyright (c) 2021-2025 Railgun Labs
+ *
+ *  This file is part of Unicorn, distributed under a non-commercial use software
+ *  license. For the full terms see the included LICENSE file. If you did not
+ *  receive a LICENSE file or you would like to purchase a commercial license,
+ *  contact us at <https://RailgunLabs.com/contact/>.
+ */
 
 #include "unicorn.h"
 #include <stddef.h>
