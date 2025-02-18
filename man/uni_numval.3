@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Jan 27th 2025" "Unicorn 1.0.4"
+.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
 .SH NAME
 uni_numval \- numeric property
 .SH LIBRARY
@@ -15,9 +15,9 @@ If the input character does not have a numeric value, then \f[C]NULL\f[R] is ret
 .PP
 The numeric value is returned as a null terminated C string in decimal notation.
 That means if the character has a numeric value of -1/2, which is the case for TIBETAN DIGIT HALF ZERO (U+0F33), it would be returned as the string “-0.5”.
-The caller can interpret the string and convert to an integer or floating-point storage format as needed.
+The caller can parse the string into an integer or floating-point storage format as needed.
 .PP
-Support for the numeric value character property must be enabled in the JSON configuration file otherwise the function will always return \f[C]NULL\f[R].
+Support for this character property must be enabled in the JSON configuration file otherwise the function will always return \f[C]NULL\f[R].
 .PP
 .in +4n
 .EX

@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Jan 27th 2025" "Unicorn 1.0.4"
+.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
 .SH NAME
 unicorn.h \- public interface for the Unicorn library
 .SH LIBRARY
@@ -205,11 +205,11 @@ There are three case conversion operations:
 .PP
 .RS
 .IP \[bu] 2
-\f[B]UNI_LOWER\f[R]
+Lowercase conversion
 .IP \[bu] 2
-\f[B]UNI_TITLE\f[R]
+Titlecase conversion
 .IP \[bu] 2
-\f[B]UNI_UPPER\f[R]
+Uppercase conversion
 .RE
 .PP
 Case conversion is context sensitive which means characters are mapped based on their surrounding characters.
@@ -250,9 +250,9 @@ There are two variations of case folding supported by Unicorn:
 .PP
 .RS
 .IP \[bu] 2
-\f[B]UNI_DEFAULT\f[R]
+Default case folding
 .IP \[bu] 2
-\f[B]UNI_CANONICAL\f[R]
+Canonical case folding
 .RE
 .PP
 Default case folding is intended for comparing strings for binary equivalence where as canonical case folding is intended for testing canonical caseless equivalence.
@@ -546,7 +546,7 @@ T}
 .TE
 .SS Text Encodings
 The Unicode Standard defines plain text as a sequence of Unicode scalar values.
-A Unicode scalar value is any \f[B]unichar\f[R](3) excluding surrogate characters (surrogates are used exclusively for encoding UTF-16).
+A Unicode scalar value is any code point excluding surrogate characters (surrogates are used exclusively for encoding UTF-16).
 A code point is a 21-bit integer in the Unicode code space used to identify a character.
 The Unicode code space defines the range of integers code points can be allocated from.
 It starts at integer 0 and goes up to and includes the integer 1114111.

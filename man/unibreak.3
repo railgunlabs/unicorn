@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Jan 27th 2025" "Unicorn 1.0.4"
+.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
 .SH NAME
 unibreak \- detectable text elements
 .SH LIBRARY
@@ -27,7 +27,7 @@ For example, graphemes should be used in the implementation of text selection, a
 When truncating text for presentation grapheme cluster boundaries should be used to avoid malforming user-perceived characters.
 .IP
 A key feature of Unicode grapheme clusters is that they remain unchanged across all canonically equivalent normalization forms.
-That means the graphemes boundaries remain unchanged whether the text is normalized as \f[B]UNI_NFC\f[R] or \f[B]UNI_NFD\f[R].
+That means the graphemes boundaries remain unchanged whether the text is normalized as NFC or NFD.
 .IP
 Support for grapheme cluster break detection can be enabled in the JSON configuration as shown below:
 .IP

@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Jan 27th 2025" "Unicorn 1.0.4"
+.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
 .SH NAME
 uniattr \- text attributes
 .SH LIBRARY
@@ -27,7 +27,7 @@ There must be exactly one of the following character encoding flags present.
 .RE
 .PP
 There can optionally be one of the following endian flags.
-If none are present, then \f[B]UNI_NATIVE\f[R](3) is assumed.
+If none are present, then native byte order is assumed.
 These flags are incompatible with \f[B]UNI_SCALAR\f[R](3) which is always in native byte order.
 These flags have no effect with \f[B]UNI_UTF8\f[R](3) because UTF-8 is endian independent.
 .PP
