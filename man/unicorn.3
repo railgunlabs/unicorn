@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
+.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
 .SH NAME
 unicorn.h \- public interface for the Unicorn library
 .SH LIBRARY
@@ -255,7 +255,7 @@ Default case folding
 Canonical case folding
 .RE
 .PP
-Default case folding is intended for comparing strings for binary equivalence where as canonical case folding is intended for testing canonical caseless equivalence.
+Default case folding is intended for comparing strings for binary equivalence whereas canonical case folding is intended for testing canonical caseless equivalence.
 .PP
 Default case folding does not preserve normalization forms.
 This means a string in a particular Unicode normalization form is not guaranteed to be in that same normalization form after being case folded.
@@ -318,7 +318,7 @@ To address the complexities of sorting, a multilevel comparison algorithm is emp
 In comparing two strings, the most important feature is the identity of the base letters.
 For example, the difference between an A and a B. Accent differences are typically ignored, if the base letters differ.
 Case differences (uppercase versus lowercase) are typically ignored, if the base letters or their accents differ.
-The number of levels that are considered in comparison is known as the strength and are programmatically indicating by the elements of the \f[B]unistrength\f[R](3) enumeration.
+The number of levels that are considered in comparison is known as the strength and are programmatically indicated by the elements of the \f[B]unistrength\f[R](3) enumeration.
 .PP
 Collation is one of the most performance-critical features in a system.
 Consider the number of comparison operations that are involved in sorting or searching large databases.
@@ -426,14 +426,14 @@ T}
 .TE
 .SS Character Properties
 The Unicode Character Database defines a large repertoire of character properties.
-Most characters properties are only applicable to specific applications, i.e. text shaping or rendering.
+Most character properties are only applicable to specific applications, i.e. text shaping or rendering.
 Other properties are informational, for example a character’s name or the version it was introduced into the Unicode Standard.
 Other properties are only relevant when implementing various Unicode algorithms.
 The properties supported by Unicorn are those that are relevant when parsing plain text.
 .PP
 Character properties have a value associated with them.
 For example, there are binary character properties which have the boolean values \f[C]true\f[R] and \f[C]false\f[R], enumeration character properties that have one of a fixed set of values, and string character properties which map to one or more code points.
-Most Unicode characters properties are binary properties.
+Most Unicode character properties are binary properties.
 .PP
 All character properties have a default value.
 The default value is the value a character property takes for an unassigned code point.
@@ -497,13 +497,14 @@ LZW
 perform compression by deduplicating repetitions within a data stream.
 These algorithms are general purpose and are designed to operate on “bags of bytes” without any prior knowledge or assumptions about the structure or semantics of the data.
 .PP
-Unicode Technical Report #34 defines two algorithms designed specifically for the compression Unicode encoded text.
+Unicode Technical Report #34 defines two algorithms designed specifically for the compression of Unicode encoded text.
 These algorithms are Standard Compression Scheme for Unicode (SCSU) and Binary Ordered Compression for Unicode (BOCU).
-These algorithm leverages knowledge of the Unicode character set and beat general purpose compression algorithms for shorter strings.
+These algorithms leverage knowledge of the Unicode character set and beat general purpose compression algorithms for shorter strings.
 Both algorithms are intended for short to medium length Unicode strings (about several hundred characters in length).
-Once strings becomes longer and include many repetitions, then a general purpose compressor is preferable.
+Once strings become longer and include many repetitions, then a general purpose compressor is preferable.
 .PP
-Support for compression must be enabled in the JSON configuration file.
+Unicorn implements the BOCU-1 algorithm.
+Support for it can be enabled in the JSON configuration file.
 .PP
 .in +4n
 .EX
@@ -515,7 +516,6 @@ Support for compression must be enabled in the JSON configuration file.
 .EE
 .in
 .PP
-Unicorn implements the BOCU-1 algorithm.
 The BOCU-1 algorithm is deterministic: the same input text is encoded identically by all encoders which makes it suitable for interchange.
 BOCU-1 is a MIME compatible Unicode compression scheme.
 That means it can be used directly in emails and similar protocols.
@@ -568,7 +568,7 @@ The Unicode Standard uses 8-bit code units in the UTF-8 encoding form, 16-bit co
 For example, in UTF-8 the code point \f[C]U+1F6F8\f[R] is represented by four code units, in UTF-16 it’s represented by two units, and in UTF-32 it’s represented by one code unit.
 .PP
 UTF-32 is the odd encoding form out because it doesn’t really “encode” anything.
-It’s value is always identical to the value of the code point.
+Its value is always identical to the value of the code point.
 It might be tempting to think of UTF-32 and code points as synonymous, but that would be semantically incorrect: a code point is a 21-bit integer in the Unicode codespace and UTF-32 is a storage standard that says “use a 32-bit integer as the storage for the 21-bit code point.”
 .PP
 Unicorn implements the function \f[B]uni_convert\f[R](3) for converting between Unicode encoding forms.

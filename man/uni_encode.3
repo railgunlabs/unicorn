@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
+.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
 .SH NAME
 uni_encode \- encode a scalar value
 .SH LIBRARY
@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_encode(unichar " cp ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
 .fi
 .SH DESCRIPTION
-Encoded the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]dst_attr\f[R] and write the resulting code units to \f[I]dst\f[R].
+Encode the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]dst_attr\f[R] and write the resulting code units to \f[I]dst\f[R].
 The code unit capacity of \f[I]dst\f[R] is specified by \f[I]dst_len\f[R].
 The implementation will write the number of code units needed to encode \f[I]cp\f[R] to \f[I]dst_len\f[R] on output.
 .PP

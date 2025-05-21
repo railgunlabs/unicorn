@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
+.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
 .SH NAME
 uni_compress \- compress text
 .SH LIBRARY
@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_compress(const void *" text ", unisize " text_len ", uniattr " text_attr ", uint8_t *" buffer ", size_t *" buffer_length ");"
 .fi
 .SH DESCRIPTION
-Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and writes the results to \f[I]buffer\f[R].
+Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and write the results to \f[I]buffer\f[R].
 Text is compressed based on its code points, i.e. UTF-8, 16, and 32 will compress to the same byte sequence.
 .PP
 The capacity of \f[I]buffer\f[R] is specified by \f[I]buffer_length\f[R].

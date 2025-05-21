@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
+.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
 .SH NAME
 uni_sortkeymk \- make sort key
 .SH LIBRARY
@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_sortkeymk(const void *" text ", unisize " text_len ", uniattr " text_attr ", uniweighting " weighting ", unistrength " strength ", uint16_t *" sortkey ", size_t *" sortkey_cap ");"
 .fi
 .SH DESCRIPTION
-Build a sort key for \f[I]text\f[R] and writes the result to \f[I]sortkey\f[R].
+Build a sort key for \f[I]text\f[R] and write the result to \f[I]sortkey\f[R].
 The number of code units in \f[I]text\f[R] is specified by \f[I]text_len\f[R].
 If \f[I]text_len\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
 Pairs of sort keys can be compared with \f[B]uni_sortkeycmp\f[R](3).

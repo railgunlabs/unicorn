@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Feb 18th 2025" "Unicorn 1.0.5"
+.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
 .SH NAME
 unimemfunc \- memory allocation function
 .SH LIBRARY
@@ -11,7 +11,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .fi
 .SH DESCRIPTION
 Defines the function signature for a custom memory management implementation.
-The memory manager is responsible for allocating, reallocating, and free’ing memory.
+The memory manager is responsible for allocating, reallocating, and freeing memory.
 The implementation must behave like \f[B]realloc\f[R](3) or \f[B]free\f[R](3) depending upon its arguments.
 .PP
 When \f[I]new_size\f[R] is non-zero, the allocator must behave like \f[B]realloc\f[R](3).
