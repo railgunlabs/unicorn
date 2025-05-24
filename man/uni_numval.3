@@ -14,7 +14,7 @@ Return the \f[C]Numeric_Value\f[R] character property for the code point \f[I]c\
 If the input character does not have a numeric value, then \f[C]NULL\f[R] is returned.
 .PP
 The numeric value is returned as a null terminated C string in decimal notation.
-That means if the character has a numeric value of -1/2, which is the case for TIBETAN DIGIT HALF ZERO (U+0F33), it would be returned as the string “-0.5”.
+That means if the character has a numeric value of -1/2, which is the case for TIBETAN DIGIT HALF ZERO (U+0F33), it would be returned as the string "-0.5".
 The caller can parse the string into an integer or floating-point storage format as needed.
 .PP
 Support for this character property must be enabled in the JSON configuration file otherwise the function will always return \f[C]NULL\f[R].

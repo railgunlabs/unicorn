@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "void uni_seterrfunc(void *" user_data ", unierrfunc " callback ");"
 .fi
 .SH DESCRIPTION
-Associate the function \f[C]cb\f[R] with the library’s internal error logger.
+Associate the function \f[C]cb\f[R] with the library's internal error logger.
 Anytime a function returns an error \f[C]cb\f[R] will be invoked with a description of the error.
 It is up to the implementation of \f[C]cb\f[R] to be thread safe.
 .PP

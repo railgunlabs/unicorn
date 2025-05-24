@@ -31,8 +31,8 @@ Unicorn supports a small subset of the binary character properties defined by th
 The binary properties supported are those that are useful when parsing plain text.
 .PP
 Most binary characters properties defined by the standard are only applicable in specific applications, i.e. text shaping or rendering.
-Other properties are informational, for example, a character’s name or the version it was introduced into the Unicode Standard.
-The remaining properties are relevant only when implementing various Unicode algorithms and are not “general” enough to expose.
+Other properties are informational, for example, a character's name or the version it was introduced into the Unicode Standard.
+The remaining properties are relevant only when implementing various Unicode algorithms and are not "general" enough to expose.
 .SH CONSTANTS
 .TP
 .BR UNI_NONCHARACTER_CODE_POINT
@@ -102,7 +102,7 @@ Support for the \f[C]Uppercase\f[R] character property is enabled in the JSON co
 .TP
 .BR UNI_HEX_DIGIT
 This property is assigned to characters commonly used for the representation of hexadecimal numbers, plus their compatibility equivalents.
-Conventionally, the letters “A” through “F”, or their lowercase equivalents are used with the ASCII decimal digits to form a set of hexadecimal digits.
+Conventionally, the letters "A" through "F", or their lowercase equivalents are used with the ASCII decimal digits to form a set of hexadecimal digits.
 .IP
 Support for the \f[C]Hex_Digit\f[R] character property is enabled in the JSON configuration file with:
 .IP
@@ -117,7 +117,7 @@ Support for the \f[C]Hex_Digit\f[R] character property is enabled in the JSON co
 .in
 .TP
 .BR UNI_WHITE_SPACE
-Spaces, separator characters and other control characters which should be treated by programming, markup, and other formal languages as “white space” for the purpose of parsing elements.
+Spaces, separator characters and other control characters which should be treated by programming, markup, and other formal languages as "white space" for the purpose of parsing elements.
 This property includes line break characters, like Line Tabulation (\f[C]U+000B\f[R]) and Carriage Return (\f[C]U+000D\f[R]).
 .IP
 This property is POSIX compatible with the C programming languages \f[B]isspace\f[R](3) character classification function.
@@ -200,7 +200,7 @@ Support for the \f[C]Extender\f[R] character property is enabled in the JSON con
 .TP
 .BR UNI_IDEOGRAPHIC
 Characters with this property are considered to be CJKV (Chinese, Japanese, Korean, and Vietnamese) or other siniform (Chinese writing-related) ideographs.
-This property roughly defines the class of “Chinese characters” and does not include characters of other logographic scripts such as Cuneiform or Egyptian Hieroglyphs.
+This property roughly defines the class of "Chinese characters" and does not include characters of other logographic scripts such as Cuneiform or Egyptian Hieroglyphs.
 The \f[C]Ideographic\f[R] property is used in the definition of Ideographic Description Sequences.
 .IP
 Characters with the \f[C]Ideographic\f[R] property include unified CJK ideographs, CJK compatibility ideographs, Tangut ideographs, Nüshu ideographs, and characters from other blocks—for example, IDEOGRAPHIC NUMBER ZERO (\f[C]U+3007\f[R]) and IDEOGRAPHIC CLOSING MARK (\f[C]U+3006\f[R]).

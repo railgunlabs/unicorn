@@ -13,7 +13,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 Convert the text pointed to by \f[I]src\f[R], which is in the encoding form specified by \f[I]src_attr\f[R], to the encoding specified by \f[I]dst_attr\f[R] and write the result to \f[I]dst\f[R].
 If \f[I]src_len\f[R] is -1, then \f[I]src\f[R] is assumed to be null terminated.
 .PP
-If \f[I]dst\f[R] isn’t large enough to contain the re-encoded \f[I]src\f[R] text, then it will be truncated to the nearest code point boundary and \f[B]UNI_NO_SPACE\f[R] will be returned.
+If \f[I]dst\f[R] isn't large enough to contain the re-encoded \f[I]src\f[R] text, then it will be truncated to the nearest code point boundary and \f[B]UNI_NO_SPACE\f[R] will be returned.
 If \f[I]dst\f[R] is large enough, then \f[B]UNI_OK\f[R] is returned.
 .PP
 If \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is zero, then the implementation writes to \f[I]dst_len\f[R] the number of code units in the fully re-encoded text and returns \f[B]UNI_OK\f[R].

@@ -15,15 +15,15 @@ That is, it checks if the graphemes of both strings are the same.
 This function is equivalent to calling \f[B]uni_norm\f[R](3) with \f[B]UNI_NFD\f[R] followed by a code point comparison.
 .PP
 The implementation is optimized to normalize the strings incrementally while simultaneously comparing them.
-This is a more optimal approach when it’s unknown whether the text is normalized or not.
-If it’s known in advance that the text is normalized, then it’s faster to simply perform the code point comparison directly with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
+This is a more optimal approach when it's unknown whether the text is normalized or not.
+If it's known in advance that the text is normalized, then it's faster to simply perform the code point comparison directly with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
 .PP
 The implementation strives to be highly performant and avoid dynamic memory allocation when possible.
 Typically, memory allocation will only be performed on unnaturally long combining character sequences, like
 .UR https://en.wikipedia.org/wiki/Zalgo_text
 Zalgo text
 .UE .
-It’s rare for real world text to trigger memory allocation.
+It's rare for real world text to trigger memory allocation.
 .SH RETURN VALUE
 .TP
 UNI_OK

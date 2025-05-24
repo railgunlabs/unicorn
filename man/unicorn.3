@@ -128,7 +128,7 @@ For example, the string \f[C]U+3392\f[R] and \f[C]U+004D U+0048 U+007A\f[R] have
 If these strings were compared canonically, they would be considered inequivalent, but when compared for compatibility they are considered equivalent.
 .PP
 Compatibility decomposition is unsupported by Unicorn because it has limited usefulness.
-It’s intended for fuzzy equivalence tests which are useful in search engines and database queries where the meaning of the string is more important than its visual appearance.
+It's intended for fuzzy equivalence tests which are useful in search engines and database queries where the meaning of the string is more important than its visual appearance.
 .PP
 Unicode Normalization Forms are formally defined normalizations of Unicode strings which make it possible to determine whether any two Unicode strings are equivalent to each other.
 Depending on the particular Unicode Normalization Form, that equivalence can either be a canonical or a compatibility equivalence.
@@ -225,7 +225,7 @@ If only one character is being case converted in isolation then the following si
 .RE
 .PP
 Support for case conversion must be enabled in the JSON configuration file.
-Where string values “lower”, “title”, and “upper” correspond to the \f[B]UNI_LOWER\f[R], \f[B]UNI_TITLE\f[R], and \f[B]UNI_UPPER\f[R] constants, respectively.
+Where string values "lower", "title", and "upper" correspond to the \f[B]UNI_LOWER\f[R], \f[B]UNI_TITLE\f[R], and \f[B]UNI_UPPER\f[R] constants, respectively.
 .PP
 .in +4n
 .EX
@@ -244,7 +244,7 @@ Where string values “lower”, “title”, and “upper” correspond to the 
 Case folding transforms text into a form intended for case-insensitive string comparisons.
 Case folding is primarily based on the simple lowercase mappings, but there are instances where uppercase characters are used such as Cherokee characters.
 A case folded string must never be displayed to an end-user.
-It’s only intended for internal case-insensitive comparisons.
+It's only intended for internal case-insensitive comparisons.
 .PP
 There are two variations of case folding supported by Unicorn:
 .PP
@@ -261,7 +261,7 @@ Default case folding does not preserve normalization forms.
 This means a string in a particular Unicode normalization form is not guaranteed to be in that same normalization form after being case folded.
 .PP
 Support for case folding must be enabled in the JSON configuration file.
-Where string values “default” and “canonical” correspond to the \f[B]UNI_DEFAULT\f[R] and \f[B]UNI_CANONICAL\f[R] constants, respectively.
+Where string values "default" and "canonical" correspond to the \f[B]UNI_DEFAULT\f[R] and \f[B]UNI_CANONICAL\f[R] constants, respectively.
 .PP
 .in +4n
 .EX
@@ -311,7 +311,7 @@ T}
 Collation is the process and function of determining the sorting order of strings.
 Collation varies according to language and culture: Germans, French and Swedes sort the same characters differently.
 Unicorn is not an internationalization library therefore it does not contain language specific rules for sorting.
-Instead, it uses the Default Collation Element Table (DUCET), which is a data table specifying the “default” collation order for all Unicode characters.
+Instead, it uses the Default Collation Element Table (DUCET), which is a data table specifying the "default" collation order for all Unicode characters.
 The goal of the DUCET is to provide a reasonable default ordering for all scripts, regardless of language.
 .PP
 To address the complexities of sorting, a multilevel comparison algorithm is employed.
@@ -322,7 +322,7 @@ The number of levels that are considered in comparison is known as the strength 
 .PP
 Collation is one of the most performance-critical features in a system.
 Consider the number of comparison operations that are involved in sorting or searching large databases.
-When comparing strings multiple times it’s recommended to generate and cache a sort key.
+When comparing strings multiple times it's recommended to generate and cache a sort key.
 A sort key is an array of unsigned 16-bit integers that is generated from a single string in combination with other collation settings.
 Sort keys must be generated with the same settings for their order to make sense.
 Two sort keys can be compared to produce either a less than, greater than, or equal to result.
@@ -427,7 +427,7 @@ T}
 .SS Character Properties
 The Unicode Character Database defines a large repertoire of character properties.
 Most character properties are only applicable to specific applications, i.e. text shaping or rendering.
-Other properties are informational, for example a character’s name or the version it was introduced into the Unicode Standard.
+Other properties are informational, for example a character's name or the version it was introduced into the Unicode Standard.
 Other properties are only relevant when implementing various Unicode algorithms.
 The properties supported by Unicorn are those that are relevant when parsing plain text.
 .PP
@@ -495,7 +495,7 @@ Lossless data compression algorithms, like
 LZW
 .UE ,
 perform compression by deduplicating repetitions within a data stream.
-These algorithms are general purpose and are designed to operate on “bags of bytes” without any prior knowledge or assumptions about the structure or semantics of the data.
+These algorithms are general purpose and are designed to operate on "bags of bytes" without any prior knowledge or assumptions about the structure or semantics of the data.
 .PP
 Unicode Technical Report #34 defines two algorithms designed specifically for the compression of Unicode encoded text.
 These algorithms are Standard Compression Scheme for Unicode (SCSU) and Binary Ordered Compression for Unicode (BOCU).
@@ -526,7 +526,7 @@ Compared to UTF-16, texts in all languages with small character repertoires take
 For large character sets, i.e. Chinese/Japanese/Korean, texts are about the same size for UTF-16 and BOCU-1.
 .PP
 BOCU-1 is an IANA registered charset and has its own BOM: \f[C]0xFB 0xEE 0x28\f[R].
-Unicorn’s implementation does not prepend the BOM and its decompressor will ignore it.
+Unicorn's implementation does not prepend the BOM and its decompressor will ignore it.
 .PP
 The BOCU-1 algorithm is documented in
 .UR https://www.unicode.org/notes/tn6/
@@ -553,9 +553,9 @@ It starts at integer 0 and goes up to and includes the integer 1114111.
 The Unicode Standard version 16.0 defines 155,063 encoded characters.
 .PP
 In Unicode a character represents what your machine (i.e. your computer) considers to be a character.
-It’s not necessarily what you, the human, think to be a character.
+It's not necessarily what you, the human, think to be a character.
 For example, the END OF LINE (U+000A) character is a control character denoting a line boundary.
-A human would never think of this character as being a “character” but the machine does.
+A human would never think of this character as being a "character" but the machine does.
 What humans perceive as a character is called a grapheme.
 Graphemes can be composed of one or more Unicode characters.
 The segmentation of characters into graphemes can be performed with the segmentation interface.
@@ -565,17 +565,17 @@ The Unicode Standard defines three encoding forms for encoding Unicode character
 An encoding form uses a bit combination to represent a code point.
 The smallest unit of this bit combination is referred to as a code unit.
 The Unicode Standard uses 8-bit code units in the UTF-8 encoding form, 16-bit code units in the UTF-16 encoding form, and 32-bit code units in the UTF-32 encoding form.
-For example, in UTF-8 the code point \f[C]U+1F6F8\f[R] is represented by four code units, in UTF-16 it’s represented by two units, and in UTF-32 it’s represented by one code unit.
+For example, in UTF-8 the code point \f[C]U+1F6F8\f[R] is represented by four code units, in UTF-16 it's represented by two units, and in UTF-32 it's represented by one code unit.
 .PP
-UTF-32 is the odd encoding form out because it doesn’t really “encode” anything.
+UTF-32 is the odd encoding form out because it doesn't really "encode" anything.
 Its value is always identical to the value of the code point.
-It might be tempting to think of UTF-32 and code points as synonymous, but that would be semantically incorrect: a code point is a 21-bit integer in the Unicode codespace and UTF-32 is a storage standard that says “use a 32-bit integer as the storage for the 21-bit code point.”
+It might be tempting to think of UTF-32 and code points as synonymous, but that would be semantically incorrect: a code point is a 21-bit integer in the Unicode codespace and UTF-32 is a storage standard that says "use a 32-bit integer as the storage for the 21-bit code point."
 .PP
 Unicorn implements the function \f[B]uni_convert\f[R](3) for converting between Unicode encoding forms.
 It also defines the functions \f[B]uni_next\f[R](3), \f[B]uni_prev\f[R](3), and \f[B]uni_encode\f[R](3) for decoding and encoding Unicode scalar values.
 .PP
 Support for each encoding form is enabled individually in the JSON configuration file.
-Where string values “UTF-8”, “UTF-16”, and “UTF-32” correspond to the \f[B]UNI_UTF8\f[R](3), \f[B]UNI_UTF16\f[R](3), and \f[B]UNI_UTF32\f[R](3) constants, respectively.
+Where string values "UTF-8", "UTF-16", and "UTF-32" correspond to the \f[B]UNI_UTF8\f[R](3), \f[B]UNI_UTF16\f[R](3), and \f[B]UNI_UTF32\f[R](3) constants, respectively.
 .PP
 .in +4n
 .EX
