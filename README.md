@@ -32,7 +32,6 @@ The unamalgamated source code is available exclusively to commercial licensees.
 
 Unicorn is fully customizable.
 You can choose which Unicode algorithms and character properties to include.
-You can even exclude character blocks for scripts your application does not support.
 
 To customize Unicorn, modify `features.json` and run the `generate.pyz` script.
 This script will generate the `unicorn.c` and `unicorn.h` source files which you can compile with your C project.
