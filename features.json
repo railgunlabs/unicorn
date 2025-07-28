@@ -5,7 +5,6 @@
     "characterStorage": "uint32_t",
     "optimizeFor": "speed",
     "stackBufferSize": 32,
-    "excludeCharacterBlocks": [],
     "algorithms": {
         "normalization": [
             "NFC",

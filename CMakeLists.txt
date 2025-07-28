@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(unicorn VERSION 1.0.6 LANGUAGES C)
+project(unicorn VERSION 1.1.0 LANGUAGES C)
 
 include(CheckIncludeFile)
 

@@ -445,6 +445,7 @@ def parse(filename,fe):
    if not isinstance(value,List):
     print("error: expected string list for 'excludeCharacterBlocks'")
     sys.exit(1)
+   print("warning: the 'excludeCharacterBlocks' configuration feature is deprecated")
    for cd in value:
     if not isinstance(cd,str):
      print("error: expected string list for 'excludeCharacterBlocks'")

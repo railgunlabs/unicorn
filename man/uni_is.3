@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
+.TH "UNICORN" "3" "Jul 28th 2025" "Unicorn 1.1.0"
 .SH NAME
 uni_is \- binary property value
 .SH LIBRARY
@@ -15,7 +15,7 @@ Retrieve the value of the binary property \f[I]p\f[R] for the character \f[I]c\f
 The binary character property \f[I]p\f[R] must be enabled in the JSON configuration file otherwise \f[C]false\f[R] is always returned.
 Instructions for enabling it are documented alongside property \f[I]p\f[R] in the \f[B]unibp\f[R](3) enumeration.
 .SH RETURN VALUE
-\f[C]true\f[R] if the character has the property else \f[C]false\f[R].
+Returns \f[C]true\f[R] if character \f[I]c\f[R] has property \f[I]p\f[R].
 .SH SEE ALSO
 .BR unibp (3),
 .BR unichar (3)

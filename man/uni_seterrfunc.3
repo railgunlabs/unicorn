@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "May 21st 2025" "Unicorn 1.0.6"
+.TH "UNICORN" "3" "Jul 28th 2025" "Unicorn 1.1.0"
 .SH NAME
 uni_seterrfunc \- receive diagnostic events
 .SH LIBRARY
@@ -10,12 +10,12 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "void uni_seterrfunc(void *" user_data ", unierrfunc " callback ");"
 .fi
 .SH DESCRIPTION
-Associate the function \f[C]cb\f[R] with the library's internal error logger.
-Anytime a function returns an error \f[C]cb\f[R] will be invoked with a description of the error.
-It is up to the implementation of \f[C]cb\f[R] to be thread safe.
+Associate the function \f[I]callback\f[R] with the library's internal error logger.
+Anytime a function returns an error \f[I]callback\f[R] will be invoked with a description of the error.
+It is up to the implementation of \f[I]callback\f[R] to be thread safe.
 .PP
-The implementation generally invokes \f[C]cb\f[R] at the moment the error occurs.
-Callers are encouraged to set breakpoints in their implementation of \f[C]cb\f[R] and view the stack trace to discover the exact cause of the error.
+The implementation generally invokes \f[I]callback\f[R] at the moment the error occurs.
+Callers are encouraged to set breakpoints in their implementation of \f[I]callback\f[R] and view the stack trace to discover the exact cause of the error.
 .SH SEE ALSO
 .BR unimemfunc (3),
 .BR unierrfunc (3)
