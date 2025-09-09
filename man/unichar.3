@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Jul 28th 2025" "Unicorn 1.1.0"
+.TH "UNICORN" "3" "Sep 9th 2025" "Unicorn 1.2.0"
 .SH NAME
 unichar \- code point
 .SH LIBRARY
@@ -17,7 +17,7 @@ Unicode scalar values are code points excluding surrogate characters.
 The integer type used as the underlying storage for this type is configurable.
 This helps simplify integration with existing applications which may already have defined their own Unicode character type.
 The type chosen can be signed or unsigned, but it must be large enough to accommodate the entire Unicode character repertoire.
-As of Unicode 16.0, that means an integer with at least 21 bits of storage.
+As of Unicode 17.0, that means an integer with at least 21 bits of storage.
 .PP
 The snippet below demonstrates how to redefine \f[B]unichar\f[R](3) as a signed 64-bit integer.
 Using a 64-bit integer is wasteful, as you only need 21-bits, and was chosen for example purposes only.

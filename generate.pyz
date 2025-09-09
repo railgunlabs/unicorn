@@ -17,7 +17,7 @@
 #  The original source code can be obtained by purchasing a license
 #  from Railgun Labs at https://RailgunLabs.com/unicorn/license.
 
-b='16.0.0'
+b='17.0.0'
 from enum import IntEnum
 from dataclasses import dataclass
 class eU(IntEnum):

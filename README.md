@@ -13,7 +13,7 @@ This repository contains the scripts to generate the Unicorn header/source amalg
 The unamalgamated source code is available exclusively to commercial licensees.
 
 [![Build Status](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml/badge.svg)](https://github.com/RailgunLabs/unicorn/actions/workflows/build.yml)
-![Unicode Version](https://img.shields.io/badge/Unicode-v16.0.0-blue)
+![Unicode Version](https://img.shields.io/badge/Unicode-v17.0.0-blue)
 
 ## Features
 
