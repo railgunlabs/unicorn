@@ -448,7 +448,7 @@ static enum decoderstate decode_bocu1_trail_byte(struct bocudecoder *decoder, in
 
 #endif
 
-unistat uni_compress(const void *text, unisize text_len, uniattr text_attr, uint8_t *buffer, size_t *buffer_length) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_compress(const void *text, unisize text_len, uniattr text_attr, uint8_t *buffer, size_t *buffer_length) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_COMPRESSION)
     int32_t buffer_index = 0;
@@ -554,7 +554,7 @@ unistat uni_compress(const void *text, unisize text_len, uniattr text_attr, uint
 #endif
 }
 
-unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, void *text, unisize *text_len, uniattr text_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, void *text, unisize *text_len, uniattr text_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_COMPRESSION)
     unistat status = UNI_OK;

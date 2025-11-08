@@ -29,13 +29,13 @@ enum TitleCaseState
 
 static bool is_cased(unichar ch)
 {
-    const uint32_t flags = (uint32_t)get_codepoint_data(ch)->flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(ch)->flags;
     return ((flags & IS_CASED) == IS_CASED) ? true : false;
 }
 
 static bool is_case_ignorable(unichar ch)
 {
-    const uint32_t flags = (uint32_t)get_codepoint_data(ch)->flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(ch)->flags;
     return ((flags & IS_CASE_IGNORABLE) == IS_CASE_IGNORABLE) ? true : false;
 }
 
@@ -329,7 +329,7 @@ static unistat to_titlecase(const void *src, unisize src_len, uniattr src_attr, 
                     const struct unitext prev_text = {src, index, src_len, src_attr};
                     (void)uni_next(src, src_len, src_attr, &index, &cp);
                     const struct unitext next_text = {src, index, src_len, src_attr};
-                    const uint8_t ccc = get_codepoint_data(cp)->canonical_combining_class;
+                    const uint8_t ccc = unicorn_get_codepoint_data(cp)->canonical_combining_class;
                     const bool cased = is_cased(cp);
 
                     if ((state == PROCESS_FIRST_CASED) && cased)
@@ -386,7 +386,7 @@ static unistat is_titlecase(const void *src, unisize src_len, uniattr src_attr, 
                     const struct unitext prev_text = {src, index, src_len, src_attr};
                     (void)uni_next(src, src_len, src_attr, &index, &cp);
                     const struct unitext next_text = {src, index, src_len, src_attr};
-                    const uint8_t ccc = get_codepoint_data(cp)->canonical_combining_class;
+                    const uint8_t ccc = unicorn_get_codepoint_data(cp)->canonical_combining_class;
                     const bool cased = is_cased(cp);
 
                     if ((state == PROCESS_FIRST_CASED) && cased)
@@ -492,7 +492,7 @@ static unistat is_case(unicaseconv casing, const void *string, unisize length, u
 }
 #endif
 
-unistat uni_caseconv(unicaseconv casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_caseconv(unicaseconv casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 
@@ -531,7 +531,7 @@ unistat uni_caseconv(unicaseconv casing, const void *src, unisize src_len, uniat
     return status;
 }
 
-unistat uni_caseconvchk(unicaseconv casing, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_caseconvchk(unicaseconv casing, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 

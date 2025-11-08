@@ -80,7 +80,7 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
         CE *const aaaa = &state->ces[state->ces_count];
         CE *const bbbb = &state->ces[state->ces_count + 1];
         state->ces_count += 2;
-        switch (get_codepoint_data(character)->collation_subtype)
+        switch (unicorn_get_codepoint_data(character)->collation_subtype)
         {
         case COLLATION_TANGUT:
             aaaa->primary = (uint16_t)0xFB00;
@@ -192,7 +192,7 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
         {
             // Stop processing if a non-starter was found.
             const unichar codepoint = charbuf->chars[index];
-            const int32_t ccc = (int32_t)get_codepoint_data(codepoint)->canonical_combining_class;
+            const int32_t ccc = (int32_t)unicorn_get_codepoint_data(codepoint)->canonical_combining_class;
             if ((ccc == 0) || (prev_ccc >= ccc))
             {
                 break;

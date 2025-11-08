@@ -142,7 +142,7 @@ unistat unicorn_check_output_encoding(const void *buffer, const unisize *capacit
     return status;
 }
 
-void uni_getversion(int32_t *major, int32_t *minor, int32_t *patch) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API void uni_getversion(int32_t *major, int32_t *minor, int32_t *patch) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     if (major != NULL)
     {
@@ -160,7 +160,7 @@ void uni_getversion(int32_t *major, int32_t *minor, int32_t *patch) // cppcheck-
     }
 }
 
-void uni_getucdversion(int32_t *major, int32_t *minor, int32_t *patch) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API void uni_getucdversion(int32_t *major, int32_t *minor, int32_t *patch) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     if (major != NULL)
     {

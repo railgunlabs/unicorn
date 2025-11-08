@@ -253,7 +253,7 @@ def generate(args: GeneratorArgs, archive: zipfile.ZipFile) -> Tuple[str, str, s
         size += data.size
         instance.total_size += data.size
 
-    data = staging_table(codespace, "CodepointData", "get_codepoint_data")
+    data = staging_table(codespace, "CodepointData", "unicorn_get_codepoint_data")
     source += data.source
     header += data.header
     size += data.size

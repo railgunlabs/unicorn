@@ -38,7 +38,7 @@ static unimemfunc unicorn_allocf;
 
 static void *unicorn_ud;
 
-unistat uni_setmemfunc(void *user_data, unimemfunc allocf) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_setmemfunc(void *user_data, unimemfunc allocf) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
     if (allocf == NULL)

@@ -19,12 +19,6 @@ if (NOT UNICORN_BUILD_STATIC AND NOT UNICORN_BUILD_SHARED)
     message(FATAL_ERROR "Please build either the static or shared library.")
 endif ()
 
-if (UNICORN_BUILD_TESTS OR UNICORN_BUILD_COOKBOOK)
-    if (NOT UNICORN_BUILD_SHARED)
-        message(FATAL_ERROR "Tests and cookbook builds require the Unicorn shared library.")
-    endif ()
-endif ()
-
 set(UNICORN_CONFIG "features.json" CACHE STRING "Path to a JSON file that configures the Unicorn feature set.")
 if (UNICORN_CONFIG STREQUAL "")
     message(FATAL_ERROR "please specify a unicorn configuration file (must be a JSON file)")

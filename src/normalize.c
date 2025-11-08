@@ -42,7 +42,7 @@ static unisize unicorn_get_canonical_decomposition(unichar character, unichar *d
 #if defined(UNICORN_OPTIMIZE_FOR_SPEED)
         // When optimizing for speed, the decomposition is stored as UTF-32.
         // Each character can be copied as-is to the destination buffer.
-        const unichar *chars = &uni_canonical_decomp_mappings[get_codepoint_data(character)->canonical_decomposition_mapping_offset];
+        const unichar *chars = &uni_canonical_decomp_mappings[unicorn_get_codepoint_data(character)->canonical_decomposition_mapping_offset];
         const unichar chars_len = chars[0];
         assert(chars_len < (unichar)LONGEST_RAW_DECOMPOSITION); // LCOV_EXCL_BR_LINE
         chars = &chars[1]; // Skip past length to the first code unit in the UTF-8 sequence.
@@ -54,7 +54,7 @@ static unisize unicorn_get_canonical_decomposition(unichar character, unichar *d
 #else
         // When optimizing for size, the decomposition is stored as UTF-8.
         // Each character must be decoded and copied to the destination buffer.
-        const uint8_t *utf8 = &uni_canonical_decomp_mappings[get_codepoint_data(character)->canonical_decomposition_mapping_offset];
+        const uint8_t *utf8 = &uni_canonical_decomp_mappings[unicorn_get_codepoint_data(character)->canonical_decomposition_mapping_offset];
         const uint8_t utf8_len = utf8[0];
         assert(utf8_len < (uint8_t)LONGEST_RAW_DECOMPOSITION); // LCOV_EXCL_BR_LINE
         utf8 = &utf8[1]; // Skip past length to the first code unit in the UTF-8 sequence.
@@ -163,7 +163,7 @@ static inline bool is_hangul_syllable_L_or_V_or_T(unichar ch)
 
 static inline int32_t get_ccc(unichar character)
 {
-    return (int32_t)get_codepoint_data(character)->canonical_combining_class;
+    return (int32_t)unicorn_get_codepoint_data(character)->canonical_combining_class;
 }
 
 // Check if the code point does not change under Normalization Form D (NFD).
@@ -191,7 +191,7 @@ bool unicorn_is_stable_nfd(unichar cp)
 static bool is_stable_nfc(unichar ch)
 {
     bool is_stable = true;
-    const uint32_t flags = (uint32_t)get_codepoint_data(ch)->flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(ch)->flags;
 
     // If this code point could be part of a composition, then treat it as unstable.
     // It may or may not compose with anything; it depends which code points surround it.
@@ -262,7 +262,7 @@ static unichar find_canonical_composition(const struct CanonicalCompositionPair 
 static unichar find_composition(unichar starter, unichar non_starter)
 {
     // Find the sorted array with all characters the starter character can compose with.
-    const struct CodepointData *character = get_codepoint_data(starter);
+    const struct CodepointData *character = unicorn_get_codepoint_data(starter);
     const struct CanonicalCompositionPair *const pairs = &uni_canonical_comp_pairs[character->canonical_composition_mapping_offset];
     const int32_t composition_mapping_count = (int32_t)character->canonical_composition_mapping_count;
     assert(composition_mapping_count > 0); // LCOV_EXCL_BR_LINE: This condition is checked for by the caller.
@@ -284,7 +284,7 @@ static void compose_combining_character_sequence(struct UDynamicBuffer *buffer, 
         unichar starter = buffer->chars[index];
 
         // Check if this code point can be composed with another.
-        const bool is_composable = get_codepoint_data(starter)->canonical_composition_mapping_count > (uint8_t)0;
+        const bool is_composable = unicorn_get_codepoint_data(starter)->canonical_composition_mapping_count > (uint8_t)0;
 
         // This character should be a starter.
         if ((get_ccc(starter) != 0) || !is_composable)
@@ -637,7 +637,7 @@ static unistat unrom_normalize_compose(const void *src, unisize src_len, uniattr
 
 #endif
 
-unistat uni_norm(uninormform form, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
+UNICORN_API unistat uni_norm(uninormform form, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
     unistat status = UNI_OK;
 
@@ -670,7 +670,7 @@ unistat uni_norm(uninormform form, const void *src, unisize src_len, uniattr src
     return status;
 }
 
-unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_NFD)
     struct UNormalizeState ns1;
@@ -806,7 +806,7 @@ static unistat quick_check(struct unitext input, QuickCheckFunc quick_check, uni
 #if defined(UNICORN_FEATURE_NFC_QUICK_CHECK)
 static inline uint32_t quick_check_NFC(unichar character)
 {
-    const uint32_t flags = (uint32_t)get_codepoint_data(character)->quick_check_flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(character)->quick_check_flags;
     return flags >> 4u;
 }
 #endif
@@ -814,12 +814,12 @@ static inline uint32_t quick_check_NFC(unichar character)
 #if defined(UNICORN_FEATURE_NFD_QUICK_CHECK)
 static inline uint32_t quick_check_NFD(unichar character)
 {
-    const uint32_t flags = (uint32_t)get_codepoint_data(character)->quick_check_flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(character)->quick_check_flags;
     return flags & 0xFu;
 }
 #endif
 
-unistat uni_normqchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, uninormchk *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_normqchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, uninormchk *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_NFC_QUICK_CHECK) || defined(UNICORN_FEATURE_NFD_QUICK_CHECK)
     unistat status = UNI_OK;
@@ -878,7 +878,7 @@ unistat uni_normqchk(uninormform form, const void *text, unisize text_len, uniat
 #endif
 }
 
-unistat uni_normchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_NFD)
     unistat status = UNI_OK;

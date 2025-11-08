@@ -215,7 +215,7 @@ static unistat sortkeybuf_append_run(struct SortKey *state, struct unitext *text
 
 #endif
 
-unistat uni_sortkeymk(const void *text, unisize text_len, uniattr text_attr, uniweighting weighting, unistrength strength, uint16_t *sortkey, size_t *sortkey_cap) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_sortkeymk(const void *text, unisize text_len, uniattr text_attr, uniweighting weighting, unistrength strength, uint16_t *sortkey, size_t *sortkey_cap) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_COLLATION)
     unistat status = UNI_OK;
@@ -293,7 +293,7 @@ unistat uni_sortkeymk(const void *text, unisize text_len, uniattr text_attr, uni
 #endif
 }
 
-unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, uniweighting weighting, unistrength strength, int32_t *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, uniweighting weighting, unistrength strength, int32_t *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_COLLATION)
     unistat status = UNI_OK;
@@ -413,7 +413,7 @@ unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr, const void 
 #endif
 }
 
-unistat uni_sortkeycmp(const uint16_t *sk1, size_t sk1_len, const uint16_t *sk2, size_t sk2_len, int32_t *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_sortkeycmp(const uint16_t *sk1, size_t sk1_len, const uint16_t *sk2, size_t sk2_len, int32_t *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_COLLATION)
     unistat status = UNI_OK;

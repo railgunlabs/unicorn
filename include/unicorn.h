@@ -32,6 +32,24 @@ extern "C" {
 typedef uint32_t unichar;
 #endif
 
+/*
+ *  The "UNICORN_STATIC" preprocessor directive must be defined
+ *  before including <unicorn.h> when it's statically linked.
+ */
+#ifndef DOXYGEN
+  #if defined(_WIN32) || defined(__CYGWIN__)
+    #if defined(DLL_EXPORT)
+      #define UNICORN_API __declspec(dllexport)
+    #elif defined(UNICORN_STATIC)
+      #define UNICORN_API
+    #else
+      #define UNICORN_API __declspec(dllimport)
+    #endif
+  #else
+    #define UNICORN_API
+  #endif
+#endif
+
 typedef int32_t unisize;
 
 typedef enum unistat
@@ -74,8 +92,8 @@ typedef uint32_t uniattr;
 // Unicode and Library Version
 //
 
-void uni_getversion(int32_t *major, int32_t *minor, int32_t *patch);
-void uni_getucdversion(int32_t *major, int32_t *minor, int32_t *patch);
+UNICORN_API void uni_getversion(int32_t *major, int32_t *minor, int32_t *patch);
+UNICORN_API void uni_getucdversion(int32_t *major, int32_t *minor, int32_t *patch);
 
 //
 // Custom Memory Allocator
@@ -83,7 +101,7 @@ void uni_getucdversion(int32_t *major, int32_t *minor, int32_t *patch);
 
 typedef void *(*unimemfunc)(void *user_data, void *ptr, size_t old_size, size_t new_size);
 
-unistat uni_setmemfunc(void *user_data, unimemfunc allocf);
+UNICORN_API unistat uni_setmemfunc(void *user_data, unimemfunc allocf);
 
 //
 // Logging
@@ -91,7 +109,7 @@ unistat uni_setmemfunc(void *user_data, unimemfunc allocf);
 
 typedef void(*unierrfunc)(void *user_data, const char *message);
 
-void uni_seterrfunc(void *user_data, unierrfunc callback);
+UNICORN_API void uni_seterrfunc(void *user_data, unierrfunc callback);
 
 //
 // Case Conversion
@@ -104,8 +122,8 @@ typedef enum unicaseconv
     UNI_UPPER,
 } unicaseconv;
 
-unistat uni_caseconv(unicaseconv casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
-unistat uni_caseconvchk(unicaseconv casing, const void *text, unisize text_len, uniattr text_attr, bool *result);
+UNICORN_API unistat uni_caseconv(unicaseconv casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
+UNICORN_API unistat uni_caseconvchk(unicaseconv casing, const void *text, unisize text_len, uniattr text_attr, bool *result);
 
 //
 // Case Folding
@@ -117,16 +135,16 @@ typedef enum unicasefold
     UNI_CANONICAL,
 } unicasefold;
 
-unistat uni_casefold(unicasefold casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
-unistat uni_casefoldcmp(unicasefold casing, const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result);
-unistat uni_casefoldchk(unicasefold casing, const void *text, unisize text_len, uniattr text_attr, bool *result);
+UNICORN_API unistat uni_casefold(unicasefold casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
+UNICORN_API unistat uni_casefoldcmp(unicasefold casing, const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result);
+UNICORN_API unistat uni_casefoldchk(unicasefold casing, const void *text, unisize text_len, uniattr text_attr, bool *result);
 
 //
 // Text Compression
 //
 
-unistat uni_compress(const void *text, unisize text_len, uniattr text_attr, uint8_t *buffer, size_t *buffer_length);
-unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, void *text, unisize *text_len, uniattr text_attr);
+UNICORN_API unistat uni_compress(const void *text, unisize text_len, uniattr text_attr, uint8_t *buffer, size_t *buffer_length);
+UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, void *text, unisize *text_len, uniattr text_attr);
 
 //
 // Collation
@@ -146,9 +164,9 @@ typedef enum uniweighting
     UNI_SHIFTED,
 } uniweighting;
 
-unistat uni_sortkeymk(const void *text, unisize text_len, uniattr text_attr, uniweighting weighting, unistrength strength, uint16_t *sortkey, size_t *sortkey_cap);
-unistat uni_sortkeycmp(const uint16_t *sk1, size_t sk1_len, const uint16_t *sk2, size_t sk2_len, int32_t *result);
-unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, uniweighting weighting, unistrength strength, int32_t *result);
+UNICORN_API unistat uni_sortkeymk(const void *text, unisize text_len, uniattr text_attr, uniweighting weighting, unistrength strength, uint16_t *sortkey, size_t *sortkey_cap);
+UNICORN_API unistat uni_sortkeycmp(const uint16_t *sk1, size_t sk1_len, const uint16_t *sk2, size_t sk2_len, int32_t *result);
+UNICORN_API unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, uniweighting weighting, unistrength strength, int32_t *result);
 
 //
 // Normalization
@@ -167,20 +185,20 @@ typedef enum uninormchk
     UNI_NO,
 } uninormchk;
 
-unistat uni_norm(uninormform form, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
-unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result);
-unistat uni_normchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, bool *result);
-unistat uni_normqchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, uninormchk *result);
+UNICORN_API unistat uni_norm(uninormform form, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
+UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result);
+UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, bool *result);
+UNICORN_API unistat uni_normqchk(uninormform form, const void *text, unisize text_len, uniattr text_attr, uninormchk *result);
 
 //
 // Text Iterators, Encoders, Decoders, and Validators
 //
 
-unistat uni_next(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp);
-unistat uni_prev(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp);
-unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr);
-unistat uni_convert(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
-unistat uni_validate(const void *text, unisize text_len, uniattr text_attr);
+UNICORN_API unistat uni_next(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp);
+UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp);
+UNICORN_API unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr);
+UNICORN_API unistat uni_convert(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr);
+UNICORN_API unistat uni_validate(const void *text, unisize text_len, uniattr text_attr);
 
 //
 // Text Segmentation
@@ -193,8 +211,8 @@ typedef enum unibreak
     UNI_SENTENCE,
 } unibreak;
 
-unistat uni_nextbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index);
-unistat uni_prevbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index);
+UNICORN_API unistat uni_nextbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index);
+UNICORN_API unistat uni_prevbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index);
 
 //
 // Character Properties
@@ -258,13 +276,13 @@ typedef enum unibp
     UNI_TERMINAL_PUNCTUATION,
 } unibp;
 
-unigc uni_gc(unichar c);
-uint8_t uni_ccc(unichar c);
-bool uni_is(unichar c, unibp p);
-const char *uni_numval(unichar c);
-unichar uni_tolower(unichar c);
-unichar uni_totitle(unichar c);
-unichar uni_toupper(unichar c);
+UNICORN_API unigc uni_gc(unichar c);
+UNICORN_API uint8_t uni_ccc(unichar c);
+UNICORN_API bool uni_is(unichar c, unibp p);
+UNICORN_API const char *uni_numval(unichar c);
+UNICORN_API unichar uni_tolower(unichar c);
+UNICORN_API unichar uni_totitle(unichar c);
+UNICORN_API unichar uni_toupper(unichar c);
 
 #ifdef __cplusplus
 }

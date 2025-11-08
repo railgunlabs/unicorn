@@ -16,7 +16,7 @@
 static unierrfunc unicorn_logger_cb;
 static void *unicorn_logger_ud;
 
-void uni_seterrfunc(void *user_data, unierrfunc callback) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API void uni_seterrfunc(void *user_data, unierrfunc callback) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unicorn_logger_ud = user_data;
     unicorn_logger_cb = callback;

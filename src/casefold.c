@@ -30,7 +30,7 @@ struct CaseState
 
 static unisize unicorn_get_casefolding(unichar character, unichar casefolding[UNICORN_MAX_CASEFOLDING])
 {
-    const unichar *data = &uni_casefold_default_mappings[get_codepoint_data(character)->full_casefold_mapping_offset];
+    const unichar *data = &uni_casefold_default_mappings[unicorn_get_codepoint_data(character)->full_casefold_mapping_offset];
     unisize codepoint_count = (unisize)data[0];
     if (codepoint_count == 0)
     {
@@ -51,7 +51,7 @@ static unisize unicorn_get_casefolding(unichar character, unichar casefolding[UN
 static bool is_canonical_caseless_stable(unichar ch)
 {
     bool is_stable;
-    const uint32_t flags = (uint32_t)get_codepoint_data(ch)->flags;
+    const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(ch)->flags;
 
     if ((flags & UNICORN_CHAR_NEEDS_NORMALIZATION) == UNICORN_CHAR_NEEDS_NORMALIZATION)
     {
@@ -158,7 +158,7 @@ static unistat collect_unstable_run(struct unitext *it, unisize *span_length, bo
         // before case folding when the string contains the character U+0345 (Combining Greek Ypogegrammeni)
         // or any character that has it as part of its canonical decomposition, such as U+1FC3 (Greek Small
         // Letter Eta with Ypogegrammeni).
-        const uint32_t flags = (uint32_t)get_codepoint_data(cp)->flags;
+        const uint32_t flags = (uint32_t)unicorn_get_codepoint_data(cp)->flags;
         if ((flags & UNICORN_CHAR_NEEDS_NORMALIZATION) == UNICORN_CHAR_NEEDS_NORMALIZATION)
         {
             *needs_normalization = true;
@@ -698,7 +698,7 @@ static unistat is_casefold_canonical(const void *text, unisize length, uniattr e
 
 #endif
 
-unistat uni_casefold(unicasefold casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_casefold(unicasefold casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 
@@ -727,7 +727,7 @@ unistat uni_casefold(unicasefold casing, const void *src, unisize src_len, uniat
     return status;
 }
 
-unistat uni_casefoldcmp(unicasefold casing, const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_casefoldcmp(unicasefold casing, const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 
@@ -756,7 +756,7 @@ unistat uni_casefoldcmp(unicasefold casing, const void *s1, unisize s1_len, unia
     return status;
 }
 
-unistat uni_casefoldchk(unicasefold casing, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_casefoldchk(unicasefold casing, const void *text, unisize text_len, uniattr text_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 

@@ -930,7 +930,7 @@ static unistat scalar_prev(const void *text, unisize *offset, unichar *scalar)
     return status;
 }
 
-unistat uni_next(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp)
+UNICORN_API unistat uni_next(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp)
 {
     ByteSwap16 swap16 = NULL;
     ByteSwap32 swap32 = NULL;
@@ -1027,7 +1027,7 @@ unistat uni_next(const void *text, unisize text_len, uniattr text_attr, unisize 
     return status;
 }
 
-unistat uni_prev(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp)
+UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_attr, unisize *index, unichar *cp)
 {
     ByteSwap16 swap16 = NULL;
     ByteSwap32 swap32 = NULL;
@@ -1128,7 +1128,7 @@ unistat uni_prev(const void *text, unisize text_len, uniattr text_attr, unisize 
     return status;
 }
 
-unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
     struct UBuffer buffer = {NULL};
@@ -1151,7 +1151,7 @@ unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr) //
     return status;
 }
 
-unistat uni_convert(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_convert(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 
@@ -1197,7 +1197,7 @@ unistat uni_convert(const void *src, unisize src_len, uniattr src_attr, void *ds
     return status;
 }
 
-unistat uni_validate(const void *text, unisize text_len, uniattr text_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_validate(const void *text, unisize text_len, uniattr text_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
 

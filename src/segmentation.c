@@ -154,7 +154,7 @@ static void add_state(struct MatchContext *ctx, struct URuleStateList *list, int
 static bool match_character_class(unibreak type, unichar cp, UOpcode klass)
 {
     bool match = false;
-    const struct CodepointData *data = get_codepoint_data(cp);
+    const struct CodepointData *data = unicorn_get_codepoint_data(cp);
     
     if (type == UNI_GRAPHEME)
     {
@@ -501,7 +501,7 @@ static unistat previous_break(unibreak type, const struct Segmentation *seg, con
 
 #endif
 
-unistat uni_nextbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index)
+UNICORN_API unistat uni_nextbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index)
 {
     unistat status;
     switch (boundary)
@@ -541,7 +541,7 @@ unistat uni_nextbrk(unibreak boundary, const void *text, unisize text_len, uniat
     return status;
 }
 
-unistat uni_prevbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unistat uni_prevbrk(unibreak boundary, const void *text, unisize text_len, uniattr text_attr, unisize *index) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status;
     switch (boundary)

@@ -14,30 +14,30 @@
 #include "common.h"
 #include "unidata.h"
 
-unigc uni_gc(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API unigc uni_gc(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_GC)
-    return (unigc)get_codepoint_data(c)->general_category; // cppcheck-suppress premium-misra-c-2012-10.5 ; Intentional violation to unpack data from 32-bits to an enum.
+    return (unigc)unicorn_get_codepoint_data(c)->general_category; // cppcheck-suppress premium-misra-c-2012-10.5 ; Intentional violation to unpack data from 32-bits to an enum.
 #else
     (void)c;
     return UNI_UNASSIGNED;
 #endif
 }
 
-uint8_t uni_ccc(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API uint8_t uni_ccc(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_CCC)
-    return get_codepoint_data(c)->canonical_combining_class;
+    return unicorn_get_codepoint_data(c)->canonical_combining_class;
 #else
     (void)c;
     return 0;
 #endif
 }
 
-bool uni_is(unichar c, unibp p) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API bool uni_is(unichar c, unibp p) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_BINARY_PROPERTIES)
-    const uint32_t binary_props = (uint32_t)get_codepoint_data(c)->binary_properties;
+    const uint32_t binary_props = (uint32_t)unicorn_get_codepoint_data(c)->binary_properties;
     const uint32_t prop = (uint32_t)p;
     const uint32_t bit_mask = (uint32_t)1 << prop;
     return ((binary_props & bit_mask) == bit_mask) ? true : false;
@@ -48,11 +48,11 @@ bool uni_is(unichar c, unibp p) // cppcheck-suppress misra-c2012-8.7 ; This is s
 #endif
 }
 
-const char *uni_numval(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
+UNICORN_API const char *uni_numval(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_NUMERIC_VALUE)
     const char *numval = NULL;
-    const uint8_t index = get_codepoint_data(c)->numeric_value_offset;
+    const uint8_t index = unicorn_get_codepoint_data(c)->numeric_value_offset;
     if (index > (uint8_t)0)
     {
         assert((size_t)index < COUNT_OF(unicorn_numeric_values)); // LCOV_EXCL_BR_LINE
@@ -65,7 +65,7 @@ const char *uni_numval(unichar c) // cppcheck-suppress misra-c2012-8.7 ; This is
 #endif
 }
 
-unichar uni_tolower(unichar c)
+UNICORN_API unichar uni_tolower(unichar c)
 {
 #if defined(UNICORN_FEATURE_SIMPLE_LOWERCASE_MAPPINGS)
     unichar lower;
@@ -88,7 +88,7 @@ unichar uni_tolower(unichar c)
 #endif
 }
 
-unichar uni_toupper(unichar c)
+UNICORN_API unichar uni_toupper(unichar c)
 {
 #if defined(UNICORN_FEATURE_SIMPLE_UPPERCASE_MAPPINGS)
     unichar upper;
@@ -111,7 +111,7 @@ unichar uni_toupper(unichar c)
 #endif
 }
 
-unichar uni_totitle(unichar c)
+UNICORN_API unichar uni_totitle(unichar c)
 {
 #if defined(UNICORN_FEATURE_SIMPLE_TITLECASE_MAPPINGS)
     unichar title;
