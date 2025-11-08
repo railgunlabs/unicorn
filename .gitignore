@@ -49,6 +49,12 @@ Makefile.in
 /ylwrap
 .deps/
 .dirstamp
+libtool
+ltmain.sh
+*.lo
+*.la
+*.lai
+*.so*
 
 # Autoconf
 autom4te.cache
@@ -78,6 +84,7 @@ unicorn.pc
 # Python files
 *.pyc
 
-# Generated files
-unicorn.c
-unicorn.h
+# Generate C source code
+unidata.c
+unidata.h
+_unicorn.h

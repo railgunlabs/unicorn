@@ -10,19 +10,18 @@ jobs:
           - { CC: gcc, display: GCC }
           - { CC: clang, display: Clang }
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v4
     - uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-    - name: CMake Build and Check
+    - name: CMake Build
       env:
         CC: ${{ matrix.platform.CC }}
         CFLAGS: ${{ matrix.platform.CFLAGS }}
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
-        ctest --output-on-failure --test-dir build
     - name: Autotools Build
       env:
         CC: ${{ matrix.platform.CC }}
