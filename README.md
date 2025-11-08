@@ -122,7 +122,7 @@ The pull request tab is enabled because GitHub does not provide a mechanism to d
 Unicorn is available under the following licenses:
 
 * [GNU General Public License version 3 (GPL v3)](LICENSE)
-* [Commerical License](https://railgunlabs.com/unicorn/license/)
+* [Commercial License](https://railgunlabs.com/unicorn/license/)
 
 The unit tests and Unicode data generators are not public.
 Access to them is granted exclusively to commercial licensees.
