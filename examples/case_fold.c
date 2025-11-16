@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
     // The following function case folds two strings, performs the comparison, and 
     // reports the result. This approach is recommended when two strings are being
     // compared in a one-off comparison check. If you'll be repeatedly comparing
-    // the same strings over and over again, then the approach below is preferred.
+    // the same strings over and over again, then the approach in the next code
+    // fragment is preferred.
     if (uni_casefoldcmp(UNI_CANONICAL, src1, -1, UNI_UTF8, src2, -1, UNI_UTF8, &is_equal) == UNI_OK)
     {
         if (is_equal)
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    // The following lines case fold two strings and then compares the results.
+    // The following code fragment case folds two strings and compares the results.
     // This more manual approach is recommended when you'll be comparing the same
     // strings over and over again because you can case fold them _once_ and then
     // re-use the results for each subsequent comparison.

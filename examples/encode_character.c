@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     //
     // Encode the code point as UTF-8. UTF-8 is a variable length encoding and will encode
-    // as either 1, 2, 3, or 4 code units.
+    // to either 1, 2, 3, or 4 code units.
     //
 
     uint8_t u8[4];
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     //
     // Encode the code point as UTF-16. UTF-16 is a variable length encoding and will encode
-    // as either 1 or 2 code units.
+    // to either 1 or 2 code units.
     //
 
     uint16_t u16[2];
@@ -59,8 +59,7 @@ int main(int argc, char *argv[])
 
     //
     // Encode the code point as UTF-32. Code points are 21-bit integers and UTF-32 stores
-    // it in a 32-bit integer. UTF-32 is not variable length like UTF-8 and UTF-16 are
-    // since a single 32-bit integer can accommodate a 21-bit integer.
+    // them in a 32-bit integer. UTF-32 is not variable length, unlike UTF-8 and UTF-16.
     //
 
     uint32_t u32[1];

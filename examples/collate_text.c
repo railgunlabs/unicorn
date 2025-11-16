@@ -11,8 +11,8 @@
 
 int main(int argc, char *argv[])
 {
-    // This code example demonstrates how to collate strings, which is to compare
-    // strings for sorting. The online documentation is available here:
+    // This code example demonstrates how to collate strings (compare strings for sorting).
+    // The online documentation is available here:
     // <https://railgunlabs.com/unicorn/manual/api/collation/>.
 
     const char *s1 = u8"Hello World";
@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
 
     int32_t result = 0;
     
-    // The following snippet collates two strings and records the result of the comparison.
+    // The following snippet collates two strings and prints the result of the comparison.
     // This function, conceptually, builds sort keys for the input strings and compares them.
-    // Building a sort key is expensive. If strings will be collated multiple times, it is
-    // recommend to build a sort once and use them from then on (see the snippet below).
+    // Building a sort key is expensive. If strings are collated multiple times, it is recommend
+    // to build the sort keys once and use them for subsequent comparisons.
     if (uni_collate(s1, -1, UNI_UTF8, s2, -1, UNI_UTF8, UNI_NON_IGNORABLE, UNI_PRIMARY, &result) == UNI_OK)
     {
         if (result < 0)
@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
     // weights of the string.
     // 
     // Constructing a sort key is the computationally expensive part of the process.
-    // Once the sort keys are constructed, they are compared which is a computationally
-    // inexpensive.
+    // Once the sort keys are constructed, they are compared which is a inexpensive.
     if (uni_sortkeymk(s1, -1, UNI_UTF8, UNI_NON_IGNORABLE, UNI_PRIMARY, sk1, &sk1_len) == UNI_OK)
     {
         if (uni_sortkeymk(s2, -1, UNI_UTF8, UNI_NON_IGNORABLE, UNI_PRIMARY, sk2, &sk2_len) == UNI_OK)

@@ -21,8 +21,7 @@ int main(int argc, char *argv[])
     unisize dest_len = 64;
 
     // The following function case converts a string to uppercase.
-    // The resulting string can be presented to an end-user display.
-    //
+    // The resulting string can be presented to an end-user.
     // The signature for the function is documented online at:
     // <https://railgunlabs.com/unicorn/manual/api/case-mapping/uni-caseconv/>.
     if (uni_caseconv(UNI_UPPER, src, -1, UNI_UTF8, dest, &dest_len, UNI_UTF8 | UNI_NULIFY) == UNI_OK)

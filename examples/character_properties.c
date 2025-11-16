@@ -62,12 +62,12 @@ static const char *const binary_properties[] = {
 int main(int argc, char *argv[])
 {
     // This code example prints character properties associated with
-    // a Unicode code point. The meaning of each support character
-    // property is documented here:
+    // a Unicode code point. The definition of each character property
+    // is documented here:
     // <https://railgunlabs.com/unicorn/manual/api/character-properties/>.
 
     // The following variable defines the Unicode character whose
-    // properties will be queried. In this example, it's Unicode
+    // properties will be printed. In this example, it's Unicode
     // character U+0300. Change this value to a different character
     // and notice how the printed properties change.
     unichar cp = 0x300;
