@@ -6,7 +6,7 @@ include(GNUInstallDirs)
 
 option(UNICORN_BUILD_STATIC "Build Unicorn as a static library" ON)
 option(UNICORN_BUILD_SHARED "Build Unicorn as a dynamic library" ON)
-option(UNICORN_BUILD_EXAMPLES "Build Unicorn code examples (requires the shared library)" ON)
+option(UNICORN_BUILD_EXAMPLES "Build Unicorn code examples (requires the shared library)" OFF)
 
 option(UNICORN_BUILD_TESTS "Build the tests (commercial licensees only)" OFF)
 option(UNICORN_BUILD_COOKBOOK "Build the documentation/cookbook programs (commercial licensees only)" OFF)
