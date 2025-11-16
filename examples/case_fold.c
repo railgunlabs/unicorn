@@ -3,19 +3,22 @@
  *  You may use, modify, and distribute it without restriction.
  */
 
+// Examples are also documented online at:
+// <https://railgunlabs.com/unicorn/manual/code-examples/>.
+
 #include <unicorn.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 
-// This code example demonstrates case folding strings. Case folding
-// transform strings for the purposes of caseless string comparison.
-// 
-// You are not supposed to display case folded strings to the end-user.
-// They for internal caseless string comparisons only.
-
 int main(int argc, char *argv[])
 {
+    // This code example demonstrates case folding strings. Case folding
+    // transform strings for the purposes of caseless string comparison.
+    // 
+    // You are not supposed to display case folded strings to the end-user.
+    // They for internal caseless string comparisons only.
+
     const char *src1 = u8"Straße";
     const char *src2 = u8"STrasse";
 

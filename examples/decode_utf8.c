@@ -1,0 +1,37 @@
+﻿/*
+ *  This file is public domain.
+ *  You may use, modify, and distribute it without restriction.
+ */
+
+// Examples are also documented online at:
+// <https://railgunlabs.com/unicorn/manual/code-examples/>.
+
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+    // This example demonstrates decoding the code points of a UTF-8 encoded string.
+    // It prints each code point on their own line.
+
+    const char str[] = u8"I 🕵️."; // I spy
+    unisize i = 0;
+    for (;;)
+    {
+        unichar cp = 0x0;
+        unistat s = uni_next(str, -1, UNI_UTF8, &i, &cp);
+        if (s == UNI_DONE)
+        {
+            break;
+        }
+        else if (s == UNI_BAD_ENCODING)
+        {
+            return 1; // Malformed character found.
+        }
+        else
+        {
+            printf("U+%04X\n", cp);
+        }
+    }
+    return 0;
+}

@@ -1,4 +1,8 @@
 link_libraries(unicorn)
 add_executable(example_case_convert case_convert.c)
 add_executable(example_case_fold case_fold.c)
+add_executable(example_character_properties character_properties.c)
+add_executable(example_collate_text collate_text.c)
 add_executable(example_compare_text compare_text.c)
+add_executable(example_decode_utf8 decode_utf8.c)
+add_executable(example_segment_text segment_text.c)

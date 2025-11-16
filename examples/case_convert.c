@@ -3,15 +3,18 @@
  *  You may use, modify, and distribute it without restriction.
  */
 
+// Examples are also documented online at:
+// <https://railgunlabs.com/unicorn/manual/code-examples/>.
+
 #include <unicorn.h>
 #include <stdio.h>
 
-// This code example case converts text to upper case, e.g. it would
-// convert the text "hello world" to "HELLO WORLD". Unicorn also
-// supports lower and title case conversion.
-
 int main(int argc, char *argv[])
 {
+    // This code example case converts text to upper case, e.g. it would
+    // convert the text "hello world" to "HELLO WORLD". Unicorn also
+    // supports lower and title case conversion.
+
     const char *src = u8"Straße";
 
     char dest[64];

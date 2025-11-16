@@ -3,18 +3,21 @@
  *  You may use, modify, and distribute it without restriction.
  */
 
+// Examples are also documented online at:
+// <https://railgunlabs.com/unicorn/manual/code-examples/>.
+
 #include <unicorn.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 
-// This code example demonstrates comparing strings for canonical equivalence.
-// Canonical equivalence means the graphemes are compared, not the code points
-// or code units. This twp of comparison is necessary when strings contain
-// precomposed and decomposed characters.
-
 int main(int argc, char *argv[])
 {
+    // This code example demonstrates comparing strings for canonical equivalence.
+    // Canonical equivalence means the graphemes are compared, not the code points
+    // or code units. This twp of comparison is necessary when strings contain
+    // precomposed and decomposed characters.
+
     const char *src1 = u8"ma\u0301scara"; // 'a' + U+0301 = á  (decomposed)
     const char *src2 = u8"m\u00E1scara";  //       U+00E1 = á  (precomposed)
 
