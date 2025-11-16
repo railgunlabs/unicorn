@@ -1,0 +1,9 @@
+caseconv
+casefold
+charprops
+collate
+compare
+compress
+decode-*
+encode-*
+segmentation

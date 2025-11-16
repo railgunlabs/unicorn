@@ -55,6 +55,7 @@ ltmain.sh
 *.la
 *.lai
 *.so*
+*.libs
 
 # Autoconf
 autom4te.cache
