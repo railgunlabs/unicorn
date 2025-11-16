@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(unicorn VERSION 1.3.0 LANGUAGES C)
+project(unicorn VERSION 1.3.1 LANGUAGES C)
 
 include(CheckIncludeFile)
 include(GNUInstallDirs)
