@@ -17,6 +17,13 @@ AC_ARG_WITH([unicorn-config],
     [CONFIG_JSON="features.json"])
 AC_SUBST([CONFIG_JSON])
 
+# Check for the --enable-examples option.
+AC_ARG_ENABLE([examples],
+    [AS_HELP_STRING([--enable-examples], [Build the example programs (disabled by default)])],
+    [enable_examples=$enableval],
+    [enable_examples=no]) # Do not build the examples by default.
+AM_CONDITIONAL([BUILD_EXAMPLES], [test "x$enable_examples" = "xyes"])
+
 # Checks for toolchain programs.
 AC_PROG_CC
 AM_PROG_AR
@@ -36,6 +43,7 @@ AC_CONFIG_FILES([
     Makefile
     src/Makefile
     include/Makefile
+    examples/Makefile
     config/Makefile
     man/Makefile
     unicorn.pc
