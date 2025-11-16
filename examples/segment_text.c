@@ -15,22 +15,31 @@ int main(int argc, char *argv[])
     // A grapheme cluster is a user-preceived character. It correspond to a single graphical
     // character on the end-users display. A grapheme can be comprised of multiple code points.
 
+    // Change 'UNI_GRAPHEME' to 'UNI_WORD' or 'UNI_SENTENCE' and observe how it affects the
+    // printed break positions.
+
     const char str[] = u8"👨🏼‍🚀👨🏽‍🚀 landed on the 🌕";
     unisize break_at = 0;
     for (;;)
     {
         unistat s = uni_nextbrk(UNI_GRAPHEME, str, -1, UNI_UTF8, &break_at);
-        if (s == UNI_DONE)
+        if (s == UNI_OK)
+        {
+            printf("%d\n", break_at);
+        }
+        else if (s == UNI_DONE)
         {
             break;
         }
         else if (s == UNI_BAD_ENCODING)
         {
-            return 1; // Malformed character found.
+            printf("malformed character at %d\n", break_at);
+            return 1;
         }
         else
         {
-            printf("%d\n", break_at);
+            puts("an internal error occured");
+            return 2; // Something else went wrong (check the status code).
         }
     }
     return 0;

@@ -26,6 +26,26 @@ int main(int argc, char *argv[])
 
     int32_t result = 0;
     
+    // The following snippet collates two strings and records the result of the comparison.
+    // This function, conceptually, builds sort keys for the input strings and compares them.
+    // Building a sort key is expensive. If strings will be collated multiple times, it is
+    // recommend to build a sort once and use them from then on (see the snippet below).
+    if (uni_collate(s1, -1, UNI_UTF8, s2, -1, UNI_UTF8, UNI_NON_IGNORABLE, UNI_PRIMARY, &result) == UNI_OK)
+    {
+        if (result < 0)
+        {
+            puts("s1 < s2");
+        }
+        else if (result > 0)
+        {
+            puts("s1 > s2");
+        }
+        else
+        {
+            puts("s1 = s2");
+        }
+    }
+
     // The following snippet collates strings the manual way. The first step is to
     // generate a "sort key" for both strings. The sort key encodes the sorting
     // weights of the string.
@@ -52,26 +72,6 @@ int main(int argc, char *argv[])
                     puts("s1 = s2");
                 }
             }
-        }
-    }
-
-    // The following snippet collates two strings and records the result of comparing them.
-    // This function, conceptually, builds sort keys for the input strings and then compares
-    // them. Building a sort tkey is expensive. If strings will be collated multiple times,
-    // it is recommend to build a sort once and use them from then on (see the snippet above).
-    if (uni_collate(s1, -1, UNI_UTF8, s2, -1, UNI_UTF8, UNI_NON_IGNORABLE, UNI_PRIMARY, &result) == UNI_OK)
-    {
-        if (result < 0)
-        {
-            puts("s1 < s2");
-        }
-        else if (result > 0)
-        {
-            puts("s1 > s2");
-        }
-        else
-        {
-            puts("s1 = s2");
         }
     }
     return 0;

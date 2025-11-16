@@ -76,14 +76,19 @@ int main(int argc, char *argv[])
     uint8_t ccc;
     const char *numeric_value;
 
+    printf("Code point: U+%04X\n", cp);
+
+    // Print the General_Category property value.
     printf("General category: %s\n", general_categories[uni_gc(cp)]);
 
+    // Print the Canonical_Combining_Class property value (if non-zero).
     ccc = uni_ccc(cp);
     if (ccc != 0)
     {
         printf("Canonical combining class: %d\n", ccc);
     }
 
+    // Print each binary property assigned to the code point.
     for (int i = 0; i < sizeof(binary_properties) / sizeof(binary_properties[0]); i++)
     {
         if (uni_is(cp, i))
@@ -92,24 +97,28 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Print the Numeric_Value property value (if present).
     numeric_value = uni_numval(cp);
     if (numeric_value != NULL)
     {
         printf("Numeric value: %s\n", numeric_value);
     }
 
+    // Print the Simple_Lowercase_Mapping (if unique).
     tmp_cp = uni_tolower(cp);
     if (tmp_cp != cp)
     {
         printf("Simple lower case mapping: U+%04X\n", tmp_cp);
     }
 
+    // Print the Simple_Uppercase_Mapping (if unique).
     tmp_cp = uni_toupper(cp);
     if (tmp_cp != cp)
     {
         printf("Simple upper case mapping: U+%04X\n", tmp_cp);
     }
 
+    // Print the Simple_Titlecase_Mapping (if unique).
     tmp_cp = uni_totitle(cp);
     if (tmp_cp != cp)
     {

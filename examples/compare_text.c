@@ -29,6 +29,22 @@ int main(int argc, char *argv[])
 
     bool is_equal = false;
     
+    // The following function normalizes two strings, performs the comparison, and 
+    // reports the result. This approach is recommended when two strings are being
+    // compared in a one-off comparison check. If you'll be repeatedly comparing
+    // the same strings over and over again, then the approach below is preferred.
+    if (uni_normcmp(src1, -1, UNI_UTF8, src2, -1, UNI_UTF8, &is_equal) == UNI_OK)
+    {
+        if (is_equal)
+        {
+            puts("equal");
+        }
+        else
+        {
+            puts("not equal");
+        }
+    }
+
     // The following lines normalizes two strings and then compares the results.
     // This more manual approach is recommended when you'll be comparing the same
     // strings over and over again because you can normalize them _once_ and then
@@ -45,22 +61,6 @@ int main(int argc, char *argv[])
             {
                 puts("not equal");
             }
-        }
-    }
-
-    // The following function normalizes two strings, performs the comparison, and 
-    // reports the result. This approach is recommended when two strings are being
-    // compared in a one-off comparison check. If you'll be repeatedly comparing
-    // the same strings over and over again, then the approach above is preferred.
-    if (uni_normcmp(src1, -1, UNI_UTF8, src2, -1, UNI_UTF8, &is_equal) == UNI_OK)
-    {
-        if (is_equal)
-        {
-            puts("equal");
-        }
-        else
-        {
-            puts("not equal");
         }
     }
     return 0;
