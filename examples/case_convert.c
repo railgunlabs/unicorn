@@ -10,8 +10,6 @@
 // convert the text "hello world" to "HELLO WORLD". Unicorn also
 // supports lower and title case conversion.
 
-// This example does NOT include error checking!
-
 int main(int argc, char *argv[])
 {
     const char *src = u8"Straße";
@@ -20,7 +18,10 @@ int main(int argc, char *argv[])
     unisize dest_len = 64;
 
     // The following function call performs the case conversion.
-    // Here's what each argument means:
+    // It's documented online at:
+    // <https://railgunlabs.com/unicorn/manual/api/case-mapping/uni-caseconv/>.
+    //
+    // In this example, here's what each argument means:
     //
     // UNI_UPPER :
     //   Specifies we want upper case conversion (as opposed to
@@ -39,30 +40,33 @@ int main(int argc, char *argv[])
     //   The input is UTF-8 encoded.
     //
     // dest :
-    //   The buffer the upper cased text will be written to (i.e. the
-    //   output or destination buffer).
+    //   This is output or destination buffer (i.e. the buffer the
+    //   upper cased text will be written to).
     //
     // dest_len :
     //   This must be set to the length of the destination buffer when
-    //   the function is called. The function, internally, writes to it
-    //   the number of code units written to the destination buffer.
-    //   It's neccessary to know how many code units were were written
-    //   when the output is not null terminated.
+    //   the function is called. The implementation writes to it the
+    //   number of code units written to the destination buffer.
+    //   It's neccessary to know how many code units were were
+    //   written when the output is not null terminated.
     //
     // UNI_UTF8 | UNI_NULIFY :
-    //   Bit flag that specifies the resulting case converted text should be
-    //   written as UTF-8 and with a null terminator.
-    uni_caseconv(UNI_UPPER, src, -1, UNI_UTF8, dest, &dest_len, UNI_UTF8 | UNI_NULIFY);
-    printf("Case converted: %s\n", dest);
+    //   Bit flags that specify the resulting case converted text should
+    //   be written as UTF-8 and with a null terminator.
+    if (uni_caseconv(UNI_UPPER, src, -1, UNI_UTF8, dest, &dest_len, UNI_UTF8 | UNI_NULIFY) == UNI_OK)
+    {
+        printf("Case converted: %s\n", dest);
+    }
 
-    // If you don't know how big the destination buffer should be, you can
-    // call uni_caseconv() with a null and zero-sized destination buffer first.
-    //
+    // If you don't know how big the destination buffer will be, you can first
+    // call uni_caseconv() with a null and zero-sized destination buffer.
     // When called this way, the implementation will write to 'dest_len' the
     // number of code units needed to accommodate the output. You can then
     // allocate a buffer with the appropriate size and call the function again.
     dest_len = 0;
-    uni_caseconv(UNI_UPPER, src, -1, UNI_UTF8, NULL, &dest_len, UNI_UTF8 | UNI_NULIFY);
-    printf("Code units needed: %d\n", dest_len);
+    if (uni_caseconv(UNI_UPPER, src, -1, UNI_UTF8, NULL, &dest_len, UNI_UTF8 | UNI_NULIFY) == UNI_OK)
+    {
+        printf("Code units needed: %d\n", dest_len);
+    }
     return 0;
 }
