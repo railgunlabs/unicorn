@@ -36,7 +36,7 @@ libunicorn_la_CFLAGS = -I$(top_srcdir)/include
 libunicorn_la_LDFLAGS = -no-undefined -version-info 0:0:0
 
 unidata.c:
-	cd $(top_srcdir) && $(PYTHON) -m config --config $(config_json) --output $(abs_top_builddir)/src
+	cd $(top_srcdir) && $(PYTHON) -m scripts --config $(config_json) --output $(abs_top_builddir)/src
 
 unidata.h: unidata.c
  

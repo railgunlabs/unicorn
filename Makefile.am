@@ -1,4 +1,4 @@
-SUBDIRS = man src include examples config
+SUBDIRS = man src include examples scripts
 
 EXTRA_DIST = unicode.bin features.json autogen.sh LICENSE CMakeLists.txt UnicornConfig.cmake.in README.md
 

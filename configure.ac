@@ -44,7 +44,7 @@ AC_CONFIG_FILES([
     src/Makefile
     include/Makefile
     examples/Makefile
-    config/Makefile
+    scripts/Makefile
     man/Makefile
     unicorn.pc
 ])

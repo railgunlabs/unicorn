@@ -68,7 +68,7 @@ endif ()
 find_package(Python3 3.10.0 REQUIRED COMPONENTS Interpreter)
 
 # Execute the Python Unicode data generators.
-file(GLOB_RECURSE PYTHON_SOURCES "config/${PYTHON_SOURCES}*.py")
+file(GLOB_RECURSE PYTHON_SOURCES "scripts/${PYTHON_SOURCES}*.py")
 set(GENERATED_FILES
     "${CMAKE_BINARY_DIR}/unidata.c"
     "${CMAKE_BINARY_DIR}/unidata.h"
@@ -76,7 +76,7 @@ set(GENERATED_FILES
 )
 add_custom_command(
     OUTPUT ${GENERATED_FILES}
-    COMMAND Python3::Interpreter -m config --config "${UNICORN_CONFIG}" --output "${CMAKE_BINARY_DIR}"
+    COMMAND Python3::Interpreter -m scripts --config "${UNICORN_CONFIG}" --output "${CMAKE_BINARY_DIR}"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     DEPENDS unicode.bin ${PYTHON_SOURCES} ${UNICORN_CONFIG})
 add_custom_target(unicorn_generate DEPENDS ${GENERATED_FILES})
