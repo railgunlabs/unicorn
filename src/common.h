@@ -55,8 +55,8 @@ unisize unichar_to_u16(unichar codepoint, UChar16 words[2], ByteSwap16 swap); //
 
 unisize uni_prev_UTF8_seqlen(const UChar8 *start, unisize offset);
 
-unistat unicorn_check_input_encoding(const void *text, unisize length, uniattr *encoding);
-unistat unicorn_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding);
+unistat uni_check_input_encoding(const void *text, unisize length, uniattr *encoding);
+unistat uni_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding);
 
 void uni_message(const char *msg);
 

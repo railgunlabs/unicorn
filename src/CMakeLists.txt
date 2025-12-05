@@ -16,10 +16,10 @@ set(SOURCES
     properties.c
     caseconv.c
     casefold.c
-    buffer.c
-    buffer.h
     charbuf.c
     charbuf.h
+    charvec.c
+    charvec.h
     ${CMAKE_BINARY_DIR}/unidata.c
     ${CMAKE_BINARY_DIR}/unidata.h
 )

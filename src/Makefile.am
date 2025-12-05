@@ -24,10 +24,10 @@ libunicorn_la_SOURCES = \
 	properties.c \
 	caseconv.c \
 	casefold.c \
-	buffer.c \
-	buffer.h \
 	charbuf.c \
 	charbuf.h \
+	charvec.c \
+	charvec.h \
 	unidata.c \
 	unidata.h \
 	_unicorn.h

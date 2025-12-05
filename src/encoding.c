@@ -11,7 +11,7 @@
  *  license, as set out in <https://railgunlabs.com/unicorn/license/>.
  */
 
-#include "buffer.h"
+#include "charbuf.h"
 #include "byteswap.h"
 #include "unidata.h"
 
@@ -948,7 +948,7 @@ UNICORN_API unistat uni_next(const void *text, unisize text_len, uniattr text_at
     }
     else
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
@@ -973,7 +973,7 @@ UNICORN_API unistat uni_next(const void *text, unisize text_len, uniattr text_at
 
         case UNI_UTF16:
 #if defined(UNICORN_FEATURE_ENCODING_UTF16)
-            swap16 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &unicorn_swap16_le : &unicorn_swap16_be;
+            swap16 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &uni_swap16_le : &uni_swap16_be;
             if ((text_attr & UNI_TRUST) == UNI_TRUST)
             {
                 status = u16_next_unsafe(text, text_len, index, cp, swap16);
@@ -990,7 +990,7 @@ UNICORN_API unistat uni_next(const void *text, unisize text_len, uniattr text_at
 
         case UNI_UTF32:
 #if defined(UNICORN_FEATURE_ENCODING_UTF32)
-            swap32 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &unicorn_swap32_le : &unicorn_swap32_be;
+            swap32 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &uni_swap32_le : &uni_swap32_be;
             if ((text_attr & UNI_TRUST) == UNI_TRUST)
             {
                 status = u32_next_unsafe(text, text_len, index, cp, swap32);
@@ -1049,7 +1049,7 @@ UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_at
     }
     else
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
@@ -1074,7 +1074,7 @@ UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_at
 
         case UNI_UTF16:
 #if defined(UNICORN_FEATURE_ENCODING_UTF16)
-            swap16 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &unicorn_swap16_le : &unicorn_swap16_be;
+            swap16 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &uni_swap16_le : &uni_swap16_be;
             if ((text_attr & UNI_TRUST) == UNI_TRUST)
             {
                 status = u16_prev_unsafe(text, index, cp, swap16);
@@ -1091,7 +1091,7 @@ UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_at
 
         case UNI_UTF32:
 #if defined(UNICORN_FEATURE_ENCODING_UTF32)
-            swap32 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &unicorn_swap32_le : &unicorn_swap32_be;
+            swap32 = ((text_attr & UNI_LITTLE) == UNI_LITTLE) ? &uni_swap32_le : &uni_swap32_be;
             if ((text_attr & UNI_TRUST) == UNI_TRUST)
             {
                 status = u32_prev_unsafe(text, index, cp, swap32);
@@ -1131,7 +1131,7 @@ UNICORN_API unistat uni_prev(const void *text, unisize text_len, uniattr text_at
 UNICORN_API unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr dst_attr) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
     unistat status = UNI_OK;
-    struct UBuffer buffer = {NULL};
+    struct CharBuf buffer = {NULL};
 
     if (!is_valid_scalar(cp))
     {
@@ -1140,11 +1140,11 @@ UNICORN_API unistat uni_encode(unichar cp, void *dst, unisize *dst_len, uniattr 
 
     if (status == UNI_OK)
     {
-        status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+        status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
         if (status == UNI_OK)
         {
-            ubuffer_appendchar(&buffer, cp);
-            status = ubuffer_finalize(&buffer);
+            uni_charbuf_appendchar(&buffer, cp);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
 
@@ -1163,13 +1163,13 @@ UNICORN_API unistat uni_convert(const void *src, unisize src_len, uniattr src_at
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
     {
-        struct UBuffer buffer = {NULL};
-        status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+        struct CharBuf buffer = {NULL};
+        status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
         if (status == UNI_OK)
         {
             unisize i = 0;
@@ -1179,7 +1179,7 @@ UNICORN_API unistat uni_convert(const void *src, unisize src_len, uniattr src_at
                 status = uni_next(src, src_len, src_attr, &i, &cp);
                 if (status == UNI_OK)
                 {
-                    ubuffer_appendchar(&buffer, cp);
+                    uni_charbuf_appendchar(&buffer, cp);
                 }
                 else
                 {
@@ -1189,7 +1189,7 @@ UNICORN_API unistat uni_convert(const void *src, unisize src_len, uniattr src_at
 
             if (status == UNI_DONE)
             {
-                status = ubuffer_finalize(&buffer);
+                status = uni_charbuf_finalize(&buffer);
             }
         }
     }
@@ -1209,7 +1209,7 @@ UNICORN_API unistat uni_validate(const void *text, unisize text_len, uniattr tex
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)

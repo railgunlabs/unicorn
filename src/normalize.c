@@ -12,7 +12,7 @@
  */
 
 #include "normalize.h"
-#include "buffer.h"
+#include "charbuf.h"
 #include "unidata.h"
 
 #if defined(UNICORN_FEATURE_NFD)
@@ -30,7 +30,7 @@ typedef uint32_t(*QuickCheckFunc)(unichar cp);
 // The conditional logic in the following function is for algorithmically
 // decomposing characters in the Korean alphabet, also known as Hangul.
 // The algorithm is described in the Unicode Standard. Refer to it for details.
-static unisize unicorn_get_canonical_decomposition(unichar character, unichar *decomposition)
+static unisize get_canonical_decomposition(unichar character, unichar *decomposition)
 {
     static const int32_t hangul_N_count = 588;
     const int32_t S_index = (int32_t)character - hangul_S_base;
@@ -104,27 +104,27 @@ static unisize unicorn_get_canonical_decomposition(unichar character, unichar *d
     return unichar_count;
 }
 
-void nstate_init(struct UNormalizeState *state, IsStable is_stable)
+void uni_norm_init(struct NormalizeState *state, IsStable is_stable)
 {
     (void)memset(state, 0, sizeof(state[0]));
     state->is_stable = is_stable;
-    udynbuf_init(&state->span);
-    udynbuf_init(&state->decomp);
+    uni_charvec_init(&state->span);
+    uni_charvec_init(&state->decomp);
 }
 
-void nstate_free(struct UNormalizeState *state)
+void uni_norm_free(struct NormalizeState *state)
 {
-    udynbuf_free(&state->span);
-    udynbuf_free(&state->decomp);
+    uni_charvec_free(&state->span);
+    uni_charvec_free(&state->decomp);
 }
 
-void ustate_reset(struct UNormalizeState *ns)
+void uni_norm_reset(struct NormalizeState *ns)
 {
-    udynbuf_reset(&ns->decomp);
+    uni_charvec_reset(&ns->decomp);
     ns->offset = 0;
 }
 
-static bool unorm_is_empty(const struct UNormalizeState *state)
+static bool uni_norm_is_empty(const struct NormalizeState *state)
 {
     return state->offset == state->decomp.length;
 }
@@ -167,7 +167,7 @@ static inline int32_t get_ccc(unichar character)
 }
 
 // Check if the code point does not change under Normalization Form D (NFD).
-bool unicorn_is_stable_nfd(unichar cp)
+bool uni_is_stable_nfd(unichar cp)
 {
     bool is_stable;
 
@@ -175,7 +175,7 @@ bool unicorn_is_stable_nfd(unichar cp)
     {
         is_stable = false;
     }
-    else if (unicorn_get_canonical_decomposition(cp, NULL) > 0)
+    else if (get_canonical_decomposition(cp, NULL) > 0)
     {
         is_stable = false;
     }
@@ -206,7 +206,7 @@ static bool is_stable_nfc(unichar ch)
     }
     else
     {
-        is_stable = unicorn_is_stable_nfd(ch);
+        is_stable = uni_is_stable_nfd(ch);
     }
 
     return is_stable;
@@ -269,7 +269,7 @@ static unichar find_composition(unichar starter, unichar non_starter)
     return find_canonical_composition(pairs, 0, composition_mapping_count, non_starter); // cppcheck-suppress misra-c2012-17.2
 }
 
-static void compose_combining_character_sequence(struct UDynamicBuffer *buffer, unisize index)
+static void compose_combining_character_sequence(struct CharVec *buffer, unisize index)
 {
     bool restart;
     do
@@ -313,7 +313,7 @@ static void compose_combining_character_sequence(struct UDynamicBuffer *buffer, 
                     buffer->chars[index] = precomposed_codepoint;
 
                     // Remove the combining mark.
-                    udynbuf_remove(buffer, offset);
+                    uni_charvec_remove(buffer, offset);
 
                     // Restart iteration from the beginning of the non-starters.
                     restart = true;
@@ -325,7 +325,7 @@ static void compose_combining_character_sequence(struct UDynamicBuffer *buffer, 
 
 // Returns 'true' if the first two characters were Hangul Jamo Syllables and
 // they were composed into a single composed Hangul Jamo.
-static bool compose_hangul_jamo(struct UDynamicBuffer *buffer, unisize index)
+static bool compose_hangul_jamo(struct CharVec *buffer, unisize index)
 {
     const unichar curr = buffer->chars[index];
     unichar next = FIRST_ILLEGAL_CODE_POINT;
@@ -368,7 +368,7 @@ static bool compose_hangul_jamo(struct UDynamicBuffer *buffer, unisize index)
     if (composed)
     {
         assert(buffer->length >= 2); // LCOV_EXCL_BR_LINE: There must have been two syllables for this code to have been reached.
-        udynbuf_remove(buffer, index + 1);
+        uni_charvec_remove(buffer, index + 1);
     }
 
     return composed;
@@ -377,7 +377,7 @@ static bool compose_hangul_jamo(struct UDynamicBuffer *buffer, unisize index)
 // Implements the canonical composition algorithm.
 // The algorithm is documented in the Unicode Standard Annex #15.
 // See section 1.3: "Description of the Normalization Process" for an overview.
-static void norm_compose(struct UDynamicBuffer *buffer)
+static void norm_compose(struct CharVec *buffer)
 {
     unisize index = 0;
     while (index < buffer->length)
@@ -412,7 +412,7 @@ static unisize decompose(unichar ch, unichar chars[LONGEST_UNICHAR_DECOMPOSITION
         assert(index < LONGEST_UNICHAR_DECOMPOSITION); // LCOV_EXCL_BR_LINE
 
         unichar decomp[LONGEST_UNICHAR_DECOMPOSITION];
-        const unisize decomp_length = unicorn_get_canonical_decomposition(chars[index], decomp);
+        const unisize decomp_length = get_canonical_decomposition(chars[index], decomp);
 
         // This code point cannot be decomposed.
         // Move to the next code point.
@@ -434,7 +434,7 @@ static unisize decompose(unichar ch, unichar chars[LONGEST_UNICHAR_DECOMPOSITION
     return length;
 }
 
-unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
+unistat uni_norm_append_run(struct NormalizeState *state, struct unitext *it)
 {
     unistat status = UNI_OK;
     unisize span_length = 0;
@@ -443,10 +443,10 @@ unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
     unichar decomp[LONGEST_UNICHAR_DECOMPOSITION];
 
     // More decomposed characters shouldn't be requested unless the buffer is empty.
-    assert(unorm_is_empty(state)); // LCOV_EXCL_BR_LINE
+    assert(uni_norm_is_empty(state)); // LCOV_EXCL_BR_LINE
 
     // Reset the buffer.
-    ustate_reset(state);
+    uni_norm_reset(state);
 
     // Determine the span of characters until the next stable character.
     bool done = false;
@@ -476,7 +476,7 @@ unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
     if (status == UNI_OK)
     {
         // Make sure the buffer is large enough to accommodate.
-        status = udynbuf_reserve(&state->span, span_length);
+        status = uni_charvec_reserve(&state->span, span_length);
     }
 
     unisize decomp_length = 0;
@@ -499,7 +499,7 @@ unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
 
         // Resize the buffer to make room for the decomposition.
         const unisize new_capacity = state->decomp.length + decomp_length + UNISIZE_C(1);
-        status = udynbuf_reserve(&state->decomp, new_capacity);
+        status = uni_charvec_reserve(&state->decomp, new_capacity);
     }
 
     if (status == UNI_OK)
@@ -509,7 +509,7 @@ unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
         for (int32_t i = 0; i < span_length; i++)
         {
             const unisize len = decompose(state->span.chars[i], decomp);
-            udynbuf_append_unsafe(&state->decomp, decomp, len);
+            uni_charvec_append_unsafe(&state->decomp, decomp, len);
         }
 
         // Sort sequences of combining marks.
@@ -545,9 +545,9 @@ unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it)
     return status;
 }
 
-static inline unichar unorm_pop(struct UNormalizeState *state)
+static inline unichar uni_norm_pop(struct NormalizeState *state)
 {
-    assert(!unorm_is_empty(state)); // LCOV_EXCL_BR_LINE
+    assert(!uni_norm_is_empty(state)); // LCOV_EXCL_BR_LINE
     const unichar ch = state->decomp.chars[state->offset];
     state->offset += 1;
     return ch;
@@ -555,36 +555,36 @@ static inline unichar unorm_pop(struct UNormalizeState *state)
 
 static unistat unrom_normalize_decompose(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
-    struct UBuffer buffer = {NULL};
-    unistat status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+    struct CharBuf buffer = {NULL};
+    unistat status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
     {
-        struct UNormalizeState state;
+        struct NormalizeState state;
         struct unitext it = {src, 0, src_len, src_attr};
 
-        nstate_init(&state, &unicorn_is_stable_nfd);
+        uni_norm_init(&state, &uni_is_stable_nfd);
         for (;;)
         {
-            status = unorm_append_run(&state, &it);
+            status = uni_norm_append_run(&state, &it);
             if (status != UNI_OK)
             {
                 break;
             }
 
-            ubuffer_append(&buffer, state.decomp.chars, state.decomp.length);
-            ustate_reset(&state);
+            uni_charbuf_append(&buffer, state.decomp.chars, state.decomp.length);
+            uni_norm_reset(&state);
         }
 
-        nstate_free(&state);
+        uni_norm_free(&state);
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buffer);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
 
@@ -594,23 +594,23 @@ static unistat unrom_normalize_decompose(const void *src, unisize src_len, uniat
 #if defined(UNICORN_FEATURE_NFC)
 static unistat unrom_normalize_compose(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
-    struct UBuffer buffer = {NULL};
-    unistat status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+    struct CharBuf buffer = {NULL};
+    unistat status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
     {
-        struct UNormalizeState state;
+        struct NormalizeState state;
         struct unitext it = {src, 0, src_len, src_attr};
 
-        nstate_init(&state, &is_stable_nfc);
+        uni_norm_init(&state, &is_stable_nfc);
         for (;;)
         {
-            status = unorm_append_run(&state, &it);
+            status = uni_norm_append_run(&state, &it);
             if (status == UNI_OK)
             {
                 norm_compose(&state.decomp);
@@ -621,14 +621,14 @@ static unistat unrom_normalize_compose(const void *src, unisize src_len, uniattr
                 break;
             }
 
-            ubuffer_append(&buffer, state.decomp.chars, state.decomp.length);
-            ustate_reset(&state);
+            uni_charbuf_append(&buffer, state.decomp.chars, state.decomp.length);
+            uni_norm_reset(&state);
         }
 
-        nstate_free(&state);
+        uni_norm_free(&state);
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buffer);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
     return status;
@@ -673,12 +673,12 @@ UNICORN_API unistat uni_norm(uninormform form, const void *src, unisize src_len,
 UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr, const void *s2, unisize s2_len, uniattr s2_attr, bool *result) // cppcheck-suppress misra-c2012-8.7 ; This is supposed to have external linkage.
 {
 #if defined(UNICORN_FEATURE_NFD)
-    struct UNormalizeState ns1;
-    struct UNormalizeState ns2;
+    struct NormalizeState ns1;
+    struct NormalizeState ns2;
     unistat status = UNI_OK;
 
-    nstate_init(&ns1, &unicorn_is_stable_nfd);
-    nstate_init(&ns2, &unicorn_is_stable_nfd);
+    uni_norm_init(&ns1, &uni_is_stable_nfd);
+    uni_norm_init(&ns2, &uni_is_stable_nfd);
 
     if (result == NULL)
     {
@@ -688,12 +688,12 @@ UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr,
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s1, s1_len, &s1_attr);
+        status = uni_check_input_encoding(s1, s1_len, &s1_attr);
     }
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s2, s2_len, &s2_attr);
+        status = uni_check_input_encoding(s2, s2_len, &s2_attr);
     }
 
     if (status == UNI_OK)
@@ -705,18 +705,18 @@ UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr,
         bool mismatch = false;
         while (!mismatch)
         {
-            if (unorm_is_empty(&ns1))
+            if (uni_norm_is_empty(&ns1))
             {
-                status = unorm_append_run(&ns1, &it1);
+                status = uni_norm_append_run(&ns1, &it1);
                 if (status == UNI_DONE)
                 {
                     status = UNI_OK;
                 }
             }
 
-            if (unorm_is_empty(&ns2) && (status == UNI_OK))
+            if (uni_norm_is_empty(&ns2) && (status == UNI_OK))
             {
-                status = unorm_append_run(&ns2, &it2);
+                status = uni_norm_append_run(&ns2, &it2);
                 if (status == UNI_DONE)
                 {
                     status = UNI_OK;
@@ -724,15 +724,15 @@ UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr,
             }
 
             // If either buffer is empty or an error occurred, then stop processing.
-            if ((status != UNI_OK) || unorm_is_empty(&ns1) || unorm_is_empty(&ns2))
+            if ((status != UNI_OK) || uni_norm_is_empty(&ns1) || uni_norm_is_empty(&ns2))
             {
                 break;
             }
 
-            while (!unorm_is_empty(&ns1) && !unorm_is_empty(&ns2))
+            while (!uni_norm_is_empty(&ns1) && !uni_norm_is_empty(&ns2))
             {
-                const unichar cp1 = unorm_pop(&ns1);
-                const unichar cp2 = unorm_pop(&ns2);
+                const unichar cp1 = uni_norm_pop(&ns1);
+                const unichar cp2 = uni_norm_pop(&ns2);
                 if (cp1 != cp2)
                 {
                     mismatch = true;
@@ -744,15 +744,15 @@ UNICORN_API unistat uni_normcmp(const void *s1, unisize s1_len, uniattr s1_attr,
         if ((status == UNI_OK) && !mismatch)
         {
             // If both buffers are empty then the strings are equal.
-            if (unorm_is_empty(&ns1) && unorm_is_empty(&ns2))
+            if (uni_norm_is_empty(&ns1) && uni_norm_is_empty(&ns2))
             {
                 *result = true;
             }
         }
     }
 
-    nstate_free(&ns1);
-    nstate_free(&ns2);
+    uni_norm_free(&ns1);
+    uni_norm_free(&ns2);
     return status;
 #else
     return UNI_FEATURE_DISABLED;
@@ -832,7 +832,7 @@ UNICORN_API unistat uni_normqchk(uninormform form, const void *text, unisize tex
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
@@ -905,7 +905,7 @@ UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text
     }
     else if (form == UNI_NFD)
     {
-        is_stable = &unicorn_is_stable_nfd;
+        is_stable = &uni_is_stable_nfd;
     }
     else
     {
@@ -915,20 +915,20 @@ UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
     {
         struct unitext it = {text, 0, text_len, text_attr};
         struct unitext copy = it;
-        struct UNormalizeState state = {0};
+        struct NormalizeState state = {0};
         bool matches = true;
 
-        nstate_init(&state, is_stable);
+        uni_norm_init(&state, is_stable);
         while (matches)
         {
-            status = unorm_append_run(&state, &it);
+            status = uni_norm_append_run(&state, &it);
             if (status != UNI_OK)
             {
                 if (status == UNI_DONE)
@@ -945,7 +945,7 @@ UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text
             }
 #endif
 
-            while (!unorm_is_empty(&state))
+            while (!uni_norm_is_empty(&state))
             {
                 unichar cp = FIRST_ILLEGAL_CODE_POINT;
                 status = uni_next(copy.data, copy.length, copy.encoding, &copy.index, &cp);
@@ -954,7 +954,7 @@ UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text
                 // Under no circumstances should a malformed character be detected at this point.
                 assert(status == UNI_OK); // LCOV_EXCL_BR_LINE
 
-                if (cp != unorm_pop(&state))
+                if (cp != uni_norm_pop(&state))
                 {
                     matches = false;
                     break;
@@ -967,7 +967,7 @@ UNICORN_API unistat uni_normchk(uninormform form, const void *text, unisize text
             *result = matches;
         }
 
-        nstate_free(&state);
+        uni_norm_free(&state);
     }
 
     return status;

@@ -15,8 +15,8 @@
 
 #include "common.h"
 #include "unidata.h"
-#include "buffer.h"
 #include "charbuf.h"
+#include "charvec.h"
 
 #if defined(UNICORN_FEATURE_LOWERCASE_CONVERT) || defined(UNICORN_FEATURE_TITLECASE_CONVERT) || defined(UNICORN_FEATURE_UPPERCASE_CONVERT)
 
@@ -161,7 +161,7 @@ static unichar get_simple_mapping(unichar ch, unicaseconv type)
     return mapping;
 }
 
-static unihash unicorn_hash_codepoint(unichar cp)
+static unihash uni_hash_char(unichar cp)
 {
     unihash hash = (unihash)cp;
     hash = ((hash >> UNIHASH_C(16)) ^ hash) * UNIHASH_C(0x45D9F3B);
@@ -170,7 +170,7 @@ static unihash unicorn_hash_codepoint(unichar cp)
     return hash;
 }
 
-static unihash unicorn_xorshift(unihash x)
+static unihash uni_xorshift(unihash x)
 {
     unihash hash = x;
     hash ^= hash << UNIHASH_C(13);
@@ -181,10 +181,10 @@ static unihash unicorn_xorshift(unihash x)
 
 static const USpecialCasing *get_special_case_mapping_conditions(unichar codepoint)
 {
-    const unihash hash = unicorn_hash_codepoint(codepoint);
+    const unihash hash = uni_hash_char(codepoint);
     const uint32_t length = SPECIAL_CASE_MAPPINGS_COUNT;
     const uint32_t seed_index = hash % length;
-    const uint32_t value_index = unicorn_xorshift(hash + (unihash)unicorn_special_casings_seeds[seed_index]) % length;
+    const uint32_t value_index = uni_xorshift(hash + (unihash)unicorn_special_casings_seeds[seed_index]) % length;
     const USpecialCasing *mappings = &unicorn_special_casings_values[value_index];
     if (mappings->codepoint != codepoint)
     {
@@ -231,7 +231,7 @@ static const unichar *get_special_case_mapping(const USpecialCasing *conditions,
     return &unicorn_special_case_codepoints[charblock_offset];
 }
 
-static unistat append_cased(struct UBuffer *buffer, struct unitext before, struct unitext after, unichar ch, unicaseconv casing)
+static unistat append_cased(struct CharBuf *buffer, struct unitext before, struct unitext after, unichar ch, unicaseconv casing)
 {
     unistat status = UNI_OK;
     bool match = false;
@@ -245,14 +245,14 @@ static unistat append_cased(struct UBuffer *buffer, struct unitext before, struc
             // If all conditions are met, then perform the replacement.
             unisize chars_count;
             const unichar *chars = get_special_case_mapping(special_casing, casing, &chars_count);
-            ubuffer_append(buffer, chars, chars_count);
+            uni_charbuf_append(buffer, chars, chars_count);
         }
     }
 
     if ((status == UNI_OK) && !match)
     {
         // Fallback to simple case mapping.
-        ubuffer_appendchar(buffer, get_simple_mapping(ch, casing));
+        uni_charbuf_appendchar(buffer, get_simple_mapping(ch, casing));
     }
 
     return status;
@@ -301,12 +301,12 @@ static unistat check_mapping(struct unitext before, struct unitext after, unicha
 #if defined(UNICORN_FEATURE_TITLECASE_CONVERT)
 static unistat to_titlecase(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
-    struct UBuffer buffer = {NULL};
-    unistat status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+    struct CharBuf buffer = {NULL};
+    unistat status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
@@ -355,7 +355,7 @@ static unistat to_titlecase(const void *src, unisize src_len, uniattr src_attr, 
 
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buffer);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
 
@@ -364,7 +364,7 @@ static unistat to_titlecase(const void *src, unisize src_len, uniattr src_attr, 
 
 static unistat is_titlecase(const void *src, unisize src_len, uniattr src_attr, bool *result)
 {
-    unistat status = unicorn_check_input_encoding(src, src_len, &src_attr);
+    unistat status = uni_check_input_encoding(src, src_len, &src_attr);
 
     if (status == UNI_OK)
     {
@@ -432,12 +432,12 @@ static unistat is_titlecase(const void *src, unisize src_len, uniattr src_attr, 
 
 static unistat to_case(unicaseconv casing, const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
-    struct UBuffer buffer = {NULL};
-    unistat status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+    struct CharBuf buffer = {NULL};
+    unistat status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
@@ -456,7 +456,7 @@ static unistat to_case(unicaseconv casing, const void *src, unisize src_len, uni
 
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buffer);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
 
@@ -465,7 +465,7 @@ static unistat to_case(unicaseconv casing, const void *src, unisize src_len, uni
 
 static unistat is_case(unicaseconv casing, const void *string, unisize length, uniattr encoding, bool *result)
 {
-    unistat status = unicorn_check_input_encoding(string, length, &encoding);
+    unistat status = uni_check_input_encoding(string, length, &encoding);
     
     if (status == UNI_OK)
     {

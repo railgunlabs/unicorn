@@ -15,12 +15,12 @@
 #define NORMALIZE_H
 
 #include "common.h"
-#include "charbuf.h"
+#include "charvec.h"
 
 typedef bool (*IsStable)(unichar cp);
 
 // Incremental normalization state book keeping.
-struct UNormalizeState
+struct NormalizeState
 {
     int32_t offset;
     int32_t r;
@@ -28,19 +28,19 @@ struct UNormalizeState
 
     // Tracks an unstable span of characters within unnormalized text.
     // This is the span of text that will be normalized.
-    struct UDynamicBuffer span;
+    struct CharVec span;
 
     // Buffer with decomposed characters.
-    struct UDynamicBuffer decomp;
+    struct CharVec decomp;
 };
 
-void nstate_init(struct UNormalizeState *state, IsStable is_stable);
-void nstate_free(struct UNormalizeState *state);
+void uni_norm_init(struct NormalizeState *state, IsStable is_stable);
+void uni_norm_free(struct NormalizeState *state);
 
-void ustate_reset(struct UNormalizeState *ns);
+void uni_norm_reset(struct NormalizeState *ns);
 
-unistat unorm_append_run(struct UNormalizeState *state, struct unitext *it);
+unistat uni_norm_append_run(struct NormalizeState *state, struct unitext *it);
 
-bool unicorn_is_stable_nfd(unichar cp);
+bool uni_is_stable_nfd(unichar cp);
 
 #endif // NORMALIZE_H

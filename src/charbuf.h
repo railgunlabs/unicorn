@@ -11,37 +11,42 @@
  *  license, as set out in <https://railgunlabs.com/unicorn/license/>.
  */
 
-// Implements a dynamic character buffer.
-
-#ifndef DYNAMIC_BUFFER_H
-#define DYNAMIC_BUFFER_H
+#ifndef CHARACTER_BUFFER_H
+#define CHARACTER_BUFFER_H
 
 #include "common.h"
 
-struct UDynamicBuffer
+struct CharBufImpl;
+
+struct CharBuf
 {
+    void *storage;
+
+    // This is where the next character will be written.
+    // When finished this is the number of characters that needed to be
+    // written, but not necessarily how many were actually written.
     unisize length;
+
+    // Number of characters actually written.
+    unisize written;
+
     unisize capacity;
-    unichar *chars;
-    unichar scratch[UNICORN_STACK_BUFFER_SIZE];
+    unisize *result;
+    bool null_terminate;
+    bool is_null_terminated;
+    const struct CharBufImpl *impl;
 };
 
-void udynbuf_init(struct UDynamicBuffer *buffer);
-void udynbuf_free(struct UDynamicBuffer *buffer);
-void udynbuf_reset(struct UDynamicBuffer *buffer);
-unistat udynbuf_append(struct UDynamicBuffer *buffer, const unichar *chars, unisize chars_count);
-unistat udynbuf_reserve(struct UDynamicBuffer *buffer, unisize new_capacity);
-void udynbuf_remove(struct UDynamicBuffer *buf, unisize i);
-void udynbuf_append_unsafe(struct UDynamicBuffer *cb, const unichar *chars, unisize chars_count);
-
-static inline unisize udynbuf_length(const struct UDynamicBuffer *buffer)
+struct CharBufImpl
 {
-    return buffer->length;
-}
+    void (*append)(struct CharBuf *buf, const unichar *chars, unisize chars_count);
+    void (*nullterminate)(struct CharBuf *buf);
+};
 
-static inline unisize udynbuf_capacity(const struct UDynamicBuffer *buffer)
-{
-    return buffer->capacity;
-}
+unistat uni_charbuf_init(struct CharBuf *buf, void *text, unisize *capacity, uniattr attributes);
+unistat uni_charbuf_finalize(struct CharBuf *buf);
 
-#endif // DYNAMIC_BUFFER_H
+void uni_charbuf_append(struct CharBuf *buf, const unichar *chars, unisize chars_count);
+void uni_charbuf_appendchar(struct CharBuf *buf, unichar ch);
+
+#endif // CHARACTER_BUFFER_H

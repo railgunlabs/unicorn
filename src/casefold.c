@@ -16,19 +16,19 @@
 #include "common.h"
 #include "normalize.h"
 #include "unidata.h"
-#include "buffer.h"
 #include "charbuf.h"
+#include "charvec.h"
 
 #if defined(UNICORN_FEATURE_CASEFOLD_DEFAULT)
 
 struct CaseState
 {
     int32_t offset;
-    struct UDynamicBuffer tmp;
-    struct UDynamicBuffer buf;
+    struct CharVec tmp;
+    struct CharVec buf;
 };
 
-static unisize unicorn_get_casefolding(unichar character, unichar casefolding[UNICORN_MAX_CASEFOLDING])
+static unisize get_casefolding(unichar character, unichar casefolding[UNICORN_MAX_CASEFOLDING])
 {
     const unichar *data = &uni_casefold_default_mappings[unicorn_get_codepoint_data(character)->full_casefold_mapping_offset];
     unisize codepoint_count = (unisize)data[0];
@@ -63,7 +63,7 @@ static bool is_canonical_caseless_stable(unichar ch)
     }
     else
     {
-        is_stable = unicorn_is_stable_nfd(ch);
+        is_stable = uni_is_stable_nfd(ch);
     }
 
     return is_stable;
@@ -72,26 +72,26 @@ static bool is_canonical_caseless_stable(unichar ch)
 static void init_casefold(struct CaseState *cs)
 {
     (void)memset(cs, 0, sizeof(cs[0]));
-    udynbuf_init(&cs->buf);
-    udynbuf_init(&cs->tmp);
+    uni_charvec_init(&cs->buf);
+    uni_charvec_init(&cs->tmp);
 }
 
 static void ucs_free(struct CaseState *cs)
 {
-    udynbuf_free(&cs->buf);
-    udynbuf_free(&cs->tmp);
+    uni_charvec_free(&cs->buf);
+    uni_charvec_free(&cs->tmp);
 }
 
 static void ucs_reset(struct CaseState *cs)
 {
-    udynbuf_reset(&cs->buf);
-    udynbuf_reset(&cs->tmp);
+    uni_charvec_reset(&cs->buf);
+    uni_charvec_reset(&cs->tmp);
     cs->offset = 0;
 }
 
 static unisize ucs_length(const struct CaseState *cs)
 {
-    return udynbuf_length(&cs->buf) - cs->offset;
+    return uni_charvec_length(&cs->buf) - cs->offset;
 }
 
 static unichar ucs_pop(struct CaseState *cs)
@@ -107,13 +107,13 @@ static unistat collect_stable_run(struct CaseState *s, struct unitext *it)
     unisize index = it->index;
     unichar cp = UNICHAR_C(0);
 
-    while (udynbuf_length(&s->buf) < udynbuf_capacity(&s->buf))
+    while (uni_charvec_length(&s->buf) < uni_charvec_capacity(&s->buf))
     {
         status = uni_next(it->data, it->length, it->encoding, &index, &cp);
         const bool is_stable = is_canonical_caseless_stable(cp);
         if ((status == UNI_OK) && is_stable)
         {
-            udynbuf_append_unsafe(&s->buf, &cp, 1);
+            uni_charvec_append_unsafe(&s->buf, &cp, 1);
             it->index = index;
         }
         else
@@ -176,22 +176,22 @@ static unistat collect_unstable_run(struct unitext *it, unisize *span_length, bo
 }
 
 // The caller has already vetted the text for well-formedness therefore this function assumes successful return codes.
-static unistat normalize_text(struct unitext *it, struct UDynamicBuffer *text)
+static unistat normalize_text(struct unitext *it, struct CharVec *text)
 {
     unistat status = UNI_OK;
     const unisize initial_index = it->index;
-    struct UNormalizeState state;
+    struct NormalizeState state;
 
     // Compute the length of the stable run before allocating a buffer large enough for it.
     unisize length = 0;
-    nstate_init(&state, &unicorn_is_stable_nfd);
+    uni_norm_init(&state, &uni_is_stable_nfd);
     for (;;)
     {
-        status = unorm_append_run(&state, it);
+        status = uni_norm_append_run(&state, it);
         if (status == UNI_OK)
         {
             length += state.decomp.length;
-            ustate_reset(&state);
+            uni_norm_reset(&state);
         }
         else
         {
@@ -205,17 +205,17 @@ static unistat normalize_text(struct unitext *it, struct UDynamicBuffer *text)
 
     if (status == UNI_OK)
     {
-        status = udynbuf_reserve(text, length);
+        status = uni_charvec_reserve(text, length);
         if (status == UNI_OK)
         {
             it->index = initial_index; // Rewind the text iterator to where it began.
             for (;;)
             {
-                status = unorm_append_run(&state, it);
+                status = uni_norm_append_run(&state, it);
                 if (status == UNI_OK)
                 {
-                    udynbuf_append_unsafe(text, state.decomp.chars, state.decomp.length);
-                    ustate_reset(&state);
+                    uni_charvec_append_unsafe(text, state.decomp.chars, state.decomp.length);
+                    uni_norm_reset(&state);
                 }
                 else
                 {
@@ -227,7 +227,7 @@ static unistat normalize_text(struct unitext *it, struct UDynamicBuffer *text)
         }
     }
 
-    nstate_free(&state);
+    uni_norm_free(&state);
     return status;
 }
 
@@ -267,7 +267,7 @@ static unistat collect_run(struct CaseState *s, struct unitext *it)
                 else
                 {
                     // Resize the buffer and copy the code points.
-                    status = udynbuf_reserve(&s->buf, span_length);
+                    status = uni_charvec_reserve(&s->buf, span_length);
                     if (status == UNI_OK)
                     {
                         it->index = startpos;
@@ -276,7 +276,7 @@ static unistat collect_run(struct CaseState *s, struct unitext *it)
                             // There should be no errors since the unstable run was pre-calculated above;
                             // in other words only known-to-be-valid characters are iterated here.
                             (void)uni_next(it->data, it->length, it->encoding, &it->index, &cp);
-                            udynbuf_append_unsafe(&s->buf, &cp, 1);
+                            uni_charvec_append_unsafe(&s->buf, &cp, 1);
                         }
                     }
                 }
@@ -289,17 +289,17 @@ static unistat collect_run(struct CaseState *s, struct unitext *it)
                 for (unisize i = 0; i < s->buf.length; i++)
                 {
                     unichar unused[UNICORN_MAX_CASEFOLDING];
-                    span_length += unicorn_get_casefolding(s->buf.chars[i], unused);
+                    span_length += get_casefolding(s->buf.chars[i], unused);
                 }
 
-                status = udynbuf_reserve(&s->tmp, span_length);
+                status = uni_charvec_reserve(&s->tmp, span_length);
                 if (status == UNI_OK)
                 {
                     for (unisize i = 0; i < s->buf.length; i++)
                     {
                         unichar chars[UNICORN_MAX_CASEFOLDING];
-                        const unisize chars_length = unicorn_get_casefolding(s->buf.chars[i], chars);
-                        udynbuf_append_unsafe(&s->tmp, chars, chars_length);
+                        const unisize chars_length = get_casefolding(s->buf.chars[i], chars);
+                        uni_charvec_append_unsafe(&s->tmp, chars, chars_length);
                     }
 
                     // Normalize the text.
@@ -307,7 +307,7 @@ static unistat collect_run(struct CaseState *s, struct unitext *it)
                     status = uni_norm(UNI_NFD, s->tmp.chars, s->tmp.length, UNI_SCALAR | UNI_TRUST, NULL, &span_length, UNI_SCALAR);
                     if (status == UNI_OK)
                     {
-                        status = udynbuf_reserve(&s->buf, span_length);
+                        status = uni_charvec_reserve(&s->buf, span_length);
                         if (status == UNI_OK)
                         {
                             status = uni_norm(UNI_NFD, s->tmp.chars, s->tmp.length, UNI_SCALAR | UNI_TRUST, s->buf.chars, &span_length, UNI_SCALAR);
@@ -328,12 +328,12 @@ static unistat collect_run(struct CaseState *s, struct unitext *it)
 
 static unistat to_casefold(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
-    struct UBuffer buffer = {NULL};
-    unistat status = ubuffer_init(&buffer, dst, dst_len, dst_attr);
+    struct CharBuf buffer = {NULL};
+    unistat status = uni_charbuf_init(&buffer, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
@@ -349,13 +349,13 @@ static unistat to_casefold(const void *src, unisize src_len, uniattr src_attr, v
             }
 
             unichar chars[UNICORN_MAX_CASEFOLDING];
-            const unisize chars_count = unicorn_get_casefolding(cp, chars);
-            ubuffer_append(&buffer, chars, chars_count);
+            const unisize chars_count = get_casefolding(cp, chars);
+            uni_charbuf_append(&buffer, chars, chars_count);
         }
 
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buffer);
+            status = uni_charbuf_finalize(&buffer);
         }
     }
 
@@ -381,12 +381,12 @@ static unistat caseless_binary_compare(const void *s1, unisize s1_len, uniattr s
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s1, s1_len, &s1_attr);
+        status = uni_check_input_encoding(s1, s1_len, &s1_attr);
     }
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s2, s2_len, &s2_attr);
+        status = uni_check_input_encoding(s2, s2_len, &s2_attr);
     }
 
     if (status == UNI_OK)
@@ -406,7 +406,7 @@ static unistat caseless_binary_compare(const void *s1, unisize s1_len, uniattr s
                 status = uni_next(run1.it.data, run1.it.length, run1.it.encoding, &run1.it.index, &cp);
                 if (status == UNI_OK)
                 {
-                    run1.length = unicorn_get_casefolding(cp, run1.chars);
+                    run1.length = get_casefolding(cp, run1.chars);
                 }
                 else if (status == UNI_DONE)
                 {
@@ -425,7 +425,7 @@ static unistat caseless_binary_compare(const void *s1, unisize s1_len, uniattr s
                 status = uni_next(run2.it.data, run2.it.length, run2.it.encoding, &run2.it.index, &cp);
                 if (status == UNI_OK)
                 {
-                    run2.length = unicorn_get_casefolding(cp, run2.chars);
+                    run2.length = get_casefolding(cp, run2.chars);
                 }
                 else if (status == UNI_DONE)
                 {
@@ -472,14 +472,14 @@ static unistat caseless_binary_compare(const void *s1, unisize s1_len, uniattr s
 static unistat to_casefold_normalized(const void *src, unisize src_len, uniattr src_attr, void *dst, unisize *dst_len, uniattr dst_attr)
 {
     unistat status;
-    struct UBuffer buf;
+    struct CharBuf buf;
     struct CaseState cs = {0};
 
-    status = ubuffer_init(&buf, dst, dst_len, dst_attr);
+    status = uni_charbuf_init(&buf, dst, dst_len, dst_attr);
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(src, src_len, &src_attr);
+        status = uni_check_input_encoding(src, src_len, &src_attr);
     }
 
     if (status == UNI_OK)
@@ -494,12 +494,12 @@ static unistat to_casefold_normalized(const void *src, unisize src_len, uniattr 
             {
                 break;
             }
-            ubuffer_append(&buf, cs.buf.chars, cs.buf.length);
+            uni_charbuf_append(&buf, cs.buf.chars, cs.buf.length);
         }
 
         if (status == UNI_DONE)
         {
-            status = ubuffer_finalize(&buf);
+            status = uni_charbuf_finalize(&buf);
         }
     }
 
@@ -521,12 +521,12 @@ static unistat caseless_normalized_compare(const void *s1, unisize s1_len, uniat
     
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s1, s1_len, &s1_attr);
+        status = uni_check_input_encoding(s1, s1_len, &s1_attr);
     }
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s2, s2_len, &s2_attr);
+        status = uni_check_input_encoding(s2, s2_len, &s2_attr);
     }
 
     if (status == UNI_OK)
@@ -598,7 +598,7 @@ static unistat caseless_normalized_compare(const void *s1, unisize s1_len, uniat
 
 static unistat is_casefold(const void *text, unisize length, uniattr encoding, bool *result)
 {
-    unistat status = unicorn_check_input_encoding(text, length, &encoding);
+    unistat status = uni_check_input_encoding(text, length, &encoding);
 
     if (status == UNI_OK)
     {
@@ -614,7 +614,7 @@ static unistat is_casefold(const void *text, unisize length, uniattr encoding, b
             {
                 // Case fold the character and compare it against the input text.
                 unichar chars[UNICORN_MAX_CASEFOLDING];
-                const unisize chars_count = unicorn_get_casefolding(cp, chars);
+                const unisize chars_count = get_casefolding(cp, chars);
                 for (unisize i = 0; (i < chars_count); i++)
                 {
                     status = uni_next(input.data, input.length, input.encoding, &input.index, &cp);
@@ -646,7 +646,7 @@ static unistat is_casefold(const void *text, unisize length, uniattr encoding, b
 #if defined(UNICORN_FEATURE_CASEFOLD_CANONICAL)
 static unistat is_casefold_canonical(const void *text, unisize length, uniattr encoding, bool *result)
 {
-    unistat status = unicorn_check_input_encoding(text, length, &encoding);
+    unistat status = uni_check_input_encoding(text, length, &encoding);
 
     if (status == UNI_OK)
     {

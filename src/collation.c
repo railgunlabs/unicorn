@@ -41,7 +41,7 @@ struct SortKey
 
 static void sortkeybuf_init(struct SortKey *state, uniweighting weighting, unistrength strength)
 {
-    cebuf_init(&state->ce_decoder);
+    uni_cebuf_init(&state->ce_decoder);
     state->weights_index = 0;
     state->weights_count = 0;
     state->is_prev_variable = false;
@@ -53,7 +53,7 @@ static void sortkeybuf_init(struct SortKey *state, uniweighting weighting, unist
 static void sortkeybuf_free(struct SortKey *state)
 {
     assert(state != NULL); // LCOV_EXCL_BR_LINE
-    cebuf_free(&state->ce_decoder);
+    uni_cebuf_free(&state->ce_decoder);
 }
 
 static unistat sortkeybuf_append(struct SortKey *state, uint16_t weight)
@@ -106,13 +106,13 @@ static unistat sortkeybuf_append_run(struct SortKey *state, struct unitext *text
     while ((status == UNI_OK) && sortkeybuf_is_empty(state) && (state->level < state->strength))
     {
         // Queue up a run of collation elements.
-        status = cebuf_append_run(decoder, text);
+        status = uni_cebuf_append_run(decoder, text);
         if (status == UNI_OK)
         {
             // If there are no more collation elements, then the text has been completely iterated.
             // If there are more collation element levels to process, then restart iteration from
             // the beginning of the text.
-            if (cebuf_is_empty(decoder))
+            if (uni_cebuf_is_empty(decoder))
             {
                 // Rewind the text to the beginning.
                 text->index = 0;
@@ -135,12 +135,12 @@ static unistat sortkeybuf_append_run(struct SortKey *state, struct unitext *text
         {
             // The following branch was moved inside the loop to avoid persistent side effects
             // in compliance with MISRA C:2012.
-            if (cebuf_is_empty(decoder))
+            if (uni_cebuf_is_empty(decoder))
             {
                 break;
             }
 
-            const CE ce = cebuf_pop(decoder);
+            const CE ce = uni_cebuf_pop(decoder);
             uint16_t ce_weights[4] = {
                 ce.primary,
                 ce.secondary,
@@ -234,7 +234,7 @@ UNICORN_API unistat uni_sortkeymk(const void *text, unisize text_len, uniattr te
         // Reuse the existing error checking logic rather than repeating it here.
         unisize unused1 = (*sortkey_cap > (size_t)0) ? UNISIZE_C(1) : UNISIZE_C(0);
         uniattr unused2 = UNI_SCALAR;
-        status = unicorn_check_output_encoding(sortkey, &unused1, &unused2);
+        status = uni_check_output_encoding(sortkey, &unused1, &unused2);
     }
 
     if (status == UNI_OK)
@@ -248,7 +248,7 @@ UNICORN_API unistat uni_sortkeymk(const void *text, unisize text_len, uniattr te
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
@@ -321,12 +321,12 @@ UNICORN_API unistat uni_collate(const void *s1, unisize s1_len, uniattr s1_attr,
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s1, s1_len, &s1_attr);
+        status = uni_check_input_encoding(s1, s1_len, &s1_attr);
     }
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(s2, s2_len, &s2_attr);
+        status = uni_check_input_encoding(s2, s2_len, &s2_attr);
     }
 
     if (status == UNI_OK)

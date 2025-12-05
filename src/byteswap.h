@@ -16,51 +16,51 @@
 
 #include "common.h"
 
-static inline uint32_t unicorn_swap32(uint32_t val)
+static inline uint32_t uni_swap32(uint32_t val)
 {
     uint32_t valm = (val << 8u) & 0xFF00FF00u;
     valm |= (val >> 8u) & 0xFF00FFu;
     return (valm << 16u) | (valm >> 16u);
 }
 
-static inline uint16_t unicorn_swap16(uint16_t val)
+static inline uint16_t uni_swap16(uint16_t val)
 {
     const uint32_t byte1 = (uint32_t)val << 8u;
     const uint32_t byte2 = (uint32_t)val >> 8u;
     return (uint16_t)(byte1 | byte2);
 }
 
-static inline uint32_t unicorn_swap32_le(uint32_t val)
+static inline uint32_t uni_swap32_le(uint32_t val)
 {
 #if defined(UNICORN_BIG_ENDIAN)
-    return unicorn_swap32(val);
+    return uni_swap32(val);
 #else
     return val;
 #endif
 }
 
-static inline uint16_t unicorn_swap16_le(uint16_t val)
+static inline uint16_t uni_swap16_le(uint16_t val)
 {
 #if defined(UNICORN_BIG_ENDIAN)
-    return unicorn_swap16(val);
+    return uni_swap16(val);
 #else
     return val;
 #endif
 }
 
-static inline uint32_t unicorn_swap32_be(uint32_t val)
+static inline uint32_t uni_swap32_be(uint32_t val)
 {
 #if defined(UNICORN_LITTLE_ENDIAN)
-    return unicorn_swap32(val);
+    return uni_swap32(val);
 #else
     return val;
 #endif
 }
 
-static inline uint16_t unicorn_swap16_be(uint16_t val)
+static inline uint16_t uni_swap16_be(uint16_t val)
 {
 #if defined(UNICORN_LITTLE_ENDIAN)
-    return unicorn_swap16(val);
+    return uni_swap16(val);
 #else
     return val;
 #endif

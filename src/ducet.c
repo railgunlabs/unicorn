@@ -65,11 +65,11 @@ static const struct CollationNode *find_child_collation_node(const struct Collat
     return node;
 }
 
-static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CEDecoder *state)
+static void collect_collation_elements(struct CharVec *charvec, struct CEDecoder *state)
 {
     // Consume the initial starter character.
-    const unichar character = charbuf->chars[0];
-    udynbuf_remove(charbuf, 0);
+    const unichar character = charvec->chars[0];
+    uni_charvec_remove(charvec, 0);
 
     const uint32_t collation_mapping_offset = uni_get_collation_data(character)->value;
     if (collation_mapping_offset == 0u)
@@ -156,12 +156,12 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
         }
 
         // Consume the longest substring that has a match in the collation element table.
-        for (unisize i = 0; i < udynbuf_length(charbuf); i++)
+        for (unisize i = 0; i < uni_charvec_length(charvec); i++)
         {
             // Check if the code point is present in a sequence in the collation table.
             const uint32_t unsigned_child_count = GET_NODE_CHILD_COUNT(node);
             const int32_t child_count = (int32_t)unsigned_child_count;
-            const struct CollationNode *child = find_child_collation_node(&unicorn_collation_mappings_trie[node->child_offset], 0, child_count - 1, charbuf->chars[i]);
+            const struct CollationNode *child = find_child_collation_node(&unicorn_collation_mappings_trie[node->child_offset], 0, child_count - 1, charvec->chars[i]);
             if (child == NULL)
             {
                 break;
@@ -181,17 +181,17 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
         // The depth reached into the trie is equal to the number of leading characters to remove.
         while (longest_match_depth > 0)
         {
-            udynbuf_remove(charbuf, 0);
+            uni_charvec_remove(charvec, 0);
             longest_match_depth -= 1;
         }
 
         // Find any unblocked non-starters with a match in the trie.
         int32_t prev_ccc = 0;
         int32_t index = 0;
-        while (index < udynbuf_length(charbuf))
+        while (index < uni_charvec_length(charvec))
         {
             // Stop processing if a non-starter was found.
-            const unichar codepoint = charbuf->chars[index];
+            const unichar codepoint = charvec->chars[index];
             const int32_t ccc = (int32_t)unicorn_get_codepoint_data(codepoint)->canonical_combining_class;
             if ((ccc == 0) || (prev_ccc >= ccc))
             {
@@ -219,7 +219,7 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
                 node = child;
 
                 // Shift down the entire string, removing the non-stater.
-                udynbuf_remove(charbuf, index);
+                uni_charvec_remove(charvec, index);
             }
             else
             {
@@ -248,53 +248,53 @@ static void collect_collation_elements(struct UDynamicBuffer *charbuf, struct CE
     }
 }
 
-void cebuf_init(struct CEDecoder *state)
+void uni_cebuf_init(struct CEDecoder *state)
 {
     (void)memset(state, 0, sizeof(state[0]));
-    nstate_init(&state->normbuf, &unicorn_is_stable_nfd);
-    udynbuf_init(&state->charbuf);
+    uni_norm_init(&state->normbuf, &uni_is_stable_nfd);
+    uni_charvec_init(&state->charvec);
 }
 
-void cebuf_free(struct CEDecoder *state)
+void uni_cebuf_free(struct CEDecoder *state)
 {
     assert(state != NULL); // LCOV_EXCL_BR_LINE
-    nstate_free(&state->normbuf);
-    udynbuf_free(&state->charbuf);
+    uni_norm_free(&state->normbuf);
+    uni_charvec_free(&state->charvec);
 }
 
-bool cebuf_is_empty(const struct CEDecoder *state)
+bool uni_cebuf_is_empty(const struct CEDecoder *state)
 {
     return state->ces_index == state->ces_count;
 }
 
-CE cebuf_pop(struct CEDecoder *state)
+CE uni_cebuf_pop(struct CEDecoder *state)
 {
-    assert(!cebuf_is_empty(state)); // LCOV_EXCL_BR_LINE
+    assert(!uni_cebuf_is_empty(state)); // LCOV_EXCL_BR_LINE
     const CE ce = state->ces[state->ces_index];
     state->ces_index += 1;
     return ce;
 }
 
-unistat cebuf_append_run(struct CEDecoder *state, struct unitext *text)
+unistat uni_cebuf_append_run(struct CEDecoder *state, struct unitext *text)
 {
     // LCOV_EXCL_START
     assert(state != NULL);
     assert(text != NULL);
-    assert(cebuf_is_empty(state));
+    assert(uni_cebuf_is_empty(state));
     // LCOV_EXCL_STOP
 
     unistat status = UNI_OK;
-    struct UDynamicBuffer *charbuf = &state->charbuf;
-    struct UNormalizeState *normbuf = &state->normbuf;
+    struct CharVec *charvec = &state->charvec;
+    struct NormalizeState *normbuf = &state->normbuf;
 
     // Reset the state.
     state->ces_count = 0;
     state->ces_index = 0;
 
     // Normalize a run of characters.
-    while ((status == UNI_OK) && (udynbuf_length(charbuf) < LONGEST_INITIAL_SUBSTRING))
+    while ((status == UNI_OK) && (uni_charvec_length(charvec) < LONGEST_INITIAL_SUBSTRING))
     {
-        status = unorm_append_run(normbuf, text);
+        status = uni_norm_append_run(normbuf, text);
         if (status != UNI_OK)
         {
             if (status == UNI_DONE)
@@ -303,14 +303,14 @@ unistat cebuf_append_run(struct CEDecoder *state, struct unitext *text)
             }
             break;
         }
-        status = udynbuf_append(charbuf, normbuf->decomp.chars, normbuf->decomp.length);
-        ustate_reset(normbuf);
+        status = uni_charvec_append(charvec, normbuf->decomp.chars, normbuf->decomp.length);
+        uni_norm_reset(normbuf);
     }
 
     // Find the collation elements for the run of normalized characters.
-    if ((status == UNI_OK) && (udynbuf_length(charbuf) > 0))
+    if ((status == UNI_OK) && (uni_charvec_length(charvec) > 0))
     {
-        collect_collation_elements(charbuf, state);
+        collect_collation_elements(charvec, state);
     }
 
     return status;

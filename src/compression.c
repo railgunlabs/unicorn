@@ -18,7 +18,7 @@
 // a sequence of byte-encoded differences (slope detection).
 
 #include "common.h"
-#include "buffer.h"
+#include "charbuf.h"
 #include "unidata.h"
 
 #if defined(UNICORN_FEATURE_COMPRESSION)
@@ -468,12 +468,12 @@ UNICORN_API unistat uni_compress(const void *text, unisize text_len, uniattr tex
         // Reuse the existing error checking logic rather than repeating it here.
         unisize unused1 = (*buffer_length > (size_t)0) ? UNISIZE_C(1) : UNISIZE_C(0);
         uniattr unused2 = UNI_SCALAR;
-        status = unicorn_check_output_encoding(buffer, &unused1, &unused2);
+        status = uni_check_output_encoding(buffer, &unused1, &unused2);
     }
 
     if (status == UNI_OK)
     {
-        status = unicorn_check_input_encoding(text, text_len, &text_attr);
+        status = uni_check_input_encoding(text, text_len, &text_attr);
     }
 
     if (status == UNI_OK)
@@ -558,7 +558,7 @@ UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, 
 {
 #if defined(UNICORN_FEATURE_COMPRESSION)
     unistat status = UNI_OK;
-    struct UBuffer output = {NULL};
+    struct CharBuf output = {NULL};
 
     if (buffer == NULL)
     {
@@ -567,7 +567,7 @@ UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, 
     }
     else
     {
-        status = ubuffer_init(&output, text, text_len, text_attr);
+        status = uni_charbuf_init(&output, text, text_len, text_attr);
     }
    
     if (status == UNI_OK)
@@ -629,7 +629,7 @@ UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, 
             // Check if a code point was decoded or an error occurred.
             if (state == DECODER_OK)
             {
-                ubuffer_appendchar(&output, (unichar)cp);
+                uni_charbuf_appendchar(&output, (unichar)cp);
             }
             else if (state == DECODER_FATAL_ERROR)
             {
@@ -644,7 +644,7 @@ UNICORN_API unistat uni_decompress(const uint8_t *buffer, size_t buffer_length, 
 
         if (status == UNI_OK)
         {
-            status = ubuffer_finalize(&output);
+            status = uni_charbuf_finalize(&output);
         }
     }
 

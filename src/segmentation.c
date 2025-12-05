@@ -33,41 +33,41 @@ typedef uint32_t UOpcode;
         (RD) = (tmp_op >> (UOpcode)8) & (UOpcode)0xFF; \
     } while (false)
 
-struct URuleState
+struct RuleState
 {
-    struct URuleState *next;
+    struct RuleState *next;
     int32_t ip;
 };
 
-struct URuleStateList
+struct RuleStateList
 {
-    struct URuleState *head;
-    struct URuleState *tail;
+    struct RuleState *head;
+    struct RuleState *tail;
     uint64_t pending; // Based on number of OPCODES!
 };
 
 struct MatchContext
 {
     const uint32_t *opcodes;
-    struct URuleState *free_list;
-    struct URuleStateList current_states;
-    struct URuleStateList next_states;
-    struct URuleState states[MAX_BREAK_STATES];
+    struct RuleState *free_list;
+    struct RuleStateList current_states;
+    struct RuleStateList next_states;
+    struct RuleState states[MAX_BREAK_STATES];
 };
 
-static inline struct URuleState *state_alloc(struct MatchContext *ctx)
+static inline struct RuleState *state_alloc(struct MatchContext *ctx)
 {
     // LCOV_EXCL_START
     assert(ctx != NULL);
     assert(ctx->free_list != NULL);
     // LCOV_EXCL_STOP
-    struct URuleState *state = ctx->free_list;
+    struct RuleState *state = ctx->free_list;
     ctx->free_list = state->next;
     (void)memset(state, 0, sizeof(state[0]));
     return state;
 }
 
-static inline void state_free(struct MatchContext *ctx, struct URuleState *state)
+static inline void state_free(struct MatchContext *ctx, struct RuleState *state)
 {
     // LCOV_EXCL_START
     assert(ctx != NULL);
@@ -83,9 +83,9 @@ static bool at_end(struct unitext text)
     return uni_next(text.data, text.length, text.encoding, &text.index, &cp) == UNI_DONE;
 }
 
-static void add_state(struct MatchContext *ctx, struct URuleStateList *list, int32_t ip, struct unitext *text)
+static void add_state(struct MatchContext *ctx, struct RuleStateList *list, int32_t ip, struct unitext *text)
 {
-    struct URuleState *rule_state = NULL;
+    struct RuleState *rule_state = NULL;
     UOpcode rs = 0;
     UOpcode rd = 0;
 
@@ -213,8 +213,8 @@ static unistat match(unibreak type, const uint32_t *opcodes, const uint32_t *dat
     struct MatchContext ctx = {.opcodes = opcodes};
     prepare(&ctx);
 
-    struct URuleStateList *current_states = &ctx.current_states;
-    struct URuleStateList *next_states = &ctx.next_states;
+    struct RuleStateList *current_states = &ctx.current_states;
+    struct RuleStateList *next_states = &ctx.next_states;
     add_state(&ctx, current_states, 0, &text); // Allocate initial states.
 
     while (current_states->head != NULL)
@@ -242,7 +242,7 @@ static unistat match(unibreak type, const uint32_t *opcodes, const uint32_t *dat
         while (current_states->head != NULL)
         {
             // Grab the newest state from the queue.
-            struct URuleState *next = current_states->head->next;
+            struct RuleState *next = current_states->head->next;
             const int32_t ip = current_states->head->ip;
             state_free(&ctx, current_states->head);
             current_states->head = next;
@@ -346,7 +346,7 @@ static unistat match(unibreak type, const uint32_t *opcodes, const uint32_t *dat
             break;
         }
 
-        struct URuleStateList *tmp = current_states;
+        struct RuleStateList *tmp = current_states;
         current_states = next_states;
         next_states = tmp;
         (void)memset(next_states, 0, sizeof(next_states[0]));
@@ -376,7 +376,7 @@ static unistat next_break(unibreak type, const struct Segmentation *seg, const v
     }
     else
     {
-        status = unicorn_check_input_encoding(text, length, &encoding);
+        status = uni_check_input_encoding(text, length, &encoding);
     }
 
     if (status == UNI_OK)
@@ -443,7 +443,7 @@ static unistat previous_break(unibreak type, const struct Segmentation *seg, con
     }
     else
     {
-        status = unicorn_check_input_encoding(text, length, &encoding);
+        status = uni_check_input_encoding(text, length, &encoding);
     }
 
     if (status == UNI_OK)

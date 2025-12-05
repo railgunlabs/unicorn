@@ -15,14 +15,14 @@
  *  SOFTWARE.
  */
 
-#include "buffer.h"
+#include "charbuf.h"
 #include "unidata.h"
 
 #if defined(_MSC_VER)
 #include <intrin.h>
 #endif
 
-static inline int32_t unicorn_popcnt(uint32_t n)
+static inline int32_t uni_popcnt(uint32_t n)
 {
 #if defined(_MSC_VER)
     return (int32_t)__popcnt(n); // cppcheck-suppress premium-misra-c-2012-17.3
@@ -50,7 +50,7 @@ static unistat check_encoding(uniattr *encoding)
     // Only one or none of the endian flags can be provided.
     uniattr mask = enc & (UNI_LITTLE | UNI_BIG);
     flags = (uint32_t)mask;
-    switch (unicorn_popcnt(flags))
+    switch (uni_popcnt(flags))
     {
     case 0: // No endian flags was provided; default to native byte order.
         if ((GET_ENCODING(enc) & (UNI_UTF16 | UNI_UTF32)) != (uniattr)0)
@@ -75,7 +75,7 @@ static unistat check_encoding(uniattr *encoding)
         // Make sure exactly ONE text encoding flag was provided.
         mask = GET_ENCODING(enc);
         flags = (uint32_t)mask;
-        if (unicorn_popcnt(flags) != 1)
+        if (uni_popcnt(flags) != 1)
         {
             uni_message("expected exactly one encoding form");
             status = UNI_BAD_OPERATION;
@@ -85,7 +85,7 @@ static unistat check_encoding(uniattr *encoding)
     return status;
 }
 
-unistat unicorn_check_input_encoding(const void *text, unisize length, uniattr *encoding)
+unistat uni_check_input_encoding(const void *text, unisize length, uniattr *encoding)
 {
     unistat status = UNI_OK;
     (void)length;
@@ -109,7 +109,7 @@ unistat unicorn_check_input_encoding(const void *text, unisize length, uniattr *
     return status;
 }
 
-unistat unicorn_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding)
+unistat uni_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding)
 {
     unistat status = UNI_OK;
 

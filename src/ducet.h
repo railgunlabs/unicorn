@@ -30,16 +30,16 @@ struct CEDecoder
 {
     int32_t ces_index;
     int32_t ces_count;
-    struct UNormalizeState normbuf;
-    struct UDynamicBuffer charbuf;
+    struct NormalizeState normbuf;
+    struct CharVec charvec;
     CE ces[UNICORN_MAX_COLLATION];
 };
 
-void cebuf_init(struct CEDecoder *state);
-void cebuf_free(struct CEDecoder *state);
-bool cebuf_is_empty(const struct CEDecoder *state);
-CE cebuf_pop(struct CEDecoder *state);
-unistat cebuf_append_run(struct CEDecoder *state, struct unitext *text);
+void uni_cebuf_init(struct CEDecoder *state);
+void uni_cebuf_free(struct CEDecoder *state);
+bool uni_cebuf_is_empty(const struct CEDecoder *state);
+CE uni_cebuf_pop(struct CEDecoder *state);
+unistat uni_cebuf_append_run(struct CEDecoder *state, struct unitext *text);
 
 #endif
 
