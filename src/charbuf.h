@@ -11,8 +11,8 @@
  *  license, as set out in <https://railgunlabs.com/unicorn/license/>.
  */
 
-#ifndef CHARACTER_BUFFER_H
-#define CHARACTER_BUFFER_H
+#ifndef CHARBUF_H
+#define CHARBUF_H
 
 #include "common.h"
 
@@ -49,4 +49,4 @@ unistat uni_charbuf_finalize(struct CharBuf *buf);
 void uni_charbuf_append(struct CharBuf *buf, const unichar *chars, unisize chars_count);
 void uni_charbuf_appendchar(struct CharBuf *buf, unichar ch);
 
-#endif // CHARACTER_BUFFER_H
+#endif // CHARBUF_H

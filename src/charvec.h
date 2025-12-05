@@ -13,8 +13,8 @@
 
 // Implements a heap-allocated growable character buffer.
 
-#ifndef CHARACTER_VECTOR_H
-#define CHARACTER_VECTOR_H
+#ifndef CHARVEC_H
+#define CHARVEC_H
 
 #include "common.h"
 
@@ -44,4 +44,4 @@ static inline unisize uni_charvec_capacity(const struct CharVec *buffer)
     return buffer->capacity;
 }
 
-#endif // CHARACTER_VECTOR_H
+#endif // CHARVEC_H
