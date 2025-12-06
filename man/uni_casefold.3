@@ -1,6 +1,6 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
-uni_casefold \- perform case folding
+uni_casefold \- case fold a string
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
@@ -10,21 +10,21 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_casefold(unicasefold " casing ", const void *" src ", unisize " src_len ", uniattr " src_attr ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
 .fi
 .SH DESCRIPTION
-Case folds \f[I]src\f[R] to casing form \f[I]casing\f[R] and writes the result to \f[I]dst\f[R].
+This function case folds \f[I]src\f[R] to casing form \f[I]casing\f[R] and writes the result to \f[I]dst\f[R].
 The capacity of \f[I]dst\f[R] is specified by \f[I]dst_len\f[R].
 .PP
-If \f[I]dst\f[R] is not \f[C]NULL\f[R], then the implementation writes to \f[I]dst_len\f[R] the total number of code units written to \f[I]dst\f[R].
-If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If \f[I]dst\f[R] is not null, then the implementation writes to \f[I]dst_len\f[R] the total number of code units written to \f[I]dst\f[R].
+If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned.
 .PP
-If \f[I]dst\f[R] is \f[C]NULL\f[R], then \f[I]dst_len\f[R] must be zero and the implementation writes to \f[I]dst_len\f[R] the number of code units in the fully case converted text and returns \f[B]UNI_OK\f[R].
-Call the function this way to compute the total length of the destination buffer before calling it again with a sufficiently sized buffer.
+If \f[I]dst\f[R] is null and \f[I]dst_len\f[R] is zero, then the implementation writes to \f[I]dst_len\f[R] the number of code units in the fully case converted text and returns \f[B]UNI_OK\f[R].
+Call the function this way to first compute the total length of the destination buffer before calling it again with a sufficiently sized buffer.
 .SH RETURN VALUE
 .TP
 UNI_OK
 If \f[C]text\f[R] was checked successfully.
 .TP
 UNI_BAD_OPERATION
-If \f[C]text\f[R] is \f[C]NULL\f[R], \f[C]length\f[R] is negative, or \f[C]result\f[R] is \f[C]NULL\f[R].
+If \f[C]text\f[R] is null, \f[C]length\f[R] is negative, or \f[C]result\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]src\f[R] is not well-formed (checks are omitted if \f[I]src_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).

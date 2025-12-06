@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 UNI_TRUST \- well-formed text
 .SH LIBRARY
@@ -10,10 +10,10 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .B #define UNI_TRUST 0x40u
 .fi
 .SH DESCRIPTION
-Text attribute bit flag that indicates that the encoded text is well-formed.
+Text attribute bit flag that indicates the encoded text is well-formed.
 .PP
 Under normal usage Unicorn processes text with the assumption that it might be malformed.
-This means it performs safety checks which are redundant if the text has already been validated with \f[B]uni_validate\f[R](3).
+This means it performs safety checks which are redundant if the text has already been validated.
 The purpose of this flag is to inform Unicorn that it can skip redundant validation checks thereby improving performance.
 .PP
 Usage of this flag means functions will never return \f[B]UNI_BAD_ENCODING\f[R].
@@ -21,9 +21,9 @@ Usage of this flag means functions will never return \f[B]UNI_BAD_ENCODING\f[R].
 Some functions, like \f[B]uni_norm\f[R](3), accept an input buffer and an output buffer.
 Using this flag with an output buffer will produce \f[B]UNI_BAD_OPERATION\f[R].
 .SH SEE ALSO
-.BR uni_validate (3),
 .BR unistat (3),
-.BR uni_norm (3)
+.BR uni_norm (3),
+.BR uni_validate (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

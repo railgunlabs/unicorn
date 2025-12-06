@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 unistrength \- collation comparison levels
 .SH LIBRARY
@@ -20,6 +20,10 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 The Unicode collation algorithm is a multilevel comparison algorithm.
 The number of levels that are considered in comparison is known as the collation strength.
 This enumeration defines constants for each level.
+.PP
+In comparing two strings, the most important feature is the identity of the base letters.
+For example, the difference between an A and a B. If the base letters differ, accent differences are typically ignored.
+If the base letters or their accents differ, case differences (uppercase versus lowercase) are typically ignored.
 .SH CONSTANTS
 .TP
 .BR UNI_PRIMARY

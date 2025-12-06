@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_collate \- compare strings for sorting
 .SH LIBRARY
@@ -10,34 +10,23 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_collate(const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", uniweighting " weighting ", unistrength " strength ", int32_t *" result ");"
 .fi
 .SH DESCRIPTION
-Compare strings \f[I]s1\f[R] and \f[I]s2\f[R] and write -1, 0, or 1 to \f[I]result\f[R] depending on if \f[C]s1 < s2\f[R], \f[C]s1 = s2\f[R], or \f[C]s1 > s2\f[R].
-.PP
-The length and text attributes for \f[I]s1\f[R] are specified by \f[I]s1_len\f[R] and \f[I]s1_attr\f[R].
-The length and text attributes for \f[I]s2\f[R] are specified by \f[I]s2_len\f[R] and \f[I]s2_attr\f[R].
-If \f[I]s1_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s1\f[R] is null terminated.
-If \f[I]s2_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s2\f[R] is null terminated.
+This function compares \f[I]s1\f[R] and \f[I]s2\f[R] for sorting and writes -1, 0, or 1 to \f[I]result\f[R] depending on if \f[C]s1 < s2\f[R], \f[C]s1 = s2\f[R], or \f[C]s1 > s2\f[R].
 .PP
 This function is intended for one-off string comparisons.
-If a string will be compared multiple times, then it's recommended to construct a sort key once with \f[B]uni_sortkeymk\f[R](3) and compare with \f[B]uni_sortkeycmp\f[R](3).
+If a string will be compared multiple times, then it's recommended to construct a sort key once with \f[B]uni_sortkeymk\f[R](3) and perform comparisons with \f[B]uni_sortkeycmp\f[R](3).
 .PP
-Support for collation must be enabled in the JSON configuration file.
+The length and text attributes for \f[I]s1\f[R] are specified by \f[I]s1_len\f[R] and \f[I]s1_attr\f[R].
+If \f[I]s1_len\f[R] is -1, then the implementation assumes \f[I]s1\f[R] is null-terminated.
 .PP
-.in +4n
-.EX
-{
-    "algorithms": {
-        "collation": true
-    }
-}
-.EE
-.in
+The length and text attributes for \f[I]s2\f[R] are specified by \f[I]s2_len\f[R] and \f[I]s2_attr\f[R].
+If \f[I]s2_len\f[R] is -1, then the implementation assumes \f[I]s2\f[R] is null-terminated.
 .SH RETURN VALUE
 .TP
 UNI_OK
 On success.
 .TP
 UNI_BAD_OPERATION
-If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], or if \f[I]result\f[R] is \f[C]NULL\f[R].
+If \f[I]s1\f[R] or \f[I]s2\f[R] are null, or if \f[I]result\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R](3)).
@@ -47,6 +36,37 @@ If Unicorn was built without support for collation.
 .TP
 UNI_NO_MEMORY
 If dynamic memory allocation failed.
+.SH EXAMPLES
+This example collates two strings.
+The function conceptually constructs a sort key for the input strings and then compares them.
+Constructing a sort key is expensive.
+If a string will be collated multiple times, then it is recommended to construct a sort key once and cache it for future calculations.
+See \f[B]uni_sortkeymk\f[R](3) for details.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    const char *s1 = u8"Hello World";
+    const char *s2 = u8"こんにちは世界";
+    int result;
+
+    if (uni_collate(s1, -1, UNI_UTF8,
+                    s2, -1, UNI_UTF8,
+                    UNI_NON_IGNORABLE, UNI_PRIMARY, &result) != UNI_OK)
+    {
+        puts("failed to collate strings");
+        return 1;
+    }
+
+    printf("%d", result);
+    return 0;
+}
+.EE
+.in
 .SH SEE ALSO
 .BR uni_sortkeymk (3),
 .BR uni_sortkeycmp (3),

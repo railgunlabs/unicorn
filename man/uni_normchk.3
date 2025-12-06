@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_normchk \- normalization check
 .SH LIBRARY
@@ -10,15 +10,15 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_normchk(uninormform " form ", const void *" text ", unisize " text_len ", uniattr " text_attr ", bool *" result ");"
 .fi
 .SH DESCRIPTION
-Checks if \f[I]text\f[R] is normalized.
-This function is more "expensive" than \f[B]uni_normqchk\f[R](3), but it returns a definitive yes or no answer as to whether \f[I]text\f[R] is normalized.
+This function checks if \f[I]text\f[R] is normalized.
+It's more "expensive" than \f[B]uni_normqchk\f[R](3), but returns a definitive yes/no answer.
 .SH RETURN VALUE
 .TP
 UNI_OK
 On success.
 .TP
 UNI_BAD_OPERATION
-If \f[I]text\f[R] or \f[I]result\f[R] is \f[C]NULL\f[R].
+If \f[I]text\f[R] or \f[I]result\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]text\f[R] is malformed; this is never returned if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3).

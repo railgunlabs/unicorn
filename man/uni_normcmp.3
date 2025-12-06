@@ -1,6 +1,6 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
-uni_normcmp \- canonical equivalence
+uni_normcmp \- compare strings for canonical equivalence
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
@@ -10,33 +10,63 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_normcmp(const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", bool *" result ");"
 .fi
 .SH DESCRIPTION
-Check if \f[I]s1\f[R] and \f[I]s2\f[R] are canonically equivalent.
+This function checks if \f[I]s1\f[R] and \f[I]s2\f[R] are canonically equivalent.
 That is, it checks if the graphemes of both strings are the same.
-This function is equivalent to calling \f[B]uni_norm\f[R](3) with \f[B]UNI_NFD\f[R] followed by a code point comparison.
+The behavior of this function is identical to calling \f[B]uni_norm\f[R](3) with \f[B]UNI_NFD\f[R] on both strings followed by a code point comparison.
 .PP
-The implementation is optimized to normalize the strings incrementally while simultaneously comparing them.
-This is a more optimal approach when it's unknown whether the text is normalized or not.
-If it's known in advance that the text is normalized, then it's faster to simply perform the code point comparison directly with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
+The implementation is optimized for normalizing the strings incrementally while simultaneously comparing them.
+This is a more optimal approach when it's unknown whether input strings are normalized or not.
+If it's known in advance that the strings are both normalized, then they can be compared directly with \f[B]memcmp\f[R](3) or \f[B]strcmp\f[R](3).
 .PP
 The implementation strives to be highly performant and avoid dynamic memory allocation when possible.
-Typically, memory allocation will only be performed on unnaturally long combining character sequences, like
+Typically, memory allocation will only be performed for unnaturally long combining character sequences, like
 .UR https://en.wikipedia.org/wiki/Zalgo_text
 Zalgo text
 .UE .
-It's rare for real world text to trigger memory allocation.
+It's rare for real-world text to trigger memory allocation.
 .SH RETURN VALUE
 .TP
 UNI_OK
 If the string was normalized successfully.
 .TP
 UNI_BAD_OPERATION
-If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], if \f[I]s1_len\f[R] or \f[I]s2_len\f[R] are negative, or if \f[I]result\f[R] is \f[C]NULL\f[R].
+If \f[I]s1\f[R] or \f[I]s2\f[R] are null, if \f[I]s1_len\f[R] or \f[I]s2_len\f[R] are negative, or if \f[I]result\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R](3)).
 .TP
 UNI_NO_MEMORY
 If dynamic memory allocation failed.
+.SH EXAMPLES
+This example compares two strings for canonical equivalence.
+Conceptually, the implementation normalizes both strings, performs the comparison, and reports the result.
+This approach is recommended when strings are compared for one-off equality.
+If strings are compared repeatedly, then it's recommended to normalize them with \f[B]uni_norm\f[R](3) and cache the result for the comparisons.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void)
+{
+    const char *s1 = u8"ma\\u0301scara"; // 'a' + U+0301 = á (decomposed)
+    const char *s2 = u8"m\\u00E1scara";  //       U+00E1 = á (precomposed)
+    bool is_equal;
+
+    if (uni_normcmp(s1, -1, UNI_UTF8,
+                    s2, -1, UNI_UTF8, &is_equal) != UNI_OK)
+    {
+        puts("failed to normalize and compare strings");
+        return 1;
+    }
+
+    printf("%s", is_equal ? "equal" : "not equal");
+    return 0;
+}
+.EE
+.in
 .SH SEE ALSO
 .BR uni_norm (3),
 .BR uninormform (3),

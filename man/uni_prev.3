@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_prev \- decode the previous scalar value
 .SH LIBRARY
@@ -10,13 +10,10 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_prev(const void *" text ", unisize " text_len ", uniattr " text_attr ", unisize *" index ", unichar *" cp ");"
 .fi
 .SH DESCRIPTION
-Decodes the preceding Unicode scalar value from \f[I]text\f[R] at code unit \f[I]index\f[R] and writes the result to \f[I]cp\f[R].
+This function decodes the preceding Unicode scalar value from \f[I]text\f[R] at code unit \f[I]index\f[R] and writes the result to \f[I]cp\f[R].
 The \f[I]index\f[R] parameter is updated by the implementation to refer to the code unit beginning the preceding scalar.
 .PP
-The number of code units in \f[I]text\f[R] is specified by \f[I]text_len\f[R] and its encoding is specified by \f[I]text_attr\f[R].
-If \f[I]text_len\f[R] is negative then \f[I]text\f[R] is assumed to be null terminated.
-.PP
-This function returns \f[B]UNI_DONE\f[R] when iteration has reached the end of \f[I]text\f[R] otherwise it returns \f[B]UNI_OK\f[R] indicating there are more characters.
+This function returns \f[B]UNI_DONE\f[R] when iteration has reached the end of \f[I]text\f[R] indicating there are more characters.
 If the implementation detects \f[I]text\f[R] is malformed, then it returns \f[B]UNI_BAD_ENCODING\f[R].
 .PP
 The \f[I]index\f[R] parameter must refer to a code point boundary otherwise the behavior is undefined.
@@ -32,7 +29,7 @@ UNI_BAD_ENCODING
 If \f[I]text\f[R] is malformed; this is never returned if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3).
 .TP
 UNI_BAD_OPERATION
-If \f[I]text\f[R], \f[C]offset\f[R], or \f[C]c\f[R] are NULL.
+If \f[I]text\f[R], \f[I]index\f[R], or \f[I]cp\f[R] are NULL.
 .SH SEE ALSO
 .BR unistat (3),
 .BR UNI_TRUST (3),

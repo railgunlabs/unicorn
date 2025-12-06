@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_compress \- compress text
 .SH LIBRARY
@@ -10,13 +10,13 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_compress(const void *" text ", unisize " text_len ", uniattr " text_attr ", uint8_t *" buffer ", size_t *" buffer_length ");"
 .fi
 .SH DESCRIPTION
-Compress \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and write the results to \f[I]buffer\f[R].
+This function compresses \f[I]text\f[R] using Binary Ordered Compression for Unicode (BOCU-1) and writes the results to \f[I]buffer\f[R].
 Text is compressed based on its code points, i.e. UTF-8, 16, and 32 will compress to the same byte sequence.
 .PP
 The capacity of \f[I]buffer\f[R] is specified by \f[I]buffer_length\f[R].
 The implementation always writes to \f[I]buffer_length\f[R] the total number of bytes in the fully compressed text.
-If the capacity of \f[I]buffer\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
-If \f[I]buffer\f[R] is \f[C]NULL\f[R], then \f[I]buffer_length\f[R] must be zero.
+If the capacity of \f[I]buffer\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned.
+If \f[I]buffer\f[R] is null, then \f[I]buffer_length\f[R] must be zero.
 .SH RETURN VALUE
 .TP
 UNI_OK
@@ -26,7 +26,7 @@ UNI_NO_SPACE
 If \f[I]buffer\f[R] is not large enough.
 .TP
 UNI_BAD_OPERATION
-If \f[I]text\f[R] or \f[I]buffer_length\f[R] is \f[C]NULL\f[R].
+If \f[I]text\f[R] or \f[I]buffer_length\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]text\f[R] is not well-formed (checks are omitted if \f[I]text_attr\f[R] has \f[B]UNI_TRUST\f[R](3)).

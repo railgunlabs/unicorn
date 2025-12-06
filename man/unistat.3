@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 unistat \- status code
 .SH LIBRARY
@@ -21,8 +21,8 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .B };
 .fi
 .SH DESCRIPTION
-Most functions in the Unicorn library return an element of this enumeration.
-Of the elements, only \f[B]UNI_OK\f[R] and \f[B]UNI_DONE\f[R] represent a success status whereas the others represent failures.
+Most functions in the Unicorn library return a constant from this enumeration.
+Of the constants, only \f[B]UNI_OK\f[R] and \f[B]UNI_DONE\f[R] represent a success status whereas the others represent failures.
 .SH CONSTANTS
 .TP
 .BR UNI_OK
@@ -56,7 +56,7 @@ If a user attempts to call a function that uses a disabled feature of the librar
 .BR UNI_MALFUNCTION
 This failure code indicates a defect with the implementation.
 In a working version of Unicorn, an application will never see this status code.
-If an application does encounter this code, it means there is a bug in Unicorn.
+If an application encounters this code, it means there is a bug in Unicorn.
 .SH SEE ALSO
 .BR uni_next (3)
 .SH AUTHOR

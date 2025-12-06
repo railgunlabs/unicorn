@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_toupper \- simple upper case mapping
 .SH LIBRARY
@@ -10,7 +10,7 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unichar uni_toupper(unichar " c ");"
 .fi
 .SH DESCRIPTION
-Return the simple upper case mapping for the code point \f[I]c\f[R].
+This function returns the simple upper case mapping for the code point \f[I]c\f[R].
 For the full uppercase mappings use \f[B]uni_caseconv\f[R](3) with \f[B]UNI_UPPER\f[R].
 .PP
 Support for simple upper case mappings must be enabled in the JSON configuration file otherwise the function will always return \f[I]c\f[R].

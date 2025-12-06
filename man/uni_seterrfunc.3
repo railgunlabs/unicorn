@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_seterrfunc \- receive diagnostic events
 .SH LIBRARY
@@ -16,6 +16,28 @@ It is up to the implementation of \f[I]callback\f[R] to be thread safe.
 .PP
 The implementation generally invokes \f[I]callback\f[R] at the moment the error occurs.
 Callers are encouraged to set breakpoints in their implementation of \f[I]callback\f[R] and view the stack trace to discover the exact cause of the error.
+.SH EXAMPLES
+This example registers a custom error callback with Unicorn.
+This callback will be invoked when an error occurs in Unicorn.
+In practice, you can set a breakpoint within the function for your debugger to pause on and then troubleshoot the error by inspecting the error message.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+static void on_error(void *user_data, const char *message)
+{
+    puts(message);
+}
+
+int main(void)
+{
+    uni_seterrfunc(NULL, on_error);
+    return 0;
+}
+.EE
+.in
 .SH SEE ALSO
 .BR unimemfunc (3),
 .BR unierrfunc (3)

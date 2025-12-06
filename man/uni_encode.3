@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_encode \- encode a scalar value
 .SH LIBRARY
@@ -10,13 +10,13 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_encode(unichar " cp ", void *" dst ", unisize *" dst_len ", uniattr " dst_attr ");"
 .fi
 .SH DESCRIPTION
-Encode the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]dst_attr\f[R] and write the resulting code units to \f[I]dst\f[R].
+This function encodes the Unicode scalar value \f[I]cp\f[R] into the encoding form \f[I]dst_attr\f[R] and writes the resulting code units to \f[I]dst\f[R].
 The code unit capacity of \f[I]dst\f[R] is specified by \f[I]dst_len\f[R].
 The implementation will write the number of code units needed to encode \f[I]cp\f[R] to \f[I]dst_len\f[R] on output.
 .PP
-If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If the capacity of \f[I]dst\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned.
 .PP
-To ensure the \f[I]dst\f[R] is sufficiently-sized, the following table lists the number of code units needed to encode any character within its respective encoding form.
+To ensure the \f[I]dst\f[R] is sufficiently sized, the following table lists the number of code units needed to encode any character within its respective encoding form.
 .PP
 .TS
 allbox tab(|);
@@ -39,20 +39,49 @@ T}|T{
 T}
 .TE
 .PP
-If \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is zero, then the number of code units needed will be computed by the implementation and written to \f[I]dst_len\f[R] and \f[B]UNI_OK\f[R] is returned.
+If \f[I]dst\f[R] is null and \f[I]dst_len\f[R] is zero, then the number of code units needed will be computed by the implementation and written to \f[I]dst_len\f[R] and \f[B]UNI_OK\f[R] is returned.
 .SH RETURN VALUE
 .TP
 UNI_OK
 If the character was encoded successfully.
 .TP
 UNI_BAD_OPERATION
-If \f[I]cp\f[R] is not a Unicode scalar value, if \f[I]dst_len\f[R] is \f[C]NULL\f[R], or if \f[I]dst\f[R] is \f[C]NULL\f[R] and \f[I]dst_len\f[R] is non-zero.
+If \f[I]cp\f[R] is not a Unicode scalar value, if \f[I]dst_len\f[R] is null, or if \f[I]dst\f[R] is null and \f[I]dst_len\f[R] is non-zero.
 .TP
 UNI_NO_SPACE
 If \f[C]dest\f[R] is too small.
 .TP
 UNI_FEATURE_DISABLED
 If Unicorn was built without support for the encoding form specified by \f[I]dst_attr\f[R].
+.SH EXAMPLES
+This example encodes the Unicode scalar value for GRINNING FACE (U+1F600) as UTF-8 encoded code units.
+The code units are printed to stdout as hexadecimal numbers.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    unichar cp = 0x1F600;
+
+    uint8_t u8[4];
+    unisize u8_len = 4;
+
+    if (uni_encode(cp, u8, &u8_len, UNI_UTF8) != UNI_OK)
+    {
+        puts("failed to encode character");
+    }
+
+    for (unisize i = 0; i < u8_len; i++)
+    {
+        printf("0x%02X ", u8[i]);
+    }
+    return 0;
+}
+.EE
+.in
 .SH SEE ALSO
 .BR unistat (3),
 .BR unichar (3),

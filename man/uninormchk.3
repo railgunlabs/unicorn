@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uninormchk \- quick check constants
 .SH LIBRARY
@@ -17,25 +17,24 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .fi
 .SH DESCRIPTION
 These properties indicate whether a character can or cannot appear in a given normalization form.
-They are defined to enable various optimizations for implementations of normalization.
-They enable fast checking of whether some input string is already in the desired normalization form.
-This may make it possible to bypass the more time-consuming call to run the complete Unicode Normalization Algorithm on the input string.
 .PP
-Users can alternatively call \f[B]uni_normchk\f[R](3) which will check if text is normalized.
-The implementation uses these properties internally to perform the check.
+When used with \f[B]uni_normqchk\f[R](3) these properties indicate whether some input string is possibly in the desired normalization form.
+This may make it possible to bypass the more time-consuming call to run the complete Unicode Normalization Algorithm.
+.PP
+Users can alternatively use \f[B]uni_normchk\f[R](3) which will definitively check if text is normalized.
 .SH CONSTANTS
 .TP
 .BR UNI_YES
-Indicates characters that can occur in the respective normalization form.
+Characters that can occur in the respective normalization form.
 .TP
 .BR UNI_MAYBE
 Characters that may occur in the respective normalization, depending on the context.
 .TP
 .BR UNI_NO
-Characters that cannot ever occur in the respective normalization form.
+Characters that cannot occur in the respective normalization form.
 .SH SEE ALSO
-.BR uni_normchk (3),
-.BR uni_normqchk (3)
+.BR uni_normqchk (3),
+.BR uni_normchk (3)
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_decompress \- decompress text
 .SH LIBRARY
@@ -10,15 +10,15 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_decompress(const uint8_t *" buffer ", size_t " buffer_length ", void *" text ", unisize *" text_len ", uniattr " text_attr ");"
 .fi
 .SH DESCRIPTION
-Decompress \f[I]buffer\f[R] and write the result to \f[I]text\f[R].
-The encoding of \f[I]text_attr\f[R] need not match the encoding of the original uncompressed text.
+This function decompresses \f[I]buffer\f[R] and writes the result to \f[I]text\f[R].
+The encoding of \f[I]text_attr\f[R] does not need to match the encoding of the original uncompressed text.
 .PP
 The capacity of \f[I]text\f[R] is specified by \f[I]text_len\f[R].
-If \f[I]text\f[R] is not \f[C]NULL\f[R], then the implementation writes to \f[I]text_len\f[R] the total number of code units written to \f[I]text\f[R].
-If the capacity of \f[I]text\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned otherwise it returns \f[B]UNI_OK\f[R].
+If \f[I]text\f[R] is not null, then the implementation writes to \f[I]text_len\f[R] the total number of code units written to \f[I]text\f[R].
+If the capacity of \f[I]text\f[R] is insufficient, then \f[B]UNI_NO_SPACE\f[R] is returned.
 .PP
-If \f[I]text\f[R] is \f[C]NULL\f[R], then \f[I]text_len\f[R] must be zero and the implementation writes to \f[I]text_len\f[R] the number of code units in the fully decompressed text and returns \f[B]UNI_OK\f[R].
-Call the function this way to compute the total length of the uncompressed text before calling it again with a sufficiently sized buffer.
+If \f[I]text\f[R] is null and \f[I]text_len\f[R] is zero, then the implementation writes to \f[I]text_len\f[R] the number of code units in the fully decompressed text and returns \f[B]UNI_OK\f[R].
+Call the function this way to first compute the total length of the uncompressed text before calling it again with a sufficiently sized buffer.
 .SH RETURN VALUE
 .TP
 UNI_OK
@@ -28,7 +28,7 @@ UNI_NO_SPACE
 If \f[I]text\f[R] is not large enough.
 .TP
 UNI_BAD_OPERATION
-If \f[I]buffer\f[R] is \f[C]NULL\f[R], \f[I]text\f[R] is \f[C]NULL\f[R] and \f[I]text_len\f[R] is non-zero.
+If \f[I]buffer\f[R] is null, \f[I]text\f[R] is null and \f[I]text_len\f[R] is non-zero.
 .TP
 UNI_FEATURE_DISABLED
 If Unicorn was configured without support for the compression algorithm.

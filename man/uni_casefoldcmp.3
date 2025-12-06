@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_casefoldcmp \- case-insensitive string comparison
 .SH LIBRARY
@@ -10,20 +10,20 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .BI "unistat uni_casefoldcmp(unicasefold " casing ", const void *" s1 ", unisize " s1_len ", uniattr " s1_attr ", const void *" s2 ", unisize " s2_len ", uniattr " s2_attr ", bool *" result ");"
 .fi
 .SH DESCRIPTION
-Check if \f[I]s1\f[R] and \f[I]s2\f[R] are a caseless match in casing form \f[I]casing\f[R].
+This function checks if \f[I]s1\f[R] and \f[I]s2\f[R] are a caseless match in casing form \f[I]casing\f[R].
 If they match, then the implementation writes \f[C]true\f[R] to \f[I]result\f[R] else it writes \f[C]false\f[R].
 .PP
 The length and text attributes for \f[I]s1\f[R] are specified by \f[I]s1_len\f[R] and \f[I]s1_attr\f[R].
 The length and text attributes for \f[I]s2\f[R] are specified by \f[I]s2_len\f[R] and \f[I]s2_attr\f[R].
-If \f[I]s1_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s1\f[R] is null terminated.
-If \f[I]s2_len\f[R] is \f[C]-1\f[R], then the implementation assumes \f[I]s2\f[R] is null terminated.
+If \f[I]s1_len\f[R] is -1, then the implementation assumes \f[I]s1\f[R] is null-terminated.
+If \f[I]s2_len\f[R] is -1, then the implementation assumes \f[I]s2\f[R] is null-terminated.
 .SH RETURN VALUE
 .TP
 UNI_OK
 If \f[C]text\f[R] was checked successfully.
 .TP
 UNI_BAD_OPERATION
-If \f[I]s1\f[R] or \f[I]s2\f[R] are \f[C]NULL\f[R], or if \f[I]result\f[R] is \f[C]NULL\f[R].
+If \f[I]s1\f[R] or \f[I]s2\f[R] are null, or if \f[I]result\f[R] is null.
 .TP
 UNI_BAD_ENCODING
 If \f[I]s1\f[R] or \f[I]s2\f[R] is not well-formed (checks are omitted if the corresponding \f[B]uniattr\f[R](3) has \f[B]UNI_TRUST\f[R](3)).

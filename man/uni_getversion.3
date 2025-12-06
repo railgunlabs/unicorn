@@ -1,4 +1,4 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
 uni_getversion \- library version
 .SH LIBRARY
@@ -12,6 +12,23 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH DESCRIPTION
 Writes the major, minor, and patch version of the Unicorn library to \f[I]major\f[R], \f[I]minor\f[R], and \f[I]patch\f[R], respectively.
 Null arguments are ignored.
+.SH EXAMPLES
+This example prints the major, minor, and patch version of the library to stdout.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdio.h>
+
+int main(void)
+{
+    int32_t major, minor, patch;
+    uni_getversion(&major, &minor, &patch);
+    printf("%d.%d.%d", major, minor, patch);
+    return 0;
+}
+.EE
+.in
 .SH AUTHOR
 .UR https://railgunlabs.com
 Railgun Labs

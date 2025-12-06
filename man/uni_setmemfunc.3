@@ -1,6 +1,6 @@
-.TH "UNICORN" "3" "Nov 7th 2025" "Unicorn 1.3.0"
+.TH "UNICORN" "3" "Dec 6th 2025" "Unicorn 1.3.1"
 .SH NAME
-uni_setmemfunc \- custom memory allocator
+uni_setmemfunc \- register a memory allocator
 .SH LIBRARY
 Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .SH SYNOPSIS
@@ -11,10 +11,12 @@ Embeddable Unicode Algorithms (libunicorn, -lunicorn)
 .fi
 .SH DESCRIPTION
 Sets \f[I]allocf\f[R] as the implementation for dynamic memory allocations.
-If \f[I]allocf\f[R] is \f[C]NULL\f[R] then the implementation reverts to its default allocator which may be the C standard allocator or a dummy allocator that always fails to allocate memory.
+If \f[I]allocf\f[R] is null then the implementation reverts to its default allocator which may be the C standard allocator or a dummy allocator that always fails to allocate memory.
 The latter is only present when the C standard library allocators are disabled.
 .PP
 Support for C standard library allocators must be enabled in the JSON configuration file.
+If the standard allocators are not enabled, then dummy allocators that always return NULL are used.
+In this case, a custom allocator must be supplied.
 .PP
 .in +4n
 .EX
@@ -29,7 +31,38 @@ UNI_OK
 If the memory allocator was modified.
 .TP
 UNI_FEATURE_DISABLED
-If \f[I]allocf\f[R] is \f[C]NULL\f[R] and Unicorn was built without support for the C standard library memory allocator.
+If \f[I]allocf\f[R] is null and Unicorn was built without support for the C standard library memory allocator.
+.SH EXAMPLES
+This example registers a custom memory allocator with Unicorn.
+In the example, the custom allocator wraps the C standard memory allocators, however, this is redundant because Unicorn already initializes with a custom allocator that wraps the C standard allocators.
+They are wrapped here for example purposes only.
+An actual implementation would implement and wrap its own custom memory allocator.
+.PP
+.in +4n
+.EX
+#include <unicorn.h>
+#include <stdlib.h>
+
+static void *allocfree(void *ud, void *ptr, size_t osize, size_t nsize)
+{
+    if (nsize == 0)
+    {
+        free(ptr);
+        return NULL;
+    }
+    else
+    {
+        return realloc(ptr, nsize);
+    }
+}
+
+int main(void)
+{
+    uni_setmemfunc(NULL, allocfree);
+    return 0;
+}
+.EE
+.in
 .SH SEE ALSO
 .BR unimemfunc (3)
 .SH AUTHOR
