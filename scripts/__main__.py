@@ -1,5 +1,5 @@
 #  Unicorn - Embeddable Unicode Algorithms
-#  Copyright (c) 2024-2025 Railgun Labs
+#  Copyright (c) 2024-2026 Railgun Labs
 #
 #  This software is dual-licensed: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 3 as
@@ -290,7 +290,7 @@ def compile(args: GeneratorArgs) -> int:
 
     copyright = """/*
  *  Unicorn - Embeddable Unicode Algorithms
- *  Copyright (c) 2024-2025 Railgun Labs
+ *  Copyright (c) 2024-2026 Railgun Labs
  *
  *  This software is dual-licensed: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 3 as

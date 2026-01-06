@@ -1,6 +1,6 @@
 ﻿/*
  *  Unicorn - Embeddable Unicode Algorithms
- *  Copyright (c) 2021-2025 Railgun Labs
+ *  Copyright (c) 2021-2026 Railgun Labs
  * 
  *  THE CONTENTS OF THIS PROJECT ARE PROPRIETARY AND CONFIDENTIAL.
  *  UNAUTHORIZED COPYING, TRANSFERRING OR REPRODUCTION OF THE CONTENTS OF THIS
