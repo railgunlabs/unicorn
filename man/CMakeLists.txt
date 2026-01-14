@@ -56,4 +56,4 @@ set(MAN
     uni_casefoldchk.3
     uni_is.3
     unibreak.3)
-install(FILES ${MAN} DESTINATION man/man3 COMPONENT doc)
+install(FILES ${MAN} DESTINATION "${CMAKE_INSTALL_MANDIR}/man3" COMPONENT doc)
