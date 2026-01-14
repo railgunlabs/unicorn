@@ -4,8 +4,6 @@ config_json = @CONFIG_JSON@
 
 gen = $(top_builddir)/src-gen
 
-nodist_include_HEADERS = $(gen)/_unicorn.h
-
 lib_LTLIBRARIES = libunicorn.la
 
 libunicorn_la_SOURCES = \
@@ -31,6 +29,7 @@ libunicorn_la_SOURCES = \
 	charvec.c \
 	charvec.h
 
+nodist_include_HEADERS = $(gen)/_unicorn.h
 nodist_libunicorn_la_SOURCES = \
 	$(gen)/unidata.c \
 	$(gen)/unidata.h \
