@@ -2,9 +2,9 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 config_json = @CONFIG_JSON@
 
-gen = $(abs_top_builddir)/src-gen
+gen = $(top_builddir)/src-gen
 
-include_HEADERS = $(gen)/_unicorn.h
+nodist_include_HEADERS = $(gen)/_unicorn.h
 
 lib_LTLIBRARIES = libunicorn.la
 
@@ -29,7 +29,9 @@ libunicorn_la_SOURCES = \
 	charbuf.c \
 	charbuf.h \
 	charvec.c \
-	charvec.h \
+	charvec.h
+
+nodist_libunicorn_la_SOURCES = \
 	$(gen)/unidata.c \
 	$(gen)/unidata.h \
 	$(gen)/_unicorn.h
@@ -41,7 +43,7 @@ $(gen):
 	mkdir -p $@
 
 $(gen)/unidata.c:
-	cd $(top_srcdir) && $(PYTHON) -m scripts --config $(config_json) --output $(gen)
+	cd $(top_srcdir) && $(PYTHON) -m scripts --config $(config_json) --output $(abs_top_builddir)/src-gen
 
 $(gen)/unidata.h: $(gen)/unidata.c
  
