@@ -2,7 +2,9 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 config_json = @CONFIG_JSON@
 
-include_HEADERS = _unicorn.h
+gen = $(abs_top_builddir)/src-gen
+
+include_HEADERS = $(gen)/_unicorn.h
 
 lib_LTLIBRARIES = libunicorn.la
 
@@ -28,28 +30,34 @@ libunicorn_la_SOURCES = \
 	charbuf.h \
 	charvec.c \
 	charvec.h \
-	unidata.c \
-	unidata.h \
-	_unicorn.h
+	$(gen)/unidata.c \
+	$(gen)/unidata.h \
+	$(gen)/_unicorn.h
 
-libunicorn_la_CFLAGS = -I$(top_srcdir)/include
+libunicorn_la_CFLAGS = -I$(top_srcdir)/include -I$(gen)
 libunicorn_la_LDFLAGS = -no-undefined -version-info 0:0:0
 
-unidata.c:
-	cd $(top_srcdir) && $(PYTHON) -m scripts --config $(config_json) --output $(abs_top_builddir)/src
+$(gen):
+	mkdir -p $@
 
-unidata.h: unidata.c
+$(gen)/unidata.c:
+	cd $(top_srcdir) && $(PYTHON) -m scripts --config $(config_json) --output $(gen)
+
+$(gen)/unidata.h: $(gen)/unidata.c
  
-_unicorn.h: unidata.c
+$(gen)/_unicorn.h: $(gen)/unidata.c
 
-noinst_HEADERS = unidata.h
+clean-local:
+	rm -rf $(gen)
+
+noinst_HEADERS = $(gen)/unidata.h
 
 BUILT_SOURCES = \
-	unidata.c \
-	unidata.h \
-	_unicorn.h
+	$(gen)/unidata.c \
+	$(gen)/unidata.h \
+	$(gen)/_unicorn.h
 
 CLEANFILES = \
-	unidata.c \
-	unidata.h \
-	_unicorn.h
+	$(gen)/unidata.c \
+	$(gen)/unidata.h \
+	$(gen)/_unicorn.h

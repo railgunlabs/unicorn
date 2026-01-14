@@ -67,26 +67,30 @@ endif ()
 # Python is required to generate the Unicode data tables.
 find_package(Python3 3.10.0 REQUIRED COMPONENTS Interpreter)
 
+# Where the generated source files are built.
+set(GENERATED_DIR ${CMAKE_BINARY_DIR}/generated)
+file(MAKE_DIRECTORY ${GENERATED_DIR})
+
 # Execute the Python Unicode data generators.
 file(GLOB_RECURSE PYTHON_SOURCES "scripts/${PYTHON_SOURCES}*.py")
 set(GENERATED_FILES
-    "${CMAKE_BINARY_DIR}/unidata.c"
-    "${CMAKE_BINARY_DIR}/unidata.h"
-    "${CMAKE_BINARY_DIR}/_unicorn.h"
+    "${GENERATED_DIR}/unidata.c"
+    "${GENERATED_DIR}/unidata.h"
+    "${GENERATED_DIR}/_unicorn.h"
 )
 add_custom_command(
     OUTPUT ${GENERATED_FILES}
-    COMMAND Python3::Interpreter -m scripts --config "${UNICORN_CONFIG}" --output "${CMAKE_BINARY_DIR}"
+    COMMAND Python3::Interpreter -m scripts --config "${UNICORN_CONFIG}" --output "${GENERATED_DIR}"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     DEPENDS unicode.bin ${PYTHON_SOURCES} ${UNICORN_CONFIG})
 add_custom_target(unicorn_generate DEPENDS ${GENERATED_FILES})
 
 # Mark the following source files as being generated at build time so CMake doesn't try to find them.
-set_source_files_properties(${CMAKE_BINARY_DIR}/unidata.c PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_BINARY_DIR}/unidata.h PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_BINARY_DIR}/_unicorn.h PROPERTIES GENERATED 1)
+set_source_files_properties(${GENERATED_DIR}/unidata.c PROPERTIES GENERATED 1)
+set_source_files_properties(${GENERATED_DIR}/unidata.h PROPERTIES GENERATED 1)
+set_source_files_properties(${GENERATED_DIR}/_unicorn.h PROPERTIES GENERATED 1)
 
-include_directories(${CMAKE_BINARY_DIR}) # For finding the generated files.
+include_directories(${GENERATED_DIR}) # For finding the generated files.
 include_directories(include) # For finding the public header files.
 include_directories(src) # For finding internal header files.
 

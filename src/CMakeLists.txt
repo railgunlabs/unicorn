@@ -1,3 +1,5 @@
+set(PUBLIC_HEADERS ../include/unicorn.h ${GENERATED_DIR}/_unicorn.h)
+
 set(SOURCES
     ../include/unicorn.h
     unicorn.c
@@ -20,16 +22,16 @@ set(SOURCES
     charbuf.h
     charvec.c
     charvec.h
-    ${CMAKE_BINARY_DIR}/unidata.c
-    ${CMAKE_BINARY_DIR}/unidata.h
+    ${GENERATED_DIR}/unidata.c
+    ${GENERATED_DIR}/unidata.h
+    ${GENERATED_DIR}/_unicorn.h
 )
 
 if (UNICORN_BUILD_STATIC)
     add_library(unicorn_static STATIC ${SOURCES})
     target_compile_definitions(unicorn_static PUBLIC UNICORN_STATIC)
     set_property(TARGET unicorn_static PROPERTY C_STANDARD 99)
-    set_target_properties(unicorn_static PROPERTIES PUBLIC_HEADER ${CMAKE_SOURCE_DIR}/unicorn.h)
-    set_target_properties(unicorn_static PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/_unicorn.h)
+    set_target_properties(unicorn_static PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADERS}")
     add_dependencies(unicorn_static unicorn_generate)
     install(TARGETS unicorn_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endif ()
@@ -38,8 +40,7 @@ if (UNICORN_BUILD_SHARED OR UNICORN_BUILD_EXAMPLES)
     add_library(unicorn SHARED ${SOURCES})
     target_compile_definitions(unicorn PRIVATE DLL_EXPORT)
     set_property(TARGET unicorn PROPERTY C_STANDARD 99)
-    set_target_properties(unicorn PROPERTIES PUBLIC_HEADER ${CMAKE_SOURCE_DIR}/unicorn.h)
-    set_target_properties(unicorn PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/_unicorn.h)
+    set_target_properties(unicorn PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADERS}")
     add_dependencies(unicorn unicorn_generate)
 
     if (CMAKE_C_COMPILER_ID MATCHES "Clang" OR
