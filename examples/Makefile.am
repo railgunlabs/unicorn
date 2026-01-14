@@ -5,7 +5,7 @@ EXTRA_DIST = CMakeLists.txt
 if BUILD_EXAMPLES
 
 PROG_LDADD = ../src/libunicorn.la
-PROG_CFLAGS = -I$(top_srcdir)/include -I$(abs_top_builddir)/src
+PROG_CFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/src-gen
 
 bin_PROGRAMS = caseconv casefold charprops collate compare compress decode-utf8 decode-utf16 decode-utf32 encode-char segmentation
 
