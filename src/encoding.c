@@ -131,10 +131,10 @@ static bool is_valid_scalar(unichar c)
     return is_scalar;
 }
 
-unisize uni_prev_UTF8_seqlen(const UChar8 *start, unisize offset)
+unisize uni_prev_UTF8_seqlen(const unichar8 *start, unisize offset)
 {
     // Move back by one byte so it's pointing to the last byte of the previous sequence.
-    const UChar8 *bytes = &start[offset];
+    const unichar8 *bytes = &start[offset];
     unisize length = 0;
     assert(bytes > start); // LCOV_EXCL_BR_LINE
 
@@ -190,51 +190,51 @@ unisize uni_prev_UTF8_seqlen(const UChar8 *start, unisize offset)
     return length;
 }
 
-unisize unichar_to_u8(unichar codepoint, UChar8 bytes[4])
+unisize unichar_to_u8(unichar codepoint, unichar8 bytes[4])
 {
     unisize length;
     if (codepoint <= UNICHAR_C(0x7F))
     {
-        bytes[0] = (UChar8)codepoint;
+        bytes[0] = (unichar8)codepoint;
         length = 1;
     }
     else if (codepoint <= UNICHAR_C(0x7FF))
     {
-        bytes[0] = (UChar8)(codepoint >> UNICHAR_C(6)) | (uint8_t)0xC0;
-        bytes[1] = (UChar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[0] = (unichar8)(codepoint >> UNICHAR_C(6)) | (uint8_t)0xC0;
+        bytes[1] = (unichar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         length = 2;
     }
     else if (codepoint <= UNICHAR_C(0xFFFF))
     {
-        bytes[0] = (UChar8)(codepoint >> UNICHAR_C(12)) | (uint8_t)0xE0;
-        bytes[1] = (UChar8)((codepoint >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
-        bytes[2] = (UChar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[0] = (unichar8)(codepoint >> UNICHAR_C(12)) | (uint8_t)0xE0;
+        bytes[1] = (unichar8)((codepoint >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[2] = (unichar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         length = 3;
     }
     else
     {
         assert(codepoint <= UNICHAR_C(0x10FFFF)); // LCOV_EXCL_BR_LINE
-        bytes[0] = (UChar8)(codepoint >> UNICHAR_C(18)) | (uint8_t)0xF0;
-        bytes[1] = (UChar8)((codepoint >> UNICHAR_C(12)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
-        bytes[2] = (UChar8)((codepoint >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
-        bytes[3] = (UChar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[0] = (unichar8)(codepoint >> UNICHAR_C(18)) | (uint8_t)0xF0;
+        bytes[1] = (unichar8)((codepoint >> UNICHAR_C(12)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[2] = (unichar8)((codepoint >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        bytes[3] = (unichar8)(codepoint & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         length = 4;
     }
     return length;
 }
 
-unisize unichar_to_u16(unichar codepoint, UChar16 words[2], ByteSwap16 swap)
+unisize unichar_to_u16(unichar codepoint, unichar16 words[2], ByteSwap16 swap)
 {
     unisize length = 1;
     if (codepoint <= (unichar)0xFFFF)
     {
-        words[0] = swap((UChar16)codepoint);
+        words[0] = swap((unichar16)codepoint);
     }
     else
     {
         const unichar LEAD_OFFSET = (unichar)0xD800 - ((unichar)0x10000 >> (unichar)10);
-        words[0] = swap((UChar16)(LEAD_OFFSET + (codepoint >> (unichar)10)));
-        words[1] = swap((UChar16)((unichar)0xDC00 + (codepoint & (unichar)0x3FF)));
+        words[0] = swap((unichar16)(LEAD_OFFSET + (codepoint >> (unichar)10)));
+        words[1] = swap((unichar16)((unichar)0xDC00 + (codepoint & (unichar)0x3FF)));
         length = 2;
     }
     return length;
@@ -242,7 +242,7 @@ unisize unichar_to_u16(unichar codepoint, UChar16 words[2], ByteSwap16 swap)
 
 #if defined(UNICORN_FEATURE_ENCODING_UTF8)
 
-static unisize u8_decode_unsafe(const UChar8 *bytes, unichar *scalar)
+static unisize u8_decode_unsafe(const unichar8 *bytes, unichar *scalar)
 {
     // Fast but unsafe lookup table for determining how many bytes are in a UTF-8 encoded sequence.
     // The table stores a sequence length of '1' for illegal starter bytes which ensures iterators
@@ -318,7 +318,7 @@ static unistat u8_next_unsafe(const void *text, unisize text_length, unisize *of
     }
     else
     {
-        const UChar8 *bytes = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar8 *bytes = text; // cppcheck-suppress misra-c2012-11.5
 
         // Check for an empty null-terminated string.
         if ((text_length < 0) && (bytes[*offset] == (uint8_t)0))
@@ -344,7 +344,7 @@ static unistat u8_next(const void *text, unisize text_length, unisize *offset, u
     // LCOV_EXCL_STOP
 
     unistat status = UNI_OK;
-    const UChar8 *start = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar8 *start = text; // cppcheck-suppress misra-c2012-11.5
     
     // Check for an empty null-terminated string.
     if ((text_length >= 0) && (*offset >= text_length))
@@ -358,7 +358,7 @@ static unistat u8_next(const void *text, unisize text_length, unisize *offset, u
     else
     {
         // Lookup the total bytes needed to represent this UTF-8 sequence.
-        const UChar8 *curr = &start[*offset];
+        const unichar8 *curr = &start[*offset];
         const unisize byte_count = (unisize)bytes_needed_for_UTF8_sequence[curr[0]];
         if (byte_count == UNISIZE_C(0))
         {
@@ -428,7 +428,7 @@ static unistat u8_prev_unsafe(const void *text, unisize *offset, unichar *cp)
     unistat status = UNI_OK;
 
     // Calculate the byte offset of the current code point.
-    const UChar8 *start = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar8 *start = text; // cppcheck-suppress misra-c2012-11.5
     if (*offset <= 0)
     {
         status = UNI_DONE;
@@ -449,7 +449,7 @@ static unistat u8_prev(const void *text, unisize *offset, unichar *cp)
     unistat status = UNI_OK;
 
     // Calculate the byte offset of the current code point.
-    const UChar8 *start = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar8 *start = text; // cppcheck-suppress misra-c2012-11.5
     if (*offset <= 0)
     {
         status = UNI_DONE;
@@ -457,7 +457,7 @@ static unistat u8_prev(const void *text, unisize *offset, unichar *cp)
     else
     {
         // Calculate where the previous code point starts.
-        const UChar8 *curr = &start[*offset];
+        const unichar8 *curr = &start[*offset];
         const unisize byte_count = uni_prev_UTF8_seqlen(start, *offset);
         if (byte_count == UNISIZE_C(0))
         {
@@ -519,7 +519,7 @@ static unistat u16_next(const void *text, unisize text_length, unisize *offset, 
     // LCOV_EXCL_STOP
 
     unistat status = UNI_OK;
-    const UChar16 *words = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar16 *words = text; // cppcheck-suppress misra-c2012-11.5
 
     // Check for the end of the string.
     if ((text_length >= 0) && (*offset >= text_length))
@@ -589,7 +589,7 @@ static unistat u16_next_unsafe(const void *text, unisize text_length, unisize *o
     // LCOV_EXCL_STOP
 
     unistat status = UNI_OK;
-    const UChar16 *words = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar16 *words = text; // cppcheck-suppress misra-c2012-11.5
     words = &words[*offset];
 
     // Check for the end of the string.
@@ -623,7 +623,7 @@ static unistat u16_next_unsafe(const void *text, unisize text_length, unisize *o
 static unistat u16_prev_unsafe(const void *text, unisize *offset, unichar *scalar, ByteSwap16 swap)
 {
     unistat status = UNI_OK;
-    const UChar16 *words = text; // cppcheck-suppress misra-c2012-11.5
+    const unichar16 *words = text; // cppcheck-suppress misra-c2012-11.5
     words = &words[*offset];
 
     if (*offset == 0)
@@ -661,7 +661,7 @@ static unistat u16_prev(const void *text, unisize *offset, unichar *cp, ByteSwap
     else
     {
         // Extract the current word.
-        const UChar16 *words = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar16 *words = text; // cppcheck-suppress misra-c2012-11.5
         const unisize word_end = *offset;
         unisize word_start = word_end - 1;
         const unichar word = (unichar)swap(words[word_start]);
@@ -728,7 +728,7 @@ static unistat u32_next(const void *text, unisize text_length, unisize *offset, 
     }
     else
     {
-        const UChar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
         const unichar cp = (unichar)swap(chars[*offset]);
         if ((text_length < 0) && (cp == UNICHAR_C(0x0)))
         {
@@ -765,7 +765,7 @@ static unistat u32_next_unsafe(const void *text, unisize text_length, unisize *o
     }
     else
     {
-        const UChar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
         const unichar cp = (unichar)swap(chars[*offset]);
         if ((text_length < 0) && (cp == UNICHAR_C(0x0)))
         {
@@ -789,7 +789,7 @@ static unistat u32_prev(const void *text, unisize *offset, unichar *scalar, Byte
     }
     else
     {
-        const UChar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
         const unichar cp = (unichar)swap(chars[(*offset) - 1]);
         if (!is_valid_scalar(cp))
         {
@@ -813,7 +813,7 @@ static unistat u32_prev_unsafe(const void *text, unisize *offset, unichar *scala
     }
     else
     {
-        const UChar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
+        const unichar32 *chars = text; // cppcheck-suppress misra-c2012-11.5
         *scalar = (unichar)swap(chars[(*offset) - 1]);
         *offset -= 1;
     }

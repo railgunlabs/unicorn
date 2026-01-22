@@ -29,9 +29,9 @@
 
 #define COUNT_OF(array) (sizeof(array) / sizeof((array)[0]))
 
-typedef uint8_t UChar8;
-typedef uint16_t UChar16;
-typedef uint32_t UChar32;
+typedef uint8_t unichar8;
+typedef uint16_t unichar16;
+typedef uint32_t unichar32;
 
 typedef uint32_t unihash;
 
@@ -50,10 +50,10 @@ void *uni_malloc(size_t size);
 void *uni_realloc(void *old_ptr, size_t old_size, size_t new_size);
 void uni_free(void *ptr, size_t size);
 
-unisize unichar_to_u8(unichar codepoint, UChar8 bytes[4]);
-unisize unichar_to_u16(unichar codepoint, UChar16 words[2], ByteSwap16 swap); // cppcheck-suppress premium-misra-c-2012-17.3 ; This is a false positive.
+unisize unichar_to_u8(unichar codepoint, unichar8 bytes[4]);
+unisize unichar_to_u16(unichar codepoint, unichar16 words[2], ByteSwap16 swap); // cppcheck-suppress premium-misra-c-2012-17.3 ; This is a false positive.
 
-unisize uni_prev_UTF8_seqlen(const UChar8 *start, unisize offset);
+unisize uni_prev_UTF8_seqlen(const unichar8 *start, unisize offset);
 
 unistat uni_check_input_encoding(const void *text, unisize length, uniattr *encoding);
 unistat uni_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding);

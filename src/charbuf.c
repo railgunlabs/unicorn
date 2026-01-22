@@ -18,7 +18,7 @@
 #if defined(UNICORN_FEATURE_ENCODING_UTF8)
 static void uni_charbuf_append_u8(struct CharBuf *buf, const unichar *chars, unisize chars_count)
 {
-    UChar8 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar8 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         buffer = &buffer[buf->length];
@@ -26,7 +26,7 @@ static void uni_charbuf_append_u8(struct CharBuf *buf, const unichar *chars, uni
 
     for (unisize i = 0; i < chars_count; i++)
     {
-        UChar8 bytes[4];
+        unichar8 bytes[4];
         const unisize bytes_count = unichar_to_u8(chars[i], bytes);
         if (buffer != NULL)
         {
@@ -43,7 +43,7 @@ static void uni_charbuf_append_u8(struct CharBuf *buf, const unichar *chars, uni
 
 static void uni_charbuf_nullterminate_u8(struct CharBuf *buf)
 {
-    UChar8 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar8 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         bool needs_null = true;
@@ -57,7 +57,7 @@ static void uni_charbuf_nullterminate_u8(struct CharBuf *buf)
             assert(len > 0); // LCOV_EXCL_BR_LINE
             assert(buf->written <= buf->capacity); // LCOV_EXCL_BR_LINE
 
-            if (buffer[buf->written - len] == (UChar8)0)
+            if (buffer[buf->written - len] == (unichar8)0)
             {
                 needs_null = false;
             }
@@ -74,7 +74,7 @@ static void uni_charbuf_nullterminate_u8(struct CharBuf *buf)
         {
             if (buf->written < buf->capacity)
             {
-                buffer[buf->written] = (UChar8)0;
+                buffer[buf->written] = (unichar8)0;
                 buf->written += 1;
             }
         }
@@ -89,7 +89,7 @@ static void uni_charbuf_nullterminate_u8(struct CharBuf *buf)
 
 #if defined(UNICORN_FEATURE_ENCODING_UTF16)
 // This assumes the UTF-16 is well-formed (which it should be since it was generated programmatically).
-static unisize previous_UTF16_sequence_length(const UChar16 *words, ByteSwap16 swap)
+static unisize previous_UTF16_sequence_length(const unichar16 *words, ByteSwap16 swap)
 {
     unisize length = 1;
     const unichar cp = swap(words[-1]);
@@ -102,7 +102,7 @@ static unisize previous_UTF16_sequence_length(const UChar16 *words, ByteSwap16 s
 
 static void uni_charbuf_append_u16(struct CharBuf *buf, const unichar *chars, unisize chars_count, ByteSwap16 swap)
 {
-    UChar16 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar16 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         buffer = &buffer[buf->length];
@@ -110,13 +110,13 @@ static void uni_charbuf_append_u16(struct CharBuf *buf, const unichar *chars, un
 
     for (unisize i = 0; i < chars_count; i++)
     {
-        UChar16 words[2];
+        unichar16 words[2];
         const unisize words_count = unichar_to_u16(chars[i], words, swap);
         if (buffer != NULL)
         {
             if ((buf->length + words_count) <= buf->capacity)
             {
-                (void)memcpy(buffer, words, sizeof(UChar16) * (size_t)words_count);
+                (void)memcpy(buffer, words, sizeof(unichar16) * (size_t)words_count);
                 buffer = &buffer[words_count];
                 buf->written += words_count;
             }
@@ -127,7 +127,7 @@ static void uni_charbuf_append_u16(struct CharBuf *buf, const unichar *chars, un
 
 static void uni_charbuf_nullterminate_u16(struct CharBuf *buf, ByteSwap16 swap)
 {
-    UChar16 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar16 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         bool needs_null = true;
@@ -141,7 +141,7 @@ static void uni_charbuf_nullterminate_u16(struct CharBuf *buf, ByteSwap16 swap)
             assert(len > 0); // LCOV_EXCL_BR_LINE
             assert(buf->written <= buf->capacity); // LCOV_EXCL_BR_LINE
 
-            if (buffer[buf->written - len] == (UChar16)0)
+            if (buffer[buf->written - len] == (unichar16)0)
             {
                 needs_null = false;
             }
@@ -158,7 +158,7 @@ static void uni_charbuf_nullterminate_u16(struct CharBuf *buf, ByteSwap16 swap)
         {
             if (buf->written < buf->capacity)
             {
-                buffer[buf->written] = (UChar16)0;
+                buffer[buf->written] = (unichar16)0;
                 buf->written += 1;
             }
         }
@@ -194,7 +194,7 @@ static void uni_charbuf_nullterminate_u16le(struct CharBuf *buf)
 #if defined(UNICORN_FEATURE_ENCODING_UTF32)
 static void uni_charbuf_append_u32(struct CharBuf *buf, const unichar *chars, unisize chars_count, ByteSwap32 swap)
 {
-    UChar32 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar32 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         buffer = &buffer[buf->length];
@@ -204,7 +204,7 @@ static void uni_charbuf_append_u32(struct CharBuf *buf, const unichar *chars, un
     {
         if ((buffer != NULL) && (buf->length < buf->capacity))
         {
-            buffer[i] = swap((UChar32)chars[i]);
+            buffer[i] = swap((unichar32)chars[i]);
             buf->written += 1;
         }
     }
@@ -223,7 +223,7 @@ static void uni_charbuf_append_u32le(struct CharBuf *buf, const unichar *chars, 
 
 static void uni_charbuf_nullterminate_u32(struct CharBuf *buf)
 {
-    UChar32 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
+    unichar32 *buffer = buf->storage; // cppcheck-suppress misra-c2012-11.5
     if (buffer != NULL)
     {
         bool needs_null = true;
@@ -234,7 +234,7 @@ static void uni_charbuf_nullterminate_u32(struct CharBuf *buf)
         if (buf->written > 0)
         {
             assert(buf->written <= buf->capacity); // LCOV_EXCL_BR_LINE
-            if (buffer[buf->written - 1] == (UChar32)0)
+            if (buffer[buf->written - 1] == (unichar32)0)
             {
                 needs_null = false;
             }
@@ -251,7 +251,7 @@ static void uni_charbuf_nullterminate_u32(struct CharBuf *buf)
         {
             if (buf->written < buf->capacity)
             {
-                buffer[buf->written] = (UChar32)0;
+                buffer[buf->written] = (unichar32)0;
                 buf->written += 1;
             }
         }
