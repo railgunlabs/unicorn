@@ -87,6 +87,10 @@ static unistat check_encoding(uniattr *encoding)
 
 unistat uni_check_input_encoding(const void *text, unisize length, uniattr *encoding)
 {
+    // LCOV_EXCL_START
+    assert(encoding != NULL);
+    // LCOV_EXCL_STOP
+
     unistat status = UNI_OK;
     (void)length;
 
@@ -111,6 +115,10 @@ unistat uni_check_input_encoding(const void *text, unisize length, uniattr *enco
 
 unistat uni_check_output_encoding(const void *buffer, const unisize *capacity, uniattr *encoding)
 {
+    // LCOV_EXCL_START
+    assert(encoding != NULL);
+    // LCOV_EXCL_STOP
+
     unistat status = UNI_OK;
 
     // Only input buffers can use the trusted.
